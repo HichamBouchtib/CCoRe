@@ -2,7 +2,7 @@
 from langchain_community.document_loaders import WikipediaLoader
 from langchain_core.messages import SystemMessage
 from llm import llm
-from state import State
+from V1.state import State
 from pydantic import BaseModel, Field
 
 class SearchQuery(BaseModel):

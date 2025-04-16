@@ -1,5 +1,5 @@
 from agents.masteragent import MasterAgent
-from state import State
+from V1.state import State
 
 def instantiate_masteragents(state: State):
     """

@@ -1,7 +1,7 @@
 # TG generation
 
 from TG.task_graph import TaskGraph
-from state import State
+from V1.state import State
 from llm import llm
 from langchain_core.messages import SystemMessage
 

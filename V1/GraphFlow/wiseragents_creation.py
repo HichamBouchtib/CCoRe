@@ -1,7 +1,7 @@
 from langchain_core.messages import HumanMessage, SystemMessage
 from agents.wiseragent import WiserAgentsList
 from llm import llm
-from state import State
+from V1.state import State
 
 wiseragents_instructions = """You are tasked with creating a set of specialized AI Wiser Agents. Follow these instructions carefully:
 

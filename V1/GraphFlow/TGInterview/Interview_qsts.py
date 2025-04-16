@@ -1,6 +1,6 @@
 from llm import llm
 from langchain_core.messages import SystemMessage
-from state import State
+from V1.state import State
 
 # Interview instructions for TG validation (for multiple agents).
 tg_interview_instructions = """You are a WiserAgent with expertise in {expertise} tasked with critically reviewing a proposed Task Graph (TG) to solve a user query.

@@ -1,6 +1,6 @@
 from langchain_core.messages import SystemMessage
 from llm import llm
-from state import State
+from V1.state import State
 
 answer_instructions = """You are a WiserAgent who has previously generated one of these Task Graphs (TGs) : {tg_candidates} to solve a given problem.  
 Now, other WiserAgents specializing in different domains are interviewing you to validate and refine your TG.  

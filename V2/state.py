@@ -1,46 +1,50 @@
-from typing import Dict, List, Tuple
+from typing import List, Annotated, Optional
 from agents.wiseragent import WiserAgent
 from langgraph.graph import MessagesState
-from typing import  Annotated
-import operator
 from interview.Interview import Interview 
 from TG.task_graph import TaskGraph
+import pprint
+from tools.context import Context
+from pydantic import BaseModel
 
-
+# class State(BaseModel):
 class State(MessagesState):
     topic: str
+    last_topic: str = "" # for conversation persistence
     query: str
     human_wiseragent_feedback: str
-    feedback_handled: bool = False # Flag to check if feedback is handled
-    WS: int # Wisdom Score
+    feedback_handled: bool = False
+    WS: int
     wiseragents: List[WiserAgent]
-    max_num_turns: int # Number turns of conversation allowed            
-    interview: Interview 
-    questions: List # List of questions of interviewers
-    context: Annotated[list, operator.add] # Source docs
-    tg_candidates = List[Tuple[WiserAgent, TaskGraph]]
-    tg_chosen: dict = {}
-    tg_response: str = "" # the aggregated placeholder-styled response
+    tg_candidates: List[TaskGraph]          
+    interview: Annotated[Interview, "list"]
+    max_num_turns: int # i'll use that later
+    context: Context # retrieval
+    tg_chosen: TaskGraph
+    response: str = ""
 
-# Step 2: Define a function to instantiate and return the current state
-def get_current_state() -> State:
-    # Ask the user to input the topic dynamically
-    topic = input("Please enter the topic: ")
+    def print_state(self):
+        """Pretty-print the current state."""
+        print("\n📌 Current State Snapshot:")
+        pprint.pprint(self.__dict__)
 
-    # You can populate other fields dynamically or load from a configuration file
+def get_current_state(topic: str, human_wiseragent_feedback: str = "") -> State:
+    """Initialize and return the current state."""
     return State(
         topic=topic,
-        query="",  # Start with an empty query
-        human_wiseragent_feedback="",  # Initially empty feedback
+        last_topic="",
+        query="",
+        human_wiseragent_feedback=human_wiseragent_feedback,
         feedback_handled=False,
-        WS=50,  # Example wisdom score
-        wiseragents=[],  # Start with an empty list of wiseragents
-        max_num_turns=5,  # Set the max number of turns
-        interview=Interview(),  
-        context=[],  # Initialize with empty context
-        tg_candidates=[],  # Empty list of tg candidates
-        tg_chosen={},  # Empty dict for tg choices
-        tg_response=""  # Empty response
+        WS=50,
+        wiseragents=[],
+        tg_candidates=[],
+        # interview=[Interview()],
+        interview=[],
+        max_num_turns=3,
+        context=Context(),
+        tg_chosen=None,
+        response=""
     )
 
 

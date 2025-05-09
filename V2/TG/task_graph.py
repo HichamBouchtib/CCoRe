@@ -1,18 +1,22 @@
 import sys
 import os
-import uuid
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import uuid
 import json
 import glob
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pydantic import BaseModel, Field
 from agents.wiseragent import WiserAgent
-
+from graphviz import Digraph
+from ipywidgets import VBox, HTML
+from IPython.display import display
 
 class TaskGraph(BaseModel):
     owner_agent: WiserAgent = Field(..., description="The WiserAgent that owns this task graph")
     tasks: Dict[str, str] = Field(..., description="Dictionary of task names and their descriptions")
-    orders: List[Dict[str, str]] = Field(..., description="List of task transitions with from, to, condition") # V1 change here
+    orders: List[Dict[str, str]] = Field(..., description="List of task transitions with from, to, condition") 
+    refused: Optional[bool] = False
+    answer: Optional[str] = Field(..., description="The userquery final answer")
 
     def update_tasks(self, tasks: Dict[str, str]) -> None:
         """Sets the tasks dictionary."""
@@ -36,31 +40,16 @@ class TaskGraph(BaseModel):
         return {
             "owner_agent": self.owner_agent.name,
             "tasks": self.tasks,
-            "orders": self.orders
+            "orders": self.orders,
+            "refused": self.refused,
+            "answer": self.answer
         }
 
     def to_json_string(self, indent=4) -> str:
         """Return the TaskGraph as a JSON-formatted string."""
         return json.dumps(self.to_json(), indent=indent)
 
-    # def save_to_file(self, folder="TG", filename: str = None) -> None:
-    #     """Save the TaskGraph to a JSON file. If filename is None, auto-increment."""
-    #     os.makedirs(folder, exist_ok=True)
-
-    #     if filename is None:
-    #         existing_files = glob.glob(os.path.join(folder, "TG_*.json"))
-    #         next_index = len(existing_files) + 1
-    #         filename = os.path.join(folder, f"TG_{next_index}.json")
-    #     else:
-    #         # Only add folder if it's not already part of the filename
-    #         if not os.path.isabs(filename) and not filename.startswith(folder):
-    #             filename = os.path.join(folder, filename)
-
-    #     with open(filename, "w", encoding="utf-8") as f:
-    #         json.dump(self.to_json(), f, indent=4)
-
-    #     print(f"Task graph saved to {filename}")
-    def save_to_file(self, folder="TG", filename: str = None) -> None:
+    def save_to_file(self, folder="TG/saved_TGs", filename: str = None) -> None:
         os.makedirs(folder, exist_ok=True)
 
         if filename is None:
@@ -74,6 +63,80 @@ class TaskGraph(BaseModel):
             json.dump(self.to_json(), f, indent=4)
 
         print(f"Task graph saved to {filename}")
+    
+    def pretty_print(self) -> None:
+        """Prints a nicely formatted view of the TaskGraph."""
+        print(f"\nProposed by: {self.owner_agent.name}")
+
+        tg_dict = {
+            "tasks": self.tasks if hasattr(self, "tasks") else {},
+            "orders": self.orders if hasattr(self, "orders") else [],
+            "refused": self.refused,
+            "answer": self.answer
+        }
+
+        print(json.dumps(tg_dict, indent=2))
+    
+    # visualization methods
+    def visualize_with_graphviz(self, output_path: str = None, view: bool = False) -> Digraph:
+        dot = Digraph(comment=f"Task Graph by {self.owner_agent.name}")
+
+        # 'dot' for hierarchical
+        dot.engine = 'dot'
+
+        # Control spacing between nodes and layers
+        dot.attr(rankdir="TB", nodesep="0.4", ranksep="0.4")
+
+        # Node styling
+        dot.attr(
+            'node',
+            shape='circle',
+            style='filled',
+            fillcolor='lightgrey',
+            fontname='Arial',
+            fontsize='18',
+            width='1.2',
+            height='1.2'
+        )
+
+        # Add all tasks as nodes (only names)
+        for task_name in self.tasks.keys():
+            dot.node(task_name)
+
+        # Edge label font styling
+        edge_font_color = "darkblue"
+
+        for order in self.orders:
+            from_task = order.get("from", "")
+            to_task = order.get("to", "")
+            condition = order.get("condition", "")
+
+            dot.edge(
+                from_task,
+                to_task,
+                label=condition,
+                fontcolor=edge_font_color,
+                fontsize='12',
+                fontname='Arial'
+            )
+
+        dot.graph_attr.update(splines="line", overlap="false")
+
+        if "Start" not in self.tasks:
+            dot.node("Start", shape="plaintext", label="Start", fontsize="14")
+            first_task = next(iter(self.tasks))
+            dot.edge("Start", first_task)
+        if "End" not in self.tasks:
+            dot.node("End", shape="plaintext", label="End", fontsize="14")
+
+        if output_path:
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            dot.render(output_path, format='png', view=view)
+            print(f"Graphviz visualization saved to {output_path}.png")
+        elif view:
+            dot.view()
+
+        return dot
 
     @staticmethod
     def from_json(json_data: Dict, agent_registry: Dict[str, WiserAgent]) -> "TaskGraph":
@@ -85,7 +148,9 @@ class TaskGraph(BaseModel):
         return TaskGraph(
             owner_agent=owner_agent,
             tasks=json_data["tasks"],
-            orders=json_data["orders"]
+            orders=json_data["orders"],
+            refused=json_data["refused"],
+            answer=json_data["answer"]
         )
 
     @staticmethod
@@ -99,7 +164,7 @@ class TaskGraph(BaseModel):
         return TaskGraph.from_json(json_data, agent_registry)
 
     @staticmethod
-    def list_available_graphs(folder="TG") -> List[str]:
+    def list_available_graphs(folder="TG/saved_TGs") -> List[str]:
         """List all task graph JSON files in the TG folder."""
         os.makedirs(folder, exist_ok=True)
         files = glob.glob(os.path.join(folder, "TG_*.json"))
@@ -110,65 +175,34 @@ class TGList(BaseModel):
         description="Full list of candidate task graphs.",
     )
 
-# # Create dummy agents
-# agent1 = WiserAgent(
-#             name="AgentAlpha",
-#             domain_expertise="AI-Driven Malware Analysis",
-#             description="Specializes in analyzing malware using advanced AI techniques to identify new threats and vulnerabilities.",
-#             WS=50,
-#             preferred_llm="qwen2.5:latest"
-#         )
-# agent_registry = {"AgentAlpha": agent1}
+# Vizualization function for TGs 
+def score_to_stars(score: float) -> str:
+    full_stars = int(score)
+    half_star = score - full_stars >= 0.5
+    return "⭐" * full_stars + ("✰" if half_star else "")
 
-# # Step 1: Create a TaskGraph
-# tg = TaskGraph(
-#     owner_agent=agent1,
-#     tasks={
-#         "start": "Begin the process",
-#         "verify": "Verify input data",
-#         "end": "Finish the task"
-#     },
-#     orders=[
-#         {"from": "start", "to": "verify", "condition": "input_valid"},
-#         {"from": "verify", "to": "end", "condition": "verified_true"}
-#     ]
-# )
+def display_tg_voting_results(final_scores: list, individual_scores: dict):
+    widgets = []
 
-# print("🛠 Created TaskGraph object:")
-# print(tg.to_json_string())
+    # Final average results table
+    header_html = "<h3>🏆 Final Scores & Rankings</h3><table border='1' style='border-collapse:collapse;'>"
+    header_html += "<tr><th>Agent</th><th>Average Score</th><th>Stars</th><th>Rank</th></tr>"
 
-# # Step 2: Save it
-# tg.save_to_file()
+    sorted_scores = sorted(final_scores, key=lambda x: x["avg_score"], reverse=True)
+    for rank, fs in enumerate(sorted_scores, 1):
+        name = fs["agent"].name if hasattr(fs["agent"], "name") else fs["agent"]
+        avg = fs["avg_score"]
+        header_html += f"<tr><td>{name}</td><td>{avg:.2f}</td><td>{score_to_stars(avg)}</td><td>#{rank}</td></tr>"
+    header_html += "</table><hr>"
 
-# # Step 3: List existing graphs
-# print("\n Available TaskGraph files:")
-# for file in TaskGraph.list_available_graphs():
-#     print(f" - {file}")
+    widgets.append(HTML(header_html))
 
-# # Step 4: Load the most recent one
-# import glob
-# import os
-# files = sorted(glob.glob("TG/TG_*.json"))
-# latest_file = files[-1] if files else None
+    # Individual scoring breakdown
+    for scorer, scores in individual_scores.items():
+        vote_html = f"<h4>🧠 <b>{scorer}</b>'s Scores:</h4><ul>"
+        for voted, score in scores.items():
+            vote_html += f"<li>{voted}: <b>{score:.1f}</b> → {score_to_stars(score)}</li>"
+        vote_html += "</ul><hr>"
+        widgets.append(HTML(vote_html))
 
-# if latest_file:
-#     loaded_tg = TaskGraph.load_from_file(latest_file, agent_registry)
-#     print("\nLoaded TaskGraph from file:")
-#     print(loaded_tg.to_json_string())
-
-#     # Step 5: Update tasks
-#     loaded_tg.update_tasks({
-#         "init": "Initialize system",
-#         "process": "Run main logic",
-#         "cleanup": "Wrap up and exit"
-#     })
-#     print("\n Updated tasks:")
-#     print(loaded_tg.to_json_string())
-
-#     # Save again to check overwrite safety
-#     loaded_tg.save_to_file(filename=latest_file)
-
-# # Step 6: Create TGList
-# tg_list = TGList(taskgraphs=[tg])
-# print("\n TGList example:")
-# print(tg_list.model_dump_json(indent=4))
+    display(VBox(widgets))

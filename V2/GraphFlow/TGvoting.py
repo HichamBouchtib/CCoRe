@@ -1,58 +1,163 @@
+from copy import deepcopy
+import sys
+import os
+from typing import Dict
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from TG.task_graph import TaskGraph, display_tg_voting_results
+from agents.wiseragent import WiserAgent
 from langchain_core.messages import SystemMessage
-from langchain_ollama import ChatOllama
-from state import State
+from state import State, get_current_state
 from llm import llm
+from pydantic import BaseModel
 
-scoring_instructions = """ You are an expert evaluator in your speciality of Task Graph proposals.
-Evaluate the following Task Graph proposals and provide a score from 0 to 5 to each one of them based on:
-1. Clarity of task definitions.
-2. Logical flow and dependency between tasks.
-3. Completeness and feasibility of the plan.
-Return your output as a JSON object with a single field "score" that contains a number between 0 and 5.
-Here is the Task Graph proposal:
-{tg_candidates}
+class ScoreOutput(BaseModel):
+    scores: Dict[str, float]  # key = TG owner name, value = score
+
+scoring_instructions = """
+You are {agent_name}, a WiserAgent with expertise in {domain}.
+You are tasked with reviewing multiple Task Graphs (TGs) proposed to solve the following user query:
+
+"{query}"
+
+Here are the TGs evaluate them against each other:
+
+{all_tgs}
+
+For each TG, evaluate critically based on:
+- Clarity and precision of task definitions
+- Logical flow and dependency correctness
+- Completeness and feasibility of solving the query
+
+Score Guide: 
+- 1: Very Poor
+- 2: Poor
+- 3: Fair
+- 4: Good
+- 5: Excellent
+
+Don't score them all the same
+
+Be strict: Deduct points for unclear tasks, missing steps, illogical flows, or redundancy.
+
+Return your output as a JSON object structured like:
+{{
+  "TG Owner Name 1": score1,
+  "TG Owner Name 2": score2,
+  ...
+}}
+If you cannot score a TG, return an empty JSON object {{}} for that TG."
 """
 
 def vote_TG(state: State):
+    query = state["query"]
+    context = state["context"]
+    context.pending_searches = []
+    context.awaiting_search = False
+
     tg_candidates = state.get("tg_candidates", [])
+    agents = state["wiseragents"]
+    
     if not tg_candidates:
         print("No TG candidates available for voting.")
         return {"tg_chosen": None}
     
-    aggregated_scores = []
-    
-    # Iterate over each TG candidate.
+    # print("\n--- Individual Scores ---\n")
+    aggregated_scores = {tg.owner_agent.name: [] for tg in tg_candidates}
+    individual_scores = {agent.name: {} for agent in agents}
+
+    # Prepare all TGs nicely
+    all_tgs_text = ""
     for candidate in tg_candidates:
-        candidate_scores = []
-        tg_json = candidate["task_graph"].to_json()  # Get the JSON dict representation.
+        all_tgs_text += f"\n--- TG proposed by {candidate.owner_agent.name} ---\n{candidate.to_json()}\n"
+
+    for agent in agents:
+        # print(f"\nAgent {agent.name} is scoring...")
         
-        # Let each wiseragent score this candidate using its own LLM.
-        for agent in state["wiseragents"]:
-            
-            prompt = scoring_instructions.format(tg_proposal=tg_json)
-            system_message = SystemMessage(content=prompt)
-            
-            # Use the agent's LLM to get a structured JSON output.
-            try:
-                result = llm.with_structured_output(dict).invoke([system_message])
-                score = float(result.get("score", 0))
-            except Exception as e:
-                print(f"Error scoring candidate from agent {agent.name}: {e}")
-                score = 0
-            
-            candidate_scores.append(score)
+        prompt = scoring_instructions.format(
+            agent_name=agent.name,
+            domain=agent.domain_expertise,
+            query=query,
+            all_tgs=all_tgs_text
+        )
+        system_message = SystemMessage(content=prompt)
         
-        # Compute the average score for the candidate.
-        avg_score = sum(candidate_scores) / len(candidate_scores)
-        aggregated_scores.append({
-            "agent": candidate["agent"],
-            "avg_score": avg_score,
-            "task_graph": candidate["task_graph"]
-        })
-    
-    # Select the candidate with the highest average score.
-    best_candidate = max(aggregated_scores, key=lambda x: x["avg_score"])
-    state["tg_chosen"] = best_candidate["task_graph"]
-    
-    print(f"Chosen TG from agent: {best_candidate['agent']} with average score: {best_candidate['avg_score']}")
-    return {"tg_chosen": best_candidate["task_graph"]}
+        try:
+            scores = llm.with_structured_output(ScoreOutput).invoke([system_message])
+            # print("Scores received:", scores)
+            for tg_owner, score in scores.scores.items():
+                if tg_owner != agent.name:  # Skip self-evaluation
+                    aggregated_scores[tg_owner].append(score)
+                    individual_scores[agent.name][tg_owner] = score
+                    # print(f"- {tg_owner} TG score : {score}")
+        except Exception as e:
+            print(f"- Error during scoring by {agent.name}: {e}")
+
+    # Compute averages
+    final_scores = []
+    for owner_name, score_list in aggregated_scores.items():
+        if score_list:
+            avg_score = sum(score_list) / len(score_list)
+            candidate = next(c for c in tg_candidates if c.owner_agent.name == owner_name)
+            final_scores.append({"agent": candidate.owner_agent, "avg_score": avg_score, "TG": candidate})
+            # print(f"\n --> Average score for {owner_name}: {avg_score:.2f}")
+
+    # Choose best TG
+    best_candidate = max(final_scores, key=lambda x: x["avg_score"])
+    state["tg_chosen"] = best_candidate["TG"]
+
+    print(f"\n>>> Chosen TG from agent: {best_candidate['agent'].name}")
+
+    # displaying results
+    display_tg_voting_results(final_scores, individual_scores)
+
+    return {
+         "tg_chosen": best_candidate["TG"]
+    }
+
+# agent1 = WiserAgent(
+#     name='Cybersecurity Specialist',
+#     domain_expertise='AI-Driven Cybersecurity',
+#     description='Expert in using AI to protect against cyber threats, focusing on phishing attacks.',
+#     WS=50,
+#     preferred_llm='qwen2.5:latest'
+# )
+# agent2 = WiserAgent(
+#     name='Data Privacy Expert',
+#     domain_expertise='AI and GDPR Compliance',
+#     description='Focused on designing AI systems that respect data privacy regulations.',
+#     WS=50,
+#     preferred_llm='qwen2.5:latest'
+# )
+# tg1 = TaskGraph(
+#     owner_agent=agent1,
+#     tasks={
+#         'Phishing Detection Training': 'Train AI model on historical phishing data.',
+#         'Website Monitoring': 'Monitor in real-time for phishing attempts.',
+#         'Automated Response': 'Auto-respond to detected phishing incidents.',
+#     },
+#     orders=[
+#         {'condition': 'trained', 'from': 'Phishing Detection Training', 'to': 'Website Monitoring'},
+#         {'condition': 'phishing_detected', 'from': 'Website Monitoring', 'to': 'Automated Response'}
+#     ],
+#     refused=False,
+#     answer=None
+# )
+# tg2 = TaskGraph(
+#     owner_agent=agent2,
+#     tasks={
+#         'Data Audit': 'Review all data usage pipelines.',
+#         'GDPR Training': 'Train developers on GDPR principles.',
+#         'Anonymization Pipeline': 'Build data anonymization layer.',
+#     },
+#     orders=[
+#         {'condition': 'audit_done', 'from': 'Data Audit', 'to': 'Anonymization Pipeline'},
+#         {'condition': 'training_complete', 'from': 'GDPR Training', 'to': 'Anonymization Pipeline'}
+#     ],
+#     refused=False,
+#     answer=None
+# )
+# state = get_current_state(topic="AI in Security")
+# state["wiseragents"] = [agent1, agent2]
+# state["tg_candidates"] = [tg1, tg2]
+# # Run vote_TG
+# result = vote_TG(state)

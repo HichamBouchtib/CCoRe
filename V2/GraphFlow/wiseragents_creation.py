@@ -1,11 +1,11 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from langchain_core.messages import HumanMessage, SystemMessage
-from agents.wiseragent import WiserAgentsList
+from agents.wiseragent import WiserAgentsList, display_wiseragents, visualize_agents_pyvis
 from llm import llm
 from state import State
+from IPython.display import display, IFrame
 
 wiseragents_instructions = """You are tasked with creating a set of specialized AI Wiser Agents. Follow these instructions carefully:
 
@@ -35,36 +35,49 @@ def create_wiseragents(state: State):
 
     """ Create WiserAgents """
 
+    if state["last_topic"] == state["topic"] and state["wiseragents"]:
+        print("✅ Skipping WiserAgent generation.")
+        return state
+    
+    print("Generating WiserAgents...\n")
     topic=state['topic']
     human_wiseragent_feedback=state.get('human_wiseragent_feedback', '')
     WS = state.get('WS', 50)
 
-    # System message
     system_message = wiseragents_instructions.format(topic=topic,
                                                         human_wiseragent_feedback=human_wiseragent_feedback,
                                                         WS=WS)
-
     messages = [
         SystemMessage(content=system_message),
         HumanMessage(content="Generate the appropriate set of WiserAgents.")
     ]
-
     structured_llm = llm.with_structured_output(WiserAgentsList)
     wiseragents_output = structured_llm.invoke(messages)
 
-    # If it's a tuple (e.g., from Pydantic model), take the first element
+    # handle it if the output is a tuple
     if isinstance(wiseragents_output, tuple):
         wiseragents_output = wiseragents_output[0]
 
     # Extract the list from WiserAgentsList
     wiseragents_list = wiseragents_output.wiseragents if hasattr(wiseragents_output, "wiseragents") else wiseragents_output
 
-
-    return State(**{
+    # Add interactive widget display here
+    display_wiseragents(wiseragents_list)
+    # agent in chrome
+    iframe = visualize_agents_pyvis(wiseragents_list)
+    display(iframe)
+    
+    # # printing
+    # for agent in wiseragents_output.wiseragents:
+    #     print(agent.persona)
+    #     print("-" * 50)
+    
+    print("WiserAgents generated:")
+    return {
         **state,
-        "wiseragents": wiseragents_list
-    })
-
+        "wiseragents": wiseragents_list,
+        "last_topic": topic
+    }
 
 # test_state = {
 #     "topic": "AI in Cyberattacks",

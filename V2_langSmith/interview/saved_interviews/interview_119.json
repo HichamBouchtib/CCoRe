@@ -1,0 +1,163 @@
+[
+    {
+        "TG_Owner": "ThreatHunter",
+        "task_graph": {
+            "owner_agent": "ThreatHunter",
+            "tasks": {
+                "GenerateTG": "Create a task graph based on the analysis of the user query.",
+                "QueryAnalysis": "Analyze the user query for understanding its intent."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryAnalysis",
+                    "to": "GenerateTG"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "NetGuardian",
+                "content": "What is the intended meaning of the user query \"hhhhhhhhhhhhhh\"? The current TG does not provide enough context to understand the query's intent."
+            },
+            {
+                "from": "IntruderPreventor",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the expected output or action based on the user query \"hhhhhhhhhhhhhh\"? The current TG lacks this information, making it unclear what task needs to be performed after the TG is generated."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "NetGuardian",
+        "task_graph": {
+            "owner_agent": "NetGuardian",
+            "tasks": {
+                "Logfile Analyzing": "Analyzing the logs for any suspicious activities and detect potential threats.",
+                "Port Scanning": "Scanning the network for open ports using predefined tools.",
+                "Vulnerability Protectoring": "Mitigating detected vulnerabilities by applying security patches or blocking malicious activities."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Port Scanning",
+                    "to": "Logfile Analyzing"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Port Scanning",
+                    "to": "Vulnerability Protectoring"
+                },
+                {
+                    "condition": "threats_found",
+                    "from": "Logfile Analyzing",
+                    "to": "Vulnerability Protectoring"
+                },
+                {
+                    "condition": "no_threats",
+                    "from": "Logfile Analyzing",
+                    "to": "End"
+                },
+                {
+                    "condition": "resolved",
+                    "from": "Vulnerability Protectoring",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatHunter",
+                "content": "What is the expected input for the \"Logfile Analyzing\" task, and how will it be provided to the NetGuardian agent?"
+            },
+            {
+                "from": "IntruderPreventor",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the expected input for the \"Port Scanning\" task, and how will it be provided to the NetGuardian agent?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "IntruderPreventor",
+        "task_graph": {
+            "owner_agent": "IntruderPreventor",
+            "tasks": {
+                "Task1": "Identify the nature of input query",
+                "Task2": "Generate a response based on the identified task"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Task1",
+                    "to": "Task2"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatHunter",
+                "content": "What is the expected input format for Task1 to correctly identify the nature of the query?"
+            },
+            {
+                "from": "NetGuardian",
+                "content": "What is the expected output format for Task2 to ensure it generates a relevant response?"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the expected input format for Task1 to correctly identify the nature of the query, and how should Task2 handle different types of inputs identified by Task1?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "Malware Analyst",
+        "task_graph": {
+            "owner_agent": "Malware Analyst",
+            "tasks": {
+                "GenerateAnswer": "Formulate a response based on the identified intent.",
+                "IdentifyQueryIntent": "Determine the user's intent behind the query 'hhhhhhhhhhhhh'."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyQueryIntent",
+                    "to": "GenerateAnswer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatHunter",
+                "content": "What is the expected output format for the response generated by the \"GenerateAnswer\" task?"
+            },
+            {
+                "from": "NetGuardian",
+                "content": "What is the expected action if the query intent cannot be determined by the \"IdentifyQueryIntent\" task?"
+            },
+            {
+                "from": "IntruderPreventor",
+                "content": "What is the expected action if the query intent is determined to be invalid or irrelevant by the \"IdentifyQueryIntent\" task?"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the expected action if the query intent is determined to be a request for information that cannot be directly answered with the given context?"
+            }
+        ],
+        "Answers": []
+    }
+]

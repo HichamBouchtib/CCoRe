@@ -1,0 +1,150 @@
+[
+    {
+        "TG_Owner": "ThreatDetect",
+        "task_graph": {
+            "owner_agent": "ThreatDetect",
+            "tasks": {
+                "AnswerFormulation": "Formulate an answer based on the retrieved information.",
+                "InformationRetrieval": "Retrieve relevant information from databases or APIs related to 'uidk'.",
+                "QueryUnderstanding": "Understand the user's query to determine what information is needed."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryUnderstanding",
+                    "to": "InformationRetrieval"
+                },
+                {
+                    "condition": "success",
+                    "from": "InformationRetrieval",
+                    "to": "AnswerFormulation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "NetSecMonitor",
+                "content": "What is the source of the query \"whats uidk\" and should it be validated before proceeding with QueryUnderstanding?"
+            },
+            {
+                "from": "IntrusionDetect",
+                "content": "What is the expected format and content of the information retrieved by the InformationRetrieval task, and how will it be used to formulate the answer in AnswerFormulation?"
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "What is the expected format and content of the answer in AnswerFormulation, and how will it be presented to the user?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "NetSecMonitor",
+        "task_graph": {
+            "owner_agent": "NetSecMonitor",
+            "tasks": {
+                "AnswerFormulation": "Formulate an answer based on the findings from the lookup.",
+                "InformationLookup": "Look up information about 'uidk' in relevant databases and online resources.",
+                "QueryUnderstanding": "Understand the user's query to determine what 'uidk' means."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryUnderstanding",
+                    "to": "InformationLookup"
+                },
+                {
+                    "condition": "success",
+                    "from": "InformationLookup",
+                    "to": "AnswerFormulation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the source of the query \"whats uidk\" and should it be considered as a potential threat or benign input?"
+            },
+            {
+                "from": "IntrusionDetect",
+                "content": "What is the expected format of the answer in the AnswerFormulation task?"
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "IntrusionDetect",
+        "task_graph": {
+            "owner_agent": "IntrusionDetect",
+            "tasks": {
+                "IdentifyQueryIntent": "Determine the intent behind the user's query 'whats uidk'",
+                "RespondToUser": "Provide a response based on the identified intent."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyQueryIntent",
+                    "to": "RespondToUser"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the expected response for the query 'whats uidk' and how should it be determined in the \"IdentifyQueryIntent\" task?"
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "What is the expected format and content of the response in the \"RespondToUser\" task if the intent behind the query 'whats uidk' cannot be determined?"
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "What is the expected behavior if the query 'whats uidk' contains malicious intent, and how should it be handled in the \"IdentifyQueryIntent\" task?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "MalwareAnalyze",
+        "task_graph": {
+            "owner_agent": "MalwareAnalyze",
+            "tasks": {
+                "AnalyzeResults": "Analyze the results obtained from the search query to determine if it is related to malware or a specific term.",
+                "SearchQuery": "Execute a search query to find information about 'uidk'"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "SearchQuery",
+                    "to": "AnalyzeResults"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the source of the search query 'uidk' and should it be validated before execution?"
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "What is the expected format of the results from the 'SearchQuery' task, and how will these results be used by the 'AnalyzeResults' task?"
+            },
+            {
+                "from": "IntrusionDetect",
+                "content": "What is the criteria for determining if the results are related to malware or a specific term in the 'AnalyzeResults' task?"
+            }
+        ],
+        "Answers": []
+    }
+]

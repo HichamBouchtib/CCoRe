@@ -1,0 +1,242 @@
+[
+    {
+        "TG_Owner": "ThreatDetect",
+        "task_graph": {
+            "owner_agent": "ThreatDetect",
+            "tasks": {
+                "Incident Response": "Responding to detected incidents by containing, investigating, and mitigating the threat.",
+                "Security Patching": "Applying security patches or updates to mitigate known vulnerabilities.",
+                "Threat Scanning": "Scanning the network for potential cyber threats using advanced AI techniques.",
+                "Vulnerability Assessment": "Evaluating the system's vulnerabilities to identify weak points that could be exploited by attackers."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Threat Scanning",
+                    "to": "Vulnerability Assessment"
+                },
+                {
+                    "condition": "threat_detected",
+                    "from": "Threat Scanning",
+                    "to": "Incident Response"
+                },
+                {
+                    "condition": "vulnerabilities_found",
+                    "from": "Vulnerability Assessment",
+                    "to": "Security Patching"
+                },
+                {
+                    "condition": "no_vulnerabilities",
+                    "from": "Vulnerability Assessment",
+                    "to": "End"
+                },
+                {
+                    "condition": "incident_resolved",
+                    "from": "Incident Response",
+                    "to": "Security Patching"
+                },
+                {
+                    "condition": "incident_not_resolved",
+                    "from": "Incident Response",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "IntrusionPrevent",
+                "content": "Does the Task Graph cover all necessary steps for a complete Intrusion Prevention workflow, including threat detection, response, mitigation, and recovery? Are there any logical dependencies or conditions that are missing or incorrectly specified?"
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "Does the TG cover all potential outcomes for threat detection and vulnerability assessment, and are there any logical dependencies or conditions that might be missing? Specifically, consider if the \"threat_detected\" condition in the \"Threat Scanning\" task should have a subsequent step beyond \"Incident Response.\""
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "Are there any potential security threats that should be included in the task graph but are currently missing, and do the existing conditions and transitions logically cover all possible scenarios for threat detection, vulnerability assessment, incident response, and security patching?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "IntrusionPrevent",
+        "task_graph": {
+            "owner_agent": "IntrusionPrevent",
+            "tasks": {
+                "Email Filtering Analysis": "Analyze email filtering mechanisms for effectiveness against known phishing tactics.",
+                "Phishing Simulation Testing": "Simulate a phishing attack to test the organization's defenses.",
+                "Security Patch Application": "Apply necessary security patches to systems that may be vulnerable to phishing attacks.",
+                "User Training Evaluation": "Evaluate current user training programs on recognizing and responding to phishing attempts."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Phishing Simulation Testing",
+                    "to": "Email Filtering Analysis"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Phishing Simulation Testing",
+                    "to": "User Training Evaluation"
+                },
+                {
+                    "condition": "vulnerabilities_found",
+                    "from": "Email Filtering Analysis",
+                    "to": "Security Patch Application"
+                },
+                {
+                    "condition": "adequate_training",
+                    "from": "User Training Evaluation",
+                    "to": "End"
+                },
+                {
+                    "condition": "patches_applied",
+                    "from": "Security Patch Application",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "Does the Task Graph cover all potential vulnerabilities related to phishing attacks, and are there any logical gaps in the task dependencies that could lead to ineffective threat detection and analysis?"
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "Does the Task Graph cover all potential security measures needed for a comprehensive phishing defense strategy, and are there any logical dependencies or conditions that might be missing?"
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "Does the Task Graph cover all potential vulnerabilities related to phishing attacks, and are there any logical gaps in the dependency conditions that could lead to ineffective mitigation strategies? Specifically, consider whether user training evaluation should be a prerequisite for email filtering analysis and if there is an appropriate task addressing immediate remediation after a successful phishing simulation."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "NetSecMonitor",
+        "task_graph": {
+            "owner_agent": "NetSecMonitor",
+            "tasks": {
+                "Incident Response Planning": "Develop a response plan in case of a detected cyber incident.",
+                "Log Analysis": "Analyze server logs for any suspicious activities or patterns that could indicate an attack.",
+                "Threat Intelligence Gathering": "Gather real-time threat intelligence to stay updated on emerging threats and vulnerabilities.",
+                "Vulnerability Assessment": "Evaluate identified vulnerabilities using automated tools and manual analysis.",
+                "Website Scanning": "Perform a comprehensive scan of the website to identify potential vulnerabilities."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Website Scanning",
+                    "to": "Log Analysis"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Website Scanning",
+                    "to": "Threat Intelligence Gathering"
+                },
+                {
+                    "condition": "threats_found",
+                    "from": "Log Analysis",
+                    "to": "Vulnerability Assessment"
+                },
+                {
+                    "condition": "no_threats",
+                    "from": "Log Analysis",
+                    "to": "End"
+                },
+                {
+                    "condition": "new_intelligence",
+                    "from": "Threat Intelligence Gathering",
+                    "to": "Vulnerability Assessment"
+                },
+                {
+                    "condition": "vulnerabilities_detected",
+                    "from": "Vulnerability Assessment",
+                    "to": "Incident Response Planning"
+                },
+                {
+                    "condition": "no_vulnerabilities",
+                    "from": "Vulnerability Assessment",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "Does the Task Graph cover all necessary steps for threat detection and response, including potential gaps in handling false positives and negatives during log analysis?"
+            },
+            {
+                "from": "IntrusionPrevent",
+                "content": "Does the Task Graph cover all necessary steps in an Intrusion Prevention workflow, and are there any logical dependencies or conditions that seem missing or incorrectly specified?"
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "Does the Task Graph cover all potential scenarios for identifying and responding to a cyber incident, or are there critical steps missing that could impact its effectiveness in a real-world scenario? Specifically, consider whether tasks like \"Patch Management\" or \"Security Patch Application\" are included and if the logical dependencies between tasks are correctly specified."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "MalwareAnalyze",
+        "task_graph": {
+            "owner_agent": "MalwareAnalyze",
+            "tasks": {
+                "Analyze Website Code": "Check the website's codebase for known vulnerabilities and malware.",
+                "Monitor User Behavior": "Track user interactions with the site to detect unusual activities that might indicate a cyber attack.",
+                "Scan Network for Threats": "Identify potential network-based threats such as DDoS attacks or unauthorized access attempts.",
+                "Update Security Measures": "Apply necessary security patches, updates, and configurations based on detected threats."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Scan Network for Threats",
+                    "to": "Analyze Website Code"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Scan Network for Threats",
+                    "to": "Monitor User Behavior"
+                },
+                {
+                    "condition": "vulnerabilities_found",
+                    "from": "Analyze Website Code",
+                    "to": "Update Security Measures"
+                },
+                {
+                    "condition": "unusual_activity_detected",
+                    "from": "Monitor User Behavior",
+                    "to": "Update Security Measures"
+                },
+                {
+                    "condition": "security_up_to_date",
+                    "from": "Update Security Measures",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "Does the Task Graph cover all potential threat vectors, and are there any logical gaps in the dependency conditions that could lead to incomplete security measures? Specifically, consider if additional tasks such as \"Check for Phishing Attempts\" or \"Evaluate Firewall Logs\" should be included, and if the current conditions effectively ensure a comprehensive security response."
+            },
+            {
+                "from": "IntrusionPrevent",
+                "content": "Does the Task Graph cover all necessary steps for an Intrusion Prevention System, including real-time monitoring and proactive defense mechanisms? Specifically, are there any missing tasks related to threat intelligence updates or incident response?"
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "Does the Task Graph cover all necessary steps for a comprehensive network security monitoring process, and are there any logical dependencies or conditions that might be missing to ensure a robust security response?"
+            }
+        ],
+        "Answers": []
+    }
+]

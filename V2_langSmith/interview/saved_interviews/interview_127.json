@@ -1,0 +1,142 @@
+[
+    {
+        "TG_Owner": "ThreatDetect",
+        "task_graph": {
+            "owner_agent": "ThreatDetect",
+            "tasks": {
+                "AnswerGeneration": "Generate a direct answer if possible or proceed with further tasks.",
+                "QueryUnderstanding": "Understand the user's query to provide an accurate response."
+            },
+            "orders": [
+                {
+                    "condition": "whazts",
+                    "from": "QueryUnderstanding",
+                    "to": "AnswerGeneration"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "IPSGuard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "NetSecMon",
+                "content": "What is the expected response for the query \"whazts\" and how should it be generated? The current TG does not specify what \"whazts\" means or how to generate an appropriate answer."
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the intended meaning of the query \"whazts\" and how should it be interpreted by the \"QueryUnderstanding\" task?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "IPSGuard",
+        "task_graph": {
+            "owner_agent": "IPSGuard",
+            "tasks": {
+                "AnswerRetrieval": "Retrieve an answer from a knowledge base or search the web if necessary.",
+                "QueryUnderstanding": "Understand the user's query and determine its intent."
+            },
+            "orders": [
+                {
+                    "condition": "query_needs_further_information",
+                    "from": "QueryUnderstanding",
+                    "to": "AnswerRetrieval"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the source of the query \"whazts\" and should it be validated for correctness before proceeding with further processing?"
+            },
+            {
+                "from": "NetSecMon",
+                "content": "What is the expected format and source of the input for the query \"whazts\" to ensure proper validation and handling?"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the expected response format for the answer retrieved by the \"AnswerRetrieval\" task, and how will it be presented to the user?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "NetSecMon",
+        "task_graph": {
+            "owner_agent": "NetSecMon",
+            "tasks": {
+                "AnswerProviding": "Provide a direct answer if possible or generate a task graph.",
+                "QueryUnderstanding": "Understand the user's query to provide an accurate response."
+            },
+            "orders": [
+                {
+                    "condition": "whazts",
+                    "from": "QueryUnderstanding",
+                    "to": "AnswerProviding"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "IPSGuard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "Malware Analyst",
+        "task_graph": {
+            "owner_agent": "Malware Analyst",
+            "tasks": {
+                "AnswerFormulation": "Formulate an answer based on the understanding of the query.",
+                "QueryUnderstanding": "Understand the user's query about 'whazts'"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryUnderstanding",
+                    "to": "AnswerFormulation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the expected response to the query \"whazts\"? The current task graph does not specify how the answer will be formulated based on the understanding of the query."
+            },
+            {
+                "from": "IPSGuard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "NetSecMon",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

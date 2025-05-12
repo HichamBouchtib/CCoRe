@@ -1,0 +1,233 @@
+[
+    {
+        "TG_Owner": "ThreatDetectWiser",
+        "task_graph": {
+            "owner_agent": "ThreatDetectWiser",
+            "tasks": {
+                "Incident Response Planning": "Developing a plan for responding to detected incidents or breaches.",
+                "Security Patch Application": "Applying necessary security patches and updates to mitigate identified vulnerabilities.",
+                "Threat Intelligence Gathering": "Collecting real-time threat intelligence to stay ahead of potential cyber attacks.",
+                "Website Security Assessment": "Evaluating the current state of website security against known vulnerabilities and threats."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Website Security Assessment",
+                    "to": "Threat Intelligence Gathering"
+                },
+                {
+                    "condition": "new_threats_detected",
+                    "from": "Threat Intelligence Gathering",
+                    "to": "Incident Response Planning"
+                },
+                {
+                    "condition": "threats_exist",
+                    "from": "Incident Response Planning",
+                    "to": "Security Patch Application"
+                },
+                {
+                    "condition": "patches_applied",
+                    "from": "Security Patch Application",
+                    "to": "Website Security Assessment"
+                },
+                {
+                    "condition": "no_new_threats",
+                    "from": "Threat Intelligence Gathering",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "NetSecMonitorWiser",
+                "content": "Does the Task Graph cover all critical steps in a comprehensive network security monitoring process, and are there any logical gaps or missing dependencies between tasks? Specifically, is there a task for \"Vulnerability Scanning\" that should precede \"Website Security Assessment\"?"
+            },
+            {
+                "from": "IntrusionPreventWiser",
+                "content": "Does the Task Graph cover all necessary steps in an Intrusion Detection and Prevention workflow, including real-time monitoring and continuous improvement? Specifically, are there any critical tasks missing such as log analysis, incident detection, or system hardening, and are the task dependencies logically sound and complete?"
+            },
+            {
+                "from": "MalwareAnalyzeWiser",
+                "content": "Does the Task Graph cover all critical steps in a comprehensive malware analysis and defense lifecycle, including detection, response, mitigation, and monitoring? If not, which key tasks are missing? Additionally, are there any logical dependencies or conditions that seem unnecessary or could be simplified?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "NetSecMonitorWiser",
+        "task_graph": {
+            "owner_agent": "NetSecMonitorWiser",
+            "tasks": {
+                "Incident Response": "Responding to detected incidents by isolating affected systems, containing the threat, and restoring normal operations.",
+                "Log Analysis": "Analyzing server logs for any suspicious activities or patterns that could indicate an attack.",
+                "Security Patch Application": "Applying security patches and updates to mitigate identified vulnerabilities.",
+                "Threat Intelligence Gathering": "Collecting real-time threat intelligence to stay updated on emerging threats and vulnerabilities.",
+                "Website Scanning": "Performing a comprehensive scan of the website to identify potential vulnerabilities."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Website Scanning",
+                    "to": "Log Analysis"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Website Scanning",
+                    "to": "Threat Intelligence Gathering"
+                },
+                {
+                    "condition": "threats_found",
+                    "from": "Log Analysis",
+                    "to": "Incident Response"
+                },
+                {
+                    "condition": "new_threats_detected",
+                    "from": "Threat Intelligence Gathering",
+                    "to": "Security Patch Application"
+                },
+                {
+                    "condition": "patched",
+                    "from": "Security Patch Application",
+                    "to": "End"
+                },
+                {
+                    "condition": "resolved",
+                    "from": "Incident Response",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetectWiser",
+                "content": "Does the proposed Task Graph cover all necessary steps for threat detection and response, including potential gaps in handling false positives and false negatives during log analysis?"
+            },
+            {
+                "from": "IntrusionPreventWiser",
+                "content": "Does the proposed Task Graph cover all necessary steps in an Intrusion Detection and Prevention system, including real-time monitoring and response mechanisms? Specifically, are there any critical tasks missing such as network traffic analysis or endpoint protection, and do the task dependencies logically follow a typical incident handling process?"
+            },
+            {
+                "from": "MalwareAnalyzeWiser",
+                "content": "Does the Task Graph cover all critical steps in a comprehensive malware defense strategy, and are there any logical gaps or missing dependencies between tasks? Specifically, is there a task for malware analysis or endpoint protection that should be included, and do the conditions for transitioning between tasks logically align with typical incident response workflows?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "IntrusionPreventWiser",
+        "task_graph": {
+            "owner_agent": "IntrusionPreventWiser",
+            "tasks": {
+                "Incident Response Planning": "Developing a plan to respond to detected threats or incidents.",
+                "Network Scanning": "Scanning the network for potential vulnerabilities using automated tools.",
+                "Security Patch Management": "Applying security patches and updates to mitigate known vulnerabilities.",
+                "Threat Intelligence Gathering": "Collecting real-time threat intelligence from various sources.",
+                "Vulnerability Assessment": "Evaluating identified vulnerabilities to determine their severity and impact."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Network Scanning",
+                    "to": "Threat Intelligence Gathering"
+                },
+                {
+                    "condition": "new_threats_detected",
+                    "from": "Threat Intelligence Gathering",
+                    "to": "Vulnerability Assessment"
+                },
+                {
+                    "condition": "high_risk_vulnerabilities",
+                    "from": "Vulnerability Assessment",
+                    "to": "Incident Response Planning"
+                },
+                {
+                    "condition": "vulnerabilities_to_patch",
+                    "from": "Incident Response Planning",
+                    "to": "Security Patch Management"
+                },
+                {
+                    "condition": "no_new_threats",
+                    "from": "Network Scanning",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetectWiser",
+                "content": "Does the Task Graph cover all necessary steps in a comprehensive threat detection and response process, and are there any logical dependencies or conditions that might be missing for a complete workflow?"
+            },
+            {
+                "from": "NetSecMonitorWiser",
+                "content": "Does the Task Graph cover all critical steps in a comprehensive Network Security Monitoring process, and are there any logical dependencies or conditions that might be missing for effective threat detection and response?"
+            },
+            {
+                "from": "MalwareAnalyzeWiser",
+                "content": "Does the Task Graph cover all critical steps in a comprehensive malware defense strategy, and are there any logical gaps or missing dependencies between tasks? Specifically, is there a task for \"Malware Detection\" that should precede Network Scanning, and does the \"Incident Response Planning\" task adequately address both initial response to threats and post-incident analysis?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "MalwareAnalyzeWiser",
+        "task_graph": {
+            "owner_agent": "MalwareAnalyzeWiser",
+            "tasks": {
+                "Incident Response Planning": "Developing a plan to respond to detected incidents, including containment, eradication, and recovery strategies.",
+                "Malware Scanning": "Scanning the system for any existing malware or malicious activities.",
+                "Threat Intelligence Gathering": "Collecting real-time threat intelligence from various sources to identify potential threats.",
+                "Vulnerability Assessment": "Evaluating the security posture of the system by identifying vulnerabilities and weaknesses."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Malware Scanning",
+                    "to": "Threat Intelligence Gathering"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Malware Scanning",
+                    "to": "Vulnerability Assessment"
+                },
+                {
+                    "condition": "new_threats_found",
+                    "from": "Threat Intelligence Gathering",
+                    "to": "Vulnerability Assessment"
+                },
+                {
+                    "condition": "vulnerabilities_detected",
+                    "from": "Vulnerability Assessment",
+                    "to": "Incident Response Planning"
+                },
+                {
+                    "condition": "plan_developed",
+                    "from": "Incident Response Planning",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetectWiser",
+                "content": "Does the TG cover all necessary steps for a comprehensive threat detection and analysis process, including any potential feedback loops between tasks? Specifically, are there logical dependencies or missing tasks that could impact the effectiveness of the response strategy?"
+            },
+            {
+                "from": "NetSecMonitorWiser",
+                "content": "Does the Task Graph cover all critical steps in a comprehensive Network Security Monitoring process, and are there any logical dependencies or missing tasks that could compromise the effectiveness of the incident response? Specifically, is there a task for log analysis or incident detection included, and do the order conditions logically flow to ensure a complete security lifecycle?"
+            },
+            {
+                "from": "IntrusionPreventWiser",
+                "content": "Does the Task Graph cover all necessary steps in an Intrusion Detection & Prevention workflow, and are the task dependencies logically sound? Specifically, is there a missing task for real-time monitoring during the threat intelligence gathering phase, and should the \"Incident Response Planning\" task include sub-tasks for prioritization and resource allocation?"
+            }
+        ],
+        "Answers": []
+    }
+]

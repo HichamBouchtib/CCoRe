@@ -21,7 +21,7 @@ The content to summarize is based on the query: "{query}".
 """
 
 def search_wikipedia(state: State):
-# def search_wikipedia(state: State) -> None:
+
     """Retrieve info from Wikipedia using the state's context and store the results."""
     
     context = state["context"]
@@ -71,7 +71,3 @@ def search_wikipedia(state: State):
 
     return {"context": context}
 
-# # test
-# state = get_current_state(topic="Reinforcement Learning")
-# state["context"].search_query = "History and applications of reinforcement learning"
-# search_wikipedia(state)

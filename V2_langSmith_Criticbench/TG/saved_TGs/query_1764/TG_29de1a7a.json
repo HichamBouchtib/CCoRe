@@ -1,0 +1,55 @@
+{
+    "owner_agent": "CodeOptimizer",
+    "tasks": {
+        "DeterminePathDirection": "Decide on the direction for the next cell based on current position and k value.",
+        "EndTraversal": "Terminate traversal when all possible paths of length k have been evaluated.",
+        "EvaluatePath": "Check if the path is valid and meets the criteria for minimum path length.",
+        "InitializeGridTraversal": "Initialize the traversal of the grid with a starting point.",
+        "MoveToNeighborCell": "Move to an adjacent cell in the chosen direction.",
+        "UpdateMinimumPath": "Update the minimum path if the current path is better."
+    },
+    "orders": [
+        {
+            "condition": "success",
+            "from": "InitializeGridTraversal",
+            "to": "DeterminePathDirection"
+        },
+        {
+            "condition": "success",
+            "from": "DeterminePathDirection",
+            "to": "MoveToNeighborCell"
+        },
+        {
+            "condition": "success",
+            "from": "MoveToNeighborCell",
+            "to": "EvaluatePath"
+        },
+        {
+            "condition": "path_valid",
+            "from": "EvaluatePath",
+            "to": "UpdateMinimumPath"
+        },
+        {
+            "condition": "success",
+            "from": "UpdateMinimumPath",
+            "to": "DeterminePathDirection"
+        },
+        {
+            "condition": "all_paths_evaluated",
+            "from": "DeterminePathDirection",
+            "to": "EndTraversal"
+        },
+        {
+            "condition": "failure",
+            "from": "MoveToNeighborCell",
+            "to": "EvaluatePath"
+        },
+        {
+            "condition": "minimum_path_found",
+            "from": "UpdateMinimumPath",
+            "to": "EndTraversal"
+        }
+    ],
+    "refused": false,
+    "answer": null
+}

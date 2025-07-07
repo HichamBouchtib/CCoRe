@@ -1,0 +1,186 @@
+[
+    {
+        "TG_Owner": "DataPrepWise",
+        "task_graph": {
+            "owner_agent": "DataPrepWise",
+            "tasks": {
+                "Count Fruits": "Count the number of each type of fruit mentioned."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Count Fruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureEngWise",
+                "content": "What is the purpose of the \"Count Fruits\" task if the user query only asks for the total number of fruits, not the count of each type?"
+            },
+            {
+                "from": "ModelSelectTuneWise",
+                "content": "What is the expected output format for the total number of fruits, and should the \"Count Fruits\" task be retained given the user's request?"
+            },
+            {
+                "from": "EvalMetricWise",
+                "content": "What is the expected output format for the total number of fruits, and should the \"Count Fruits\" task be retained given the user's request to only know the total count?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "FeatureEngWise",
+                "content": "The \"Count Fruits\" task in this TG is designed to count the number of each type of fruit mentioned. However, if the user query only asks for the total number of fruits without needing a breakdown by type, this task is redundant and unnecessary. The purpose of including such a task could be historical or as part of a more complex workflow that requires individual counts but was not fully specified in the initial query. To directly answer the question: If the goal is solely to find the total number of fruits, the \"Count Fruits\" task should be modified or removed to streamline the process and avoid unnecessary computation."
+            },
+            {
+                "to": "ModelSelectTuneWise",
+                "content": "The expected output format for the total number of fruits should be a simple numerical count. For example, \"You have 14 fruits in total.\"\n\nGiven the user's request to count the number of each type of fruit and provide the total, the \"Count Fruits\" task should indeed be retained. However, it would be beneficial to add a subsequent task that calculates the total number of fruits from the counts obtained by the \"Count Fruits\" task. This will ensure that both the individual counts and the total are provided as requested."
+            },
+            {
+                "to": "EvalMetricWise",
+                "content": "The expected output format for the total number of fruits should be a single integer representing the total count. For example, \"12\" if the total number of fruits is 12.\n\nGiven the user's request to only know the total count, the \"Count Fruits\" task can be modified or replaced with a task that sums up all the individual fruit counts and provides the total. The current \"Count Fruits\" task focuses on counting each type of fruit separately, which is not necessary for the user's request. Therefore, it would be more appropriate to retain a task that directly calculates the total number of fruits."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "FeatureEngWise",
+        "task_graph": {
+            "owner_agent": "FeatureEngWise",
+            "tasks": {
+                "Count Fruits": "Count the number of each type of fruit mentioned in the query."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Count Fruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPrepWise",
+                "content": "What is the purpose of the \"End\" task in this TG? It seems unnecessary since there are no subsequent tasks."
+            },
+            {
+                "from": "ModelSelectTuneWise",
+                "content": "What is the expected output format for the fruit count? Is it a single total number of fruits, or the count of each individual type of fruit?"
+            },
+            {
+                "from": "EvalMetricWise",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPrepWise",
+                "content": "The \"End\" task in this TG serves as a termination point for the workflow. It indicates that once the \"Count Fruits\" task has been successfully completed, there are no further actions required. This helps to clearly define the end of the process and ensures that any necessary outputs or results from the \"Count Fruits\" task can be properly handled or displayed. While it might seem unnecessary if there are no subsequent tasks, it provides a clear structure and can be useful for debugging or logging purposes in more complex workflows."
+            },
+            {
+                "to": "ModelSelectTuneWise",
+                "content": "The expected output format for the fruit count should be the count of each individual type of fruit mentioned in the query. This aligns with the task description \"Count the number of each type of fruit mentioned in the query.\" Therefore, the output would look something like this:\n\n- Orange: 1\n- Grape: 1\n- Strawberry: 1\n- Apple: 3\n- Plum: 1\n- Banana: 1\n- Raspberry: 1\n- Blackberry: 1\n- Nectarine: 1\n- Peach: 3\n\nThis format provides a clear count for each type of fruit."
+            },
+            {
+                "to": "EvalMetricWise",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ModelSelectTuneWise",
+        "task_graph": {
+            "owner_agent": "ModelSelectTuneWise",
+            "tasks": {
+                "CountFruits": "Count the number of each type of fruit provided."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountFruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPrepWise",
+                "content": "What is the purpose of the \"End\" task in this TG? The TG does not specify what action should occur after counting the fruits."
+            },
+            {
+                "from": "FeatureEngWise",
+                "content": "What is the expected output format for the fruit count? The TG does not specify whether the output should be a single number representing the total count of fruits or a detailed list of each type and its quantity."
+            },
+            {
+                "from": "EvalMetricWise",
+                "content": "What is the expected action to be taken after counting the fruits? The TG should specify whether the total count or a detailed list of each fruit type and quantity is required."
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPrepWise",
+                "content": "The \"End\" task in this TG serves as a placeholder to indicate the completion of the workflow. It signifies that once the \"CountFruits\" task has been successfully executed and its results are available, the process can be considered finished. Since no specific action is defined for the \"End\" task, it acts as a logical endpoint for the current TG design."
+            },
+            {
+                "to": "FeatureEngWise",
+                "content": "The expected output format for the fruit count should be a detailed list of each type and its quantity. This provides more informative and precise information compared to just giving the total count."
+            },
+            {
+                "to": "EvalMetricWise",
+                "content": "The expected action to be taken after counting the fruits is to provide a detailed list of each fruit type and its quantity. This aligns with the initial query where you need to know how many of each type of fruit are present. However, if only the total number of fruits is required, then that information should be specified in the TG as well. Given the current TG, it specifies \"Count the number of each type of fruit provided,\" so the detailed list is expected."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "EvalMetricWise",
+        "task_graph": {
+            "owner_agent": "EvalMetricWise",
+            "tasks": {
+                "CountFruits": "Count the number of each type of fruit mentioned in the query."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountFruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPrepWise",
+                "content": "What is the purpose of the \"End\" task in this TG? It seems unnecessary since there are no further actions required after counting the fruits."
+            },
+            {
+                "from": "FeatureEngWise",
+                "content": "What is the expected output format for the fruit count? Is it a single total number of fruits, or the count of each individual type of fruit?"
+            },
+            {
+                "from": "ModelSelectTuneWise",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPrepWise",
+                "content": "The \"End\" task in this TG serves as a placeholder to indicate the completion of the workflow. While it might seem unnecessary given that there are no further actions required after counting the fruits, it provides a clear endpoint for the task graph and helps maintain consistency in the structure. This can be particularly useful if the TG needs to be extended or modified in the future without disrupting existing logic."
+            },
+            {
+                "to": "FeatureEngWise",
+                "content": "The expected output format for the fruit count should be the count of each individual type of fruit mentioned in the query. This aligns with the task description \"Count the number of each type of fruit mentioned in the query.\" Therefore, the response should provide a count for each specific fruit listed."
+            },
+            {
+                "to": "ModelSelectTuneWise",
+                "content": "You are welcome!"
+            }
+        ]
+    }
+]

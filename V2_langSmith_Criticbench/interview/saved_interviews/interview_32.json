@@ -1,0 +1,110 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateDateAfter24Hours": "Calculate the date that is 24 hours after today",
+                "DetermineFirstDayOf2019": "Identify the first day of 2019",
+                "FindTodayDate": "Identify today's date as the first Monday of 2019"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineFirstDayOf2019",
+                    "to": "FindTodayDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindTodayDate",
+                    "to": "CalculateDateAfter24Hours"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the exact date of \"today\" in MM/DD/YYYY format, and how did you determine it as the first Monday of 2019?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the exact date of \"the first day of 2019\" in MM/DD/YYYY format, and how did you determine it as a Tuesday?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateDateAfter24Hours": "Compute the date that is 24 hours after the identified first Monday",
+                "DetermineStartDay": "Identify the first day of January 2019",
+                "FindFirstMonday": "Locate the date of the first Monday in 2019"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineStartDay",
+                    "to": "FindFirstMonday"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindFirstMonday",
+                    "to": "CalculateDateAfter24Hours"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the exact date of the first Monday in 2019, and how does it relate to January 1, 2019?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the exact date of the first Tuesday in 2019, and how does it relate to January 1, 2019? This will help clarify the starting point for finding the first Monday."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "AddDaysToStartDate": "Add the calculated number of days to the start date",
+                "CalculateDaysBetweenDates": "Calculate the number of days between two dates",
+                "DetermineFirstDayOf2019": "Identify the first day of 2019 based on given information"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineFirstDayOf2019",
+                    "to": "CalculateDaysBetweenDates"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysBetweenDates",
+                    "to": "AddDaysToStartDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the specific date of \"today\" in 2019, and how does it relate to the first Monday of 2019? The current TG does not specify this information."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

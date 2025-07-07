@@ -1,0 +1,206 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "median_calculation": "Calculate the median of elements in the list l."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "median_calculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the input list `l` is empty?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the input list `l` contains duplicate median values?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the input list `l` contains an even number of elements?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "TestDebugWizard",
+                "content": "The expected behavior for an empty list `l` in the median calculation function should be to raise a ValueError or return None, as there are no elements to calculate the median from. Since the median is defined as the middle value in a sorted list of numbers, an empty list does not have a median."
+            },
+            {
+                "to": "APIProvisioner",
+                "content": "The expected behavior when the input list `l` contains duplicate median values depends on how the median is calculated. For an odd number of elements, the median is the middle element. If there are duplicates and they occupy the middle position(s), any of those duplicates can be considered as the median. For an even number of elements, the median is typically the average of the two middle numbers. If these two middle numbers are equal (due to duplicates), their average will still yield a single value as the median.\n\nIn Python, using the `statistics` module, for example, duplicate values would not change the result since it calculates the median based on position rather than unique values. The function `median(l)` would return the appropriate value(s) without issue."
+            },
+            {
+                "to": "GitHelper",
+                "content": "When the input list `l` contains an even number of elements, the median should be calculated as the average of the two middle numbers. For example, in the list `[1, 2, 3, 4]`, the two middle numbers are `2` and `3`, so the median would be `(2 + 3) / 2 = 2.5`."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "DefineFunction": "Define the function signature and docstring.",
+                "ImplementFunction": "Write the implementation of the median function.",
+                "TestFunction": "Create test cases to validate the correctness of the function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "ImplementFunction"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImplementFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior for an empty list input in the median function?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior for a list containing duplicate median values (e.g., [1, 2, 2, 3]) in the median function?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior for a list containing an even number of elements in the median function?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenLangExpert",
+                "content": "For an empty list input in the median function, the expected behavior should be to raise a ValueError or return None, as the median cannot be calculated for an empty list. This handling ensures that the function is robust and provides clear feedback when given invalid input."
+            },
+            {
+                "to": "APIProvisioner",
+                "content": "For a list containing duplicate median values, such as [1, 2, 2, 3], the median function should return the average of the two middle numbers after sorting. In this case, the sorted list is [1, 2, 2, 3], and the two middle numbers are 2 and 2. Therefore, the median would be (2 + 2) / 2 = 2. The function should handle both even and odd-length lists correctly."
+            },
+            {
+                "to": "GitHelper",
+                "content": "For a list containing an even number of elements, the median function should return the average of the two middle numbers. This ensures that the result is a single value representing the central tendency of the dataset, even when there isn't a single middle element."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "DefineFunction": "Define the function signature for the median calculation.",
+                "GenerateDocumentation": "Generate comprehensive documentation for the provided code snippet.",
+                "ImplementLogic": "Implement the logic to calculate the median based on the input list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "ImplementLogic"
+                },
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "GenerateDocumentation"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImplementLogic",
+                    "to": "GenerateDocumentation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior for an empty list input in the `median` function?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior of the `median` function when the input list contains duplicate values?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior of the `median` function when the input list contains an even number of elements?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenLangExpert",
+                "content": "For an empty list input in the `median` function, the expected behavior should be to raise a ValueError or return None, as there are no elements in the list to calculate a median. This ensures that the function handles edge cases gracefully and provides clear feedback to the caller about invalid inputs."
+            },
+            {
+                "to": "TestDebugWizard",
+                "content": "The `median` function should handle lists with duplicate values by considering all duplicates in the calculation. The presence of duplicates does not change the process of finding the median; it simply means there are repeated elements in the dataset. If the list has an odd number of elements, the median is the middle element when the list is sorted. If the list has an even number of elements, the median is the average of the two middle elements. Duplicates will be included in determining these middle values but will not affect the calculation method."
+            },
+            {
+                "to": "GitHelper",
+                "content": "When the input list contains an even number of elements, the `median` function should return the average of the two middle numbers. This means if the sorted list has elements at positions \\( n/2 \\) and \\( (n/2) + 1 \\), the median is calculated as:\n\n\\[\n\\text{median} = \\frac{\\text{list}[n//2] + \\text{list}[(n//2) + 1]}{2}\n\\]\n\nThis behavior ensures that the `median` function provides a single central value even when there's an even number of data points."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "DefineMedianFunction": "Define the median function in Python.",
+                "TestFunction": "Test the defined function using provided test cases."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineMedianFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior for an empty list input in the median function?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior of the median function when the input list contains duplicate values?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior of the median function when the input list contains an even number of elements?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenLangExpert",
+                "content": "For an empty list input in the median function, the expected behavior would be to raise a ValueError or return None, as there are no elements in the list to calculate a median. This handles the edge case appropriately and provides clear feedback to the user about why the function cannot compute a median."
+            },
+            {
+                "to": "TestDebugWizard",
+                "content": "The median function should handle lists with duplicate values by considering all duplicates in the calculation. The presence of duplicates does not change the process of finding the median; it simply means there are multiple occurrences of certain values in the list. For an odd number of elements, the median is still the middle value when the list is sorted. For an even number of elements, the median is the average of the two middle values."
+            },
+            {
+                "to": "APIProvisioner",
+                "content": "When the input list contains an even number of elements, the median function should return the average of the two middle numbers. This ensures that the result is a single value representing the central tendency of the dataset, even when there's no single middle element."
+            }
+        ]
+    }
+]

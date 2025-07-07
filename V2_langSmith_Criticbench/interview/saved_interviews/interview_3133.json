@@ -1,0 +1,206 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "FilterArray": "Filter out non-integer and integer values not between 1 and 9 inclusive from the array.",
+                "MapDigitsToWords": "Replace each digit with its corresponding name from 'One', 'Two', 'Three', etc.",
+                "ReverseArray": "Reverse the sorted array.",
+                "SortArray": "Sort the filtered array in ascending order."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FilterArray",
+                    "to": "SortArray"
+                },
+                {
+                    "condition": "success",
+                    "from": "SortArray",
+                    "to": "ReverseArray"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReverseArray",
+                    "to": "MapDigitsToWords"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What happens if the array contains duplicate numbers? Does the TG handle duplicates correctly, or should there be a task to remove them before sorting?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "HandleEmptyArray": "Return an empty array if the input array is empty.",
+                "MapDigitsToWords": "Replace each digit in the reversed array with its corresponding name from 'One' to 'Nine'.",
+                "ReverseArray": "Reverse the sorted array.",
+                "SortAndFilterArray": "Sort the array of integers between 1 and 9 inclusive, ignoring any other numbers."
+            },
+            "orders": [
+                {
+                    "condition": "empty_array",
+                    "from": "HandleEmptyArray",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "not_empty_array",
+                    "from": "SortAndFilterArray",
+                    "to": "ReverseArray"
+                },
+                {
+                    "condition": "sorted_filtered_array",
+                    "from": "ReverseArray",
+                    "to": "MapDigitsToWords"
+                },
+                {
+                    "condition": "reversed_array",
+                    "from": "MapDigitsToWords",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What happens if the input array contains non-integer values? Are they ignored, and how are they handled in the task graph?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What happens if the input array contains non-digit values between 1 and 9, such as strings like \"1\" or \"5\"? Are they ignored, and how are they handled in the task graph?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "HandleEmptyArray": "Returns an empty array if the input array is empty.",
+                "MapDigitsToWords": "Maps each digit in the reversed array to its corresponding word from 'One' to 'Nine'.",
+                "ReverseArray": "Reverses a given array.",
+                "SortAndFilterArray": "Sorts an array of integers between 1 and 9 inclusive, filters out non-integer values, and sorts the remaining numbers in ascending order."
+            },
+            "orders": [
+                {
+                    "condition": "empty_array",
+                    "from": "HandleEmptyArray",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "SortAndFilterArray",
+                    "to": "ReverseArray"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReverseArray",
+                    "to": "MapDigitsToWords"
+                },
+                {
+                    "condition": "success",
+                    "from": "MapDigitsToWords",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What happens if the input array contains non-integer values that are not between 1 and 9 inclusive? Are they ignored, or do they cause an error?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "DigitToWordMapping": "Map each digit to its corresponding name from 'One' to 'Nine'.",
+                "HandleEdgeCases": "Handle edge cases such as empty arrays or non-integer values.",
+                "ReverseArray": "Reverse the sorted array.",
+                "SortArray": "Sort the array of integers between 1 and 9 inclusive."
+            },
+            "orders": [
+                {
+                    "condition": "arr is empty",
+                    "from": "HandleEdgeCases",
+                    "to": "None"
+                },
+                {
+                    "condition": "arr contains integers between 1 and 9 inclusive",
+                    "from": "HandleEdgeCases",
+                    "to": "SortArray"
+                },
+                {
+                    "condition": "success",
+                    "from": "SortArray",
+                    "to": "ReverseArray"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReverseArray",
+                    "to": "DigitToWordMapping"
+                },
+                {
+                    "condition": "success",
+                    "from": "DigitToWordMapping",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What happens if the array contains integers outside the range 1 to 9? Is there a specific action for those values, or should they be ignored entirely?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

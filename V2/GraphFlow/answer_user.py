@@ -29,7 +29,7 @@ def answer_user(state: State):
     # Case 1: Already answered earlier in the graph
     if state["response"] is not None:
     # if state["response"] is not None and not tg_chosen:
-        print(f"The answer: {state['response']}")
+        print(f"The answer from SA mode: {state['response']}")
 
     # Case 2: a TG was chosen
     if tg_chosen:
@@ -77,7 +77,7 @@ def answer_user(state: State):
             result = llm.invoke([system_message])
             state["response"] = result.content
             print("-----------------------------------------------------------------------------------------------")
-            print(f"The answer: {state['response']}")
+            print(f"The answer from MA mode: {state['response']}")
         except Exception as e:
             print(f"\nError executing TG: {e}")
 

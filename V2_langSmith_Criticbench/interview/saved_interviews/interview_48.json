@@ -1,0 +1,172 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "FlyPositionCalculation": "Determine the fly's position on the opposite side wall.",
+                "GeckoPositionCalculation": "Calculate the gecko's initial position on the side wall.",
+                "PathFinding": "Find the shortest path from the gecko to the fly considering the room dimensions and possible paths (walls, ceiling)."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GeckoPositionCalculation",
+                    "to": "FlyPositionCalculation"
+                },
+                {
+                    "condition": "success",
+                    "from": "FlyPositionCalculation",
+                    "to": "PathFinding"
+                },
+                {
+                    "condition": "shortest_path_found",
+                    "from": "PathFinding",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What is the specific path the gecko takes to reach the fly, and how does it transition from one surface to another?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the specific path the gecko takes to reach the fly, and how does it transition from one surface to another? This question can help clarify the exact sequence of movements the gecko makes, ensuring that all transitions between walls and the ceiling are accounted for in the shortest path calculation."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the specific path the gecko takes to reach the fly, and how does it transition from one surface to another? This will ensure all movements are accounted for in the shortest path calculation."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "FlyPositionCalculation": "Determine the fly's position on the opposite side wall.",
+                "GeckoPositionCalculation": "Calculate the gecko's initial position on the wall.",
+                "ShortestPathCalculation": "Find the shortest path between the gecko and the fly using the unfolded room surface.",
+                "UnfoldRoomSurface": "Unfold the room surface to create a 2D plane for easier calculation of distances."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GeckoPositionCalculation",
+                    "to": "FlyPositionCalculation"
+                },
+                {
+                    "condition": "success",
+                    "from": "FlyPositionCalculation",
+                    "to": "UnfoldRoomSurface"
+                },
+                {
+                    "condition": "success",
+                    "from": "UnfoldRoomSurface",
+                    "to": "ShortestPathCalculation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the specific method used to unfold the room surface, and how does this affect the calculation of the shortest path?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the specific method used to unfold the room surface, and how does this affect the calculation of the shortest path? This question addresses a critical step in the TG but should also clarify whether the unfolding method considered the gecko's and fly's positions correctly on the unfolded plane."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the method used to determine the gecko's and fly's positions on the unfolded plane, and how are their respective distances from the edges of the unfolded surface accounted for?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "CalculatePathLength": "Calculating the shortest path length on the unfolded 2D plane",
+                "UnfoldRoom": "Unfolding the room's geometry to a 2D plane for easier path calculation"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "UnfoldRoom",
+                    "to": "CalculatePathLength"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the specific method used to unfold the room's geometry, and how does it ensure the shortest path is accurately represented on a 2D plane?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What specific method is used to unfold the room's geometry, and how does it ensure the shortest path is accurately represented on a 2D plane? This question can be refined by specifying that the method should consider all possible unfoldings of the room to guarantee finding the shortest path."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What specific method is used to unfold the room's geometry, and how does it ensure the shortest path is accurately represented on a 2D plane without missing any possible configurations?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "FlyPositionAnalysis": "Analyze the fly's position on the opposite side wall.",
+                "GeckoPositionAnalysis": "Analyze the gecko's current position on the side wall.",
+                "ShortestPathCalculation": "Calculate the shortest path for the gecko to reach the fly considering it can only walk across the ceiling and walls."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GeckoPositionAnalysis",
+                    "to": "FlyPositionAnalysis"
+                },
+                {
+                    "condition": "success",
+                    "from": "FlyPositionAnalysis",
+                    "to": "ShortestPathCalculation"
+                },
+                {
+                    "condition": "path_calculated",
+                    "from": "ShortestPathCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the specific method used to calculate the shortest path in \"ShortestPathCalculation\"? The TG does not specify whether this involves unfolding the 3D space into a 2D plane or using a different approach."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What specific method will be used to unfold the 3D space into a 2D plane for calculating the shortest path, and how will this method ensure the accuracy of the result?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What specific method will be used to unfold the 3D space into a 2D plane, and how will this method ensure the accuracy of the shortest path calculation?"
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,97 @@
+[
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "FindOldestPenguin": "Identify the oldest penguin from the given data.",
+                "ReadTable": "Read the table containing penguin information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ReadTable",
+                    "to": "FindOldestPenguin"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicLearner",
+                "content": "What is the criteria for determining the \"oldest\" penguin in this context, and does the TG handle cases where two penguins have the same age?"
+            },
+            {
+                "from": "ProofProver",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "LogicLearner",
+        "task_graph": {
+            "owner_agent": "LogicLearner",
+            "tasks": {
+                "AddPenguin": "Add a new penguin to the table.",
+                "FindOldestPenguin": "Determine which penguin is the oldest based on age.",
+                "ReadTable": "Read the table with penguin information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ReadTable",
+                    "to": "AddPenguin"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddPenguin",
+                    "to": "FindOldestPenguin"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the source of the table data, and how is it formatted? The TG assumes the table is already available, but there's no task to ensure its correctness or completeness."
+            },
+            {
+                "from": "ProofProver",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProofProver",
+        "task_graph": {
+            "owner_agent": "ProofProver",
+            "tasks": {
+                "IdentifyOldestPenguin": "Determine which penguin is the oldest based on their age."
+            },
+            "orders": [
+                {
+                    "condition": "completed",
+                    "from": "IdentifyOldestPenguin",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the source of the penguin data, and how will new penguins be added to the table in future queries? This information is not clear and may affect the task's execution."
+            },
+            {
+                "from": "LogicLearner",
+                "content": "What is the criteria for determining the age of a penguin in case of a tie? The TG assumes there will only be one oldest penguin, but it's unclear what happens if two penguins have the same age."
+            }
+        ],
+        "Answers": []
+    }
+]

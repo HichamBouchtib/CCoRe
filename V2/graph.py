@@ -15,6 +15,7 @@ from GraphFlow.answer_user import answer_user
 from GraphFlow.ConditionalEdges.choose_Agentmode import choose_AgentMode
 from GraphFlow.agent_mode import agent_mode
 from GraphFlow.tool_calling import tool_calling
+from GraphFlow.TG_refining import refine_task_graphs
 # from tools.mcp_tools import mcp_tool
 
 # Nodes
@@ -28,6 +29,7 @@ builder.add_node("tool_calling", tool_calling)
 builder.add_node("generate_answers", generate_answers)
 builder.add_node("search_web", search_web)
 builder.add_node("search_wikipedia", search_wikipedia)
+builder.add_node("TG_refining", refine_task_graphs)
 builder.add_node("vote_TG", vote_TG)
 builder.add_node("answer_user", answer_user)
 # builder.add_node("mcp_node", mcp_node)
@@ -44,7 +46,8 @@ builder.add_conditional_edges("tool_calling", should_search, ["search_web", "sea
 # builder.add_edge("mcp_tool", "generate_answers")
 builder.add_edge("search_web", "generate_answers")
 builder.add_edge("search_wikipedia", "generate_answers")
-builder.add_edge("generate_answers", "vote_TG")
+builder.add_edge("generate_answers", "TG_refining")
+builder.add_edge("TG_refining", "vote_TG")
 builder.add_edge("vote_TG", "answer_user")
 builder.add_edge("answer_user", END)
 

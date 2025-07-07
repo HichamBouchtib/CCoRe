@@ -1,0 +1,103 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateTodayDate": "Find out today's date based on the delay.",
+                "CalculateYesterdayDate": "Compute yesterday's date from today's date.",
+                "DetermineOriginalDate": "Calculate the original date of the concert before it was delayed."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineOriginalDate",
+                    "to": "CalculateTodayDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateTodayDate",
+                    "to": "CalculateYesterdayDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the significance of \"today\" in the context of the concert's original and delayed dates? The TG does not specify whether \"today\" refers to the date after the delay or needs to be calculated. This ambiguity could lead to incorrect calculations."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the basis for determining \"today's date\" in the TG, and how should it be calculated from the original concert date? This clarification is necessary to resolve the ambiguity."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateOriginalDate": "Determine the original date of the concert before it was delayed by one day.",
+                "SubtractOneDay": "Subtract one day from today's date to find out what yesterday's date is."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateOriginalDate",
+                    "to": "SubtractOneDay"
+                },
+                {
+                    "condition": "valid_date",
+                    "from": "SubtractOneDay",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the logic behind using \"CalculateOriginalDate\" as a task when the user query does not require finding the original date, but rather the date yesterday after the delay? This task seems unnecessary and could be removed."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the purpose of the \"valid_date\" condition in the order, given that all dates provided are in MM/DD/YYYY format and there is no indication that any date validation is needed for this specific problem? This condition seems unnecessary."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "CalculateYesterday": "Find out what date is yesterday from today's date",
+                "DetermineOriginalDate": "Calculate the original date of the concert before it was delayed by one day"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineOriginalDate",
+                    "to": "CalculateYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date if the concert was originally scheduled for 06/01/1943 and was delayed by one day?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date if the concert was originally scheduled for 06/01/1943 and was delayed by one day? This question should be included to clarify the context, as it directly relates to determining today's date from the original concert date."
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,110 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "MarriageDateCalculation": "Calculate the marriage date given the current year and the number of years since their marriage.",
+                "PreviousYearCalculation": "Determine the previous year from the calculated marriage year.",
+                "YesterdayDateCalculation": "Find the date for yesterday based on the previous year."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "MarriageDateCalculation",
+                    "to": "PreviousYearCalculation"
+                },
+                {
+                    "condition": "success",
+                    "from": "PreviousYearCalculation",
+                    "to": "YesterdayDateCalculation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current year, and how is it related to the 5-year anniversary mentioned in the user query? The TG does not explicitly state the current year, which is necessary for calculating the marriage date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date, and how does it relate to the 5-year anniversary mentioned in the user query? The TG does not explicitly state the current date, which is necessary for determining yesterday's date."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateCurrentYear": "Determine the current year based on the given information.",
+                "CheckDate": "Verify if the date is yesterday's date in MM/DD/YYYY format.",
+                "SubtractYears": "Subtract 5 years from the current year to find out the marriage year."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentYear",
+                    "to": "SubtractYears"
+                },
+                {
+                    "condition": "success",
+                    "from": "SubtractYears",
+                    "to": "CheckDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date, and how is it determined to be their 5-year anniversary today? The TG does not specify how the current date is derived from the given information."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date, and how is it determined to be their 5-year anniversary today? The TG does not specify how the current date is derived from the given information. Additionally, the TG should include a task to calculate the current date based on the marriage date and the 5-year anniversary condition."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "CalculateCurrentYear": "Determine the current year based on the given information.",
+                "FindDate": "Identify the date yesterday in MM/DD/YYYY format.",
+                "SubtractYears": "Subtract 5 years from the current year to find out the year of their marriage."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentYear",
+                    "to": "SubtractYears"
+                },
+                {
+                    "condition": "success",
+                    "from": "SubtractYears",
+                    "to": "FindDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date, and how is it determined in the task graph? The TG does not specify the current date, which is crucial for calculating yesterday's date."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current year, and how will it be determined in the task graph to ensure accurate calculations?"
+            }
+        ],
+        "Answers": []
+    }
+]

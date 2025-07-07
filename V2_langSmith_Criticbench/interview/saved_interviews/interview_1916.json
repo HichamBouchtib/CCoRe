@@ -1,0 +1,148 @@
+[
+    {
+        "TG_Owner": "EverydayWise",
+        "task_graph": {
+            "owner_agent": "EverydayWise",
+            "tasks": {
+                "FindCommonActor": "Identify the actor that appears in both movies."
+            },
+            "orders": [
+                {
+                    "condition": "actor_found",
+                    "from": "FindCommonActor",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialNormsGuru",
+                "content": "What is the criteria for determining if an actor \"appears\" in both movies? Does it refer to a credited role, or does it include uncredited appearances as well?"
+            },
+            {
+                "from": "CauseEffectAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialNormsGuru",
+        "task_graph": {
+            "owner_agent": "SocialNormsGuru",
+            "tasks": {
+                "FindCommonActor": "Identify the actor that appears in both movies."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FindCommonActor",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the title of the second \"American Beauty\" mentioned in the query, and does it refer to the same movie?"
+            },
+            {
+                "from": "CauseEffectAgent",
+                "content": "What is the title of the second \"American Beauty\" mentioned in the query, and does it refer to the same movie? No question, Thanks."
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CauseEffectAgent",
+        "task_graph": {
+            "owner_agent": "CauseEffectAgent",
+            "tasks": {
+                "ActorSearch1": "Find actors from the movie 'American Beauty'",
+                "ActorSearch2": "Find actors from the movie 'American Beauty' (same title as query)",
+                "CommonActorCheck": "Identify common actor(s) between both searches."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ActorSearch1",
+                    "to": "CommonActorCheck"
+                },
+                {
+                    "condition": "success",
+                    "from": "ActorSearch2",
+                    "to": "CommonActorCheck"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "Why are there two separate tasks (\"ActorSearch1\" and \"ActorSearch2\") to find actors from the same movie title 'American Beauty'? This seems redundant. Can these tasks be combined into one?"
+            },
+            {
+                "from": "SocialNormsGuru",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ObjectPropertiesAgent",
+        "task_graph": {
+            "owner_agent": "ObjectPropertiesAgent",
+            "tasks": {
+                "ActorSearch1": "Identify actors from American Beauty movie.",
+                "ActorSearch2": "Identify actors from American Beauty TV show.",
+                "FindCommonActors": "Determine the common actor(s) between the two sources."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ActorSearch1",
+                    "to": "FindCommonActors"
+                },
+                {
+                    "condition": "success",
+                    "from": "ActorSearch2",
+                    "to": "FindCommonActors"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "Why are both \"American Beauty\" movie and TV show being searched for actors when the user is only asking about a common actor between two instances of \"American Beauty\"? This task graph might incorrectly assume there are two distinct works, while the query likely refers to the same film."
+            },
+            {
+                "from": "SocialNormsGuru",
+                "content": "Why are separate searches being conducted for \"American Beauty\" movie and TV show when the user is likely asking about a common actor between two instances of the same film? This task graph might incorrectly assume there are two distinct works, while the query likely refers to the same film."
+            },
+            {
+                "from": "CauseEffectAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

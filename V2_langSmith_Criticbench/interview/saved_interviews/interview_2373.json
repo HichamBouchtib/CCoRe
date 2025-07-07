@@ -1,0 +1,174 @@
+[
+    {
+        "TG_Owner": "OptiCode",
+        "task_graph": {
+            "owner_agent": "OptiCode",
+            "tasks": {
+                "CheckForLetters": "Check if the string contains any letters.",
+                "ReturnResult": "Return the modified string.",
+                "ReverseCase": "If there are letters, reverse their case.",
+                "ReverseString": "If no letters, reverse the entire string."
+            },
+            "orders": [
+                {
+                    "condition": "contains_letters",
+                    "from": "CheckForLetters",
+                    "to": "ReverseCase"
+                },
+                {
+                    "condition": "no_letters",
+                    "from": "CheckForLetters",
+                    "to": "ReverseString"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReverseCase",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReverseString",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ErrDetect",
+                "content": "What happens if the input string is empty? The current TG does not account for this scenario."
+            },
+            {
+                "from": "StyleGuide",
+                "content": "What happens if the input string contains both letters and non-letter characters? The current TG does not specify how to handle this scenario."
+            },
+            {
+                "from": "TestGen",
+                "content": "What happens if the input string contains only uppercase letters? The current TG does not specify how to handle this scenario."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ErrDetect",
+        "task_graph": {
+            "owner_agent": "ErrDetect",
+            "tasks": {
+                "CheckInputType": "Verify if the input is a string.",
+                "ProcessString": "Apply the logic defined in the function solve(s).",
+                "ReturnResult": "Return the processed result."
+            },
+            "orders": [
+                {
+                    "condition": "is_string",
+                    "from": "CheckInputType",
+                    "to": "ProcessString"
+                },
+                {
+                    "condition": "success",
+                    "from": "ProcessString",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What happens if the input string is empty? Is it considered to contain no letters, and should it be reversed according to the spec?"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "What happens if the input string contains both letters and non-letter characters? Should only the letters be transformed, or should the entire string be reversed as per the spec?"
+            },
+            {
+                "from": "TestGen",
+                "content": "What happens if the input string contains only non-letter characters? Should the entire string still be reversed, or should it follow a different rule?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "StyleGuide",
+        "task_graph": {
+            "owner_agent": "StyleGuide",
+            "tasks": {
+                "CheckInputType": "Verify if the input is a string.",
+                "ProcessString": "Apply the specified logic to each character in the string.",
+                "ReturnResult": "Return the processed string as the result."
+            },
+            "orders": [
+                {
+                    "condition": "is_string",
+                    "from": "CheckInputType",
+                    "to": "ProcessString"
+                },
+                {
+                    "condition": "not_string",
+                    "from": "CheckInputType",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What happens if the string contains only digits and no letters? The current TG does not handle this case explicitly."
+            },
+            {
+                "from": "ErrDetect",
+                "content": "What happens if the string contains both letters and digits? The current TG does not specify how to handle such cases."
+            },
+            {
+                "from": "TestGen",
+                "content": "What happens if the string contains both letters and digits, but no spaces? The current TG does not specify how to handle such cases."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestGen",
+        "task_graph": {
+            "owner_agent": "TestGen",
+            "tasks": {
+                "CheckForLetters": "Checks if the string contains any letters.",
+                "FinalResult": "Returns the final result after processing.",
+                "ReverseCase": "Reverses the case of each letter in the string.",
+                "ReverseString": "Reverses the entire string if it contains no letters."
+            },
+            "orders": [
+                {
+                    "condition": "contains_letters",
+                    "from": "CheckForLetters",
+                    "to": "ReverseCase"
+                },
+                {
+                    "condition": "no_letters",
+                    "from": "CheckForLetters",
+                    "to": "ReverseString"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What happens if the string contains both letters and non-letter characters? Is the case of the letters supposed to be reversed, or is the entire string reversed as a fallback?"
+            },
+            {
+                "from": "ErrDetect",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

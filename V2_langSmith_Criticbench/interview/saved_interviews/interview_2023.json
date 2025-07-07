@@ -1,0 +1,167 @@
+[
+    {
+        "TG_Owner": "CodeOptimizer",
+        "task_graph": {
+            "owner_agent": "CodeOptimizer",
+            "tasks": {
+                "DetermineRoundingDirection": "Determines if rounding should be towards or away from zero based on the fractional part of the number.",
+                "ParseInput": "Parses the input string to a float value.",
+                "RoundValue": "Applies rounding according to the determined direction and returns the result."
+            },
+            "orders": [
+                {
+                    "condition": "input_parsed",
+                    "from": "ParseInput",
+                    "to": "DetermineRoundingDirection"
+                },
+                {
+                    "condition": "direction_determined",
+                    "from": "DetermineRoundingDirection",
+                    "to": "RoundValue"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the condition for transitioning from \"DetermineRoundingDirection\" to \"RoundValue\"? The current TG does not specify what \"direction_determined\" means in this context."
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SyntaxChecker",
+        "task_graph": {
+            "owner_agent": "SyntaxChecker",
+            "tasks": {
+                "DetermineClosestInteger": "Determines the closest integer based on the parsed value and rounding rules.",
+                "ParseInput": "Parses the input string to a float value.",
+                "ReturnResult": "Returns the result of the determined closest integer."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ParseInput",
+                    "to": "DetermineClosestInteger"
+                },
+                {
+                    "condition": "success",
+                    "from": "DetermineClosestInteger",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What happens if the input string is not a valid number? How should the `ParseInput` task handle such cases?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What happens if the input string is a non-numeric value like \"abc\"? How should `ParseInput` handle such cases?"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What happens if the input string represents a number very close to an integer boundary, such as \"14.501\" or \"-14.499\"? How should `DetermineClosestInteger` handle these cases to ensure rounding away from zero?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "StyleFormatter",
+        "task_graph": {
+            "owner_agent": "StyleFormatter",
+            "tasks": {
+                "ApplyRoundingRule": "Applies rounding away from zero if necessary.",
+                "DetermineClosestInteger": "Determines the closest integer based on the parsed value.",
+                "ParseInput": "Parses the input string to a float value."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ParseInput",
+                    "to": "DetermineClosestInteger"
+                },
+                {
+                    "condition": "equidistant",
+                    "from": "DetermineClosestInteger",
+                    "to": "ApplyRoundingRule"
+                },
+                {
+                    "condition": "any",
+                    "from": "ApplyRoundingRule",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the condition for the \"equidistant\" transition, and how is it determined? The current TG does not specify what exactly constitutes an \"equidistant\" case."
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestAutomator",
+        "task_graph": {
+            "owner_agent": "TestAutomator",
+            "tasks": {
+                "DetermineClosestInteger": "Determines the closest integer based on the parsed value.",
+                "ParseInput": "Parses the input string into a numerical value.",
+                "RoundAwayFromZero": "Rounds the number away from zero if it is equidistant between two integers."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ParseInput",
+                    "to": "DetermineClosestInteger"
+                },
+                {
+                    "condition": "equidistant",
+                    "from": "DetermineClosestInteger",
+                    "to": "RoundAwayFromZero"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the criteria for determining if a number is equidistant between two integers in the \"DetermineClosestInteger\" task? The TG does not specify how to handle this condition, which could lead to ambiguity."
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the exact condition for determining if a number is equidistant between two integers in the \"DetermineClosestInteger\" task, and how should it be handled in the \"RoundAwayFromZero\" task?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the exact numerical condition used to determine if a number is equidistant between two integers in the \"DetermineClosestInteger\" task, and how should this be implemented?"
+            }
+        ],
+        "Answers": []
+    }
+]

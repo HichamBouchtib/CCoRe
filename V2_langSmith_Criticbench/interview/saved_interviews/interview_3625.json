@@ -1,0 +1,160 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "ChooseAnswer": "Select the best answer from given choices.",
+                "GetBridge": "Find a bridge to cross the canal.",
+                "UseBarges": "Use barges to travel on the canal."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GetBridge",
+                    "to": "ChooseAnswer"
+                },
+                {
+                    "condition": "failure",
+                    "from": "UseBarges",
+                    "to": "ChooseAnswer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the rationale behind using a condition to choose an answer based on the success or failure of finding a bridge? This seems redundant since the best answer can be directly selected from the choices provided."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the rationale for including both \"GetBridge\" and \"UseBarges\" tasks when one of these methods should suffice to cross the canal, given the user query? This seems redundant as the TG should focus on the most direct solution."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the rationale for including both \"GetBridge\" and \"UseBarges\" tasks in the TG when one of these methods should suffice to cross the canal, given the user query? This seems redundant as the TG should focus on the most direct solution. Additionally, the condition-based order between these tasks does not align with the user's request for a direct answer choice."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "AnswerChoices": "List of possible answers provided by the user.",
+                "GetAcrossCanal": "How would you get from one side of a canal to another?"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GetAcrossCanal",
+                    "to": "AnswerChoices"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the context or type of canal being referred to, as this might affect the method of crossing?"
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the typical width of the canal, and are there any obstacles such as locks or narrow passages that might affect the method of crossing?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausalReasoning",
+        "task_graph": {
+            "owner_agent": "WiserCausalReasoning",
+            "tasks": {
+                "ChooseAnswer": "Select the most appropriate answer based on the given choices.",
+                "GetBridge": "Build a bridge over the canal to cross from one side to another.",
+                "UseBarges": "Travel across the canal using barges that are available for transportation."
+            },
+            "orders": [
+                {
+                    "condition": "bridge_exists",
+                    "from": "GetBridge",
+                    "to": "End"
+                },
+                {
+                    "condition": "barges_available",
+                    "from": "UseBarges",
+                    "to": "End"
+                },
+                {
+                    "condition": "no_bridge_no_barges",
+                    "from": "ChooseAnswer",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the condition for \"bridge_exists\" and \"barges_available\"? The TG does not specify how these conditions are met."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the condition for \"no_bridge_no_barges\" and how will the agent determine the most appropriate answer in this case?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the default action if neither a bridge nor barges are available, and how will the agent choose between the given answer choices?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "GetAcrossCanalUsingBarges": "Traveling across the canal using barges",
+                "GetAcrossCanalUsingBridge": "Crossing a canal using a bridge"
+            },
+            "orders": [
+                {
+                    "condition": "bridge_available",
+                    "from": "GetAcrossCanalUsingBridge",
+                    "to": "End"
+                },
+                {
+                    "condition": "barges_available",
+                    "from": "GetAcrossCanalUsingBarges",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the condition for \"bridge_available\" and \"barges_available\"? How are these conditions determined in the TG?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the default action if neither a bridge nor barges are available?"
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the criteria for determining whether \"bridge_available\" or \"barges_available\" conditions are met in the TG? How are these conditions checked or determined in practice?"
+            }
+        ],
+        "Answers": []
+    }
+]

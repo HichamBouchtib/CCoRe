@@ -1,0 +1,144 @@
+[
+    {
+        "TG_Owner": "EverydayWise",
+        "task_graph": {
+            "owner_agent": "EverydayWise",
+            "tasks": {
+                "PremiereDateCheck": "Verify the premiere date of RuPaul's first album to find matching TV series premiere dates.",
+                "TVSeriesVolumeCheck": "Identify which channel produced the ninth volume of a TV series that premiered on the same day as RuPaul's first album."
+            },
+            "orders": [
+                {
+                    "condition": "same_date",
+                    "from": "PremiereDateCheck",
+                    "to": "TVSeriesVolumeCheck"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is considered a \"volume\" in this context, and how does it relate to episodes of a TV series?"
+            },
+            {
+                "from": "LogicalDeductionBot",
+                "content": "What is considered a \"volume\" in this context, and how does it relate to episodes of a TV series? No question, Thanks."
+            },
+            {
+                "from": "ProblemSolvingWizard",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialEtiquetteAgent",
+            "tasks": {
+                "PremiereDateQuery": "Determine the premiere date of RuPaul's first album",
+                "TVSeriesVolumeQuery": "Identify the TV series that premiered on the same date as RuPaul's first album and find which channel produced its ninth volume"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PremiereDateQuery",
+                    "to": "TVSeriesVolumeQuery"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the premiere date of RuPaul's first album?"
+            },
+            {
+                "from": "LogicalDeductionBot",
+                "content": "What is the ninth volume of the identified TV series?"
+            },
+            {
+                "from": "ProblemSolvingWizard",
+                "content": "What is the source of the information used to identify the TV series and its ninth volume?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "LogicalDeductionBot",
+        "task_graph": {
+            "owner_agent": "LogicalDeductionBot",
+            "tasks": {
+                "ChannelIdentification": "Determine which channel produced the ninth volume of the identified TV series",
+                "PremiereDateQuery": "Find the premiere date of RuPaul's first album",
+                "TVSeriesVolumeCheck": "Identify the TV series that premiered on the same day as RuPaul's first album"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PremiereDateQuery",
+                    "to": "TVSeriesVolumeCheck"
+                },
+                {
+                    "condition": "success",
+                    "from": "TVSeriesVolumeCheck",
+                    "to": "ChannelIdentification"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the premiere date of RuPaul's first album?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the ninth volume of the identified TV series?"
+            },
+            {
+                "from": "ProblemSolvingWizard",
+                "content": "What is the title of the TV series that premiered on the same day as RuPaul's first album?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProblemSolvingWizard",
+        "task_graph": {
+            "owner_agent": "ProblemSolvingWizard",
+            "tasks": {
+                "FindNinthVolumeChannel": "Determine which channel produced the ninth volume of the identified TV series.",
+                "IdentifyTVSeriesPremiereDate": "Find the premiere date of the TV series that premiered on the same day as RuPaul's first album."
+            },
+            "orders": [
+                {
+                    "condition": "premise_satisfied",
+                    "from": "IdentifyTVSeriesPremiereDate",
+                    "to": "FindNinthVolumeChannel"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the premiere date of RuPaul's first album? This information is required to identify the TV series that premiered on the same day and proceed with finding the channel that produced its ninth volume."
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the title of RuPaul's first album, and when was it released? This information is needed to determine the premiere date of the TV series."
+            },
+            {
+                "from": "LogicalDeductionBot",
+                "content": "What is the title of the TV series, and which channel produced its ninth volume? This information is needed to directly answer the original query without relying on an intermediate task."
+            }
+        ],
+        "Answers": []
+    }
+]

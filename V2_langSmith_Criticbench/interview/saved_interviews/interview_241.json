@@ -1,0 +1,184 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "CalculateDistance": "Use the found speed to calculate the total distance traveled.",
+                "DefineVariables": "Define the variables for distance (d) and speed (s).",
+                "FormulateEquations": "Formulate equations based on given information.",
+                "SolveForSpeed": "Solve one of the equations to find the speed during the forward journey."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineVariables",
+                    "to": "FormulateEquations"
+                },
+                {
+                    "condition": "success",
+                    "from": "FormulateEquations",
+                    "to": "SolveForSpeed"
+                },
+                {
+                    "condition": "success",
+                    "from": "SolveForSpeed",
+                    "to": "CalculateDistance"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What is the basis for defining \"CalculateDistance\" as the final task without considering the return journey's speed increase? The TG should ensure consistency with the problem statement."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the basis for defining \"CalculateDistance\" as the final task without considering the return journey's speed increase? The TG should ensure consistency with the problem statement and account for both journeys."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the basis for defining \"CalculateDistance\" as the final task without explicitly using both the forward and return journey speeds in the calculation? The TG should ensure consistency with the problem statement and account for both journeys' speeds."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "DistanceCalculation": "Use the calculated speed to find the distance travelled by the jeep.",
+                "ForwardJourneyTime": "The time taken for the forward journey is given as 6 hours.",
+                "ReturnJourneyTime": "The time taken for the return journey is given as 4 hours with an increased speed of 12 km/hr.",
+                "SpeedCalculation": "Calculate the initial speed using the information from the forward and return journeys."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ForwardJourneyTime",
+                    "to": "ReturnJourneyTime"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReturnJourneyTime",
+                    "to": "SpeedCalculation"
+                },
+                {
+                    "condition": "success",
+                    "from": "SpeedCalculation",
+                    "to": "DistanceCalculation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the relationship between the speeds in the forward and return journeys, and how does it affect the calculation of the distance?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the relationship between the given times and speeds in the forward and return journeys, and how does it affect the calculation of the distance?"
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the relationship between the given times and speeds in the forward and return journeys, and how does it affect the calculation of the distance? This question can be refined to specifically ask about the speed difference and its impact on the time taken for the return journey."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "DistanceCalculation": "Calculate the distance travelled by the jeep using the speeds from both journeys",
+                "ForwardJourneySpeedCalculation": "Calculate the speed during the forward journey",
+                "ReturnJourneySpeedCalculation": "Calculate the speed during the return journey"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ForwardJourneySpeedCalculation",
+                    "to": "ReturnJourneySpeedCalculation"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReturnJourneySpeedCalculation",
+                    "to": "DistanceCalculation"
+                },
+                {
+                    "condition": "distance_calculated",
+                    "from": "DistanceCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the condition for ending the task graph, and how does it relate to the distance calculation? The current TG does not specify what \"distance_calculated\" means."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "DistanceCalculation": "Calculate the distance travelled by the jeep using the information from the forward and return journeys.",
+                "ForwardJourneyTime": "The time taken for the forward journey is given as 6 hours.",
+                "ReturnJourneyTime": "The time taken for the return journey is given as 4 hours with an increased speed of 12 km/hr."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ForwardJourneyTime",
+                    "to": "ReturnJourneyTime"
+                },
+                {
+                    "condition": "success",
+                    "from": "ReturnJourneyTime",
+                    "to": "DistanceCalculation"
+                },
+                {
+                    "condition": "distance_calculated",
+                    "from": "DistanceCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the speed of the jeep during the forward journey, and how does it relate to the increased speed during the return journey? This information is necessary for calculating the distance travelled by the jeep."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the speed of the jeep during the forward journey, and how does it relate to the increased speed during the return journey? This information is necessary for calculating the distance travelled by the jeep. However, the TG does not explicitly state how to derive these speeds from the given times and the increase in speed."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the relationship between the speed during the forward journey and the increased speed during the return journey, and how can this information be used to calculate the distance travelled by the jeep? This clarification is necessary for completing the DistanceCalculation task."
+            }
+        ],
+        "Answers": []
+    }
+]

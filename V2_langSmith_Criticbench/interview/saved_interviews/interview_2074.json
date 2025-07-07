@@ -1,0 +1,142 @@
+[
+    {
+        "TG_Owner": "EverydayWise",
+        "task_graph": {
+            "owner_agent": "EverydayWise",
+            "tasks": {
+                "IdentifyContext": "Determine the context of the question to understand the scenario better.",
+                "RetrieveAnswer": "Find the correct answer among the given choices based on the context."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyContext",
+                    "to": "RetrieveAnswer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the rationale behind including a \"RetrieveAnswer\" task when the TG does not provide any method for actually retrieving or evaluating the answer choices? This task seems unnecessary given the context."
+            },
+            {
+                "from": "CausalReasoner",
+                "content": "What is the rationale behind including a \"RetrieveAnswer\" task when there are no predefined methods or data sources within the TG to actually retrieve or evaluate the answer choices? This task seems unnecessary given the context and the user query."
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "What is the rationale behind including a \"RetrieveAnswer\" task when there are no predefined methods or data sources within the TG to actually retrieve or evaluate the answer choices? This task seems unnecessary given the context and the user query. Additionally, how will the \"IdentifyContext\" task provide enough information to determine the correct answer without any specific knowledge base or search mechanism?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialEtiquetteAgent",
+            "tasks": {
+                "IdentifyContext": "Determine the context of the question to understand the scenario better."
+            },
+            "orders": [
+                {
+                    "condition": "context_identified",
+                    "from": "IdentifyContext",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the context of \"the man didn't do great in college\"? This task might need more specificity to understand if it refers to academic performance, social life, or both."
+            },
+            {
+                "from": "CausalReasoner",
+                "content": "What specific aspect of \"best memories\" should be emphasized to clarify whether it relates more to social activities or academic experiences?"
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "What specific task will be performed to determine the context of the scenario, and how does it relate to identifying the correct answer among the given choices?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CausalReasoner",
+        "task_graph": {
+            "owner_agent": "CausalReasoner",
+            "tasks": {
+                "AnalyzeMemories": "Analyze the memories mentioned in the question to identify the most likely location.",
+                "IdentifyContext": "Determine the context of the question based on the given answer choices.",
+                "MatchLocation": "Match the identified location with the given answer choices."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyContext",
+                    "to": "AnalyzeMemories"
+                },
+                {
+                    "condition": "success",
+                    "from": "AnalyzeMemories",
+                    "to": "MatchLocation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the rationale for including both \"IdentifyContext\" and \"AnalyzeMemories\" as separate tasks when the context seems clear from the answer choices provided? This task graph might benefit from simplification."
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ObjectPropertiesAgent",
+        "task_graph": {
+            "owner_agent": "ObjectPropertiesAgent",
+            "tasks": {
+                "BrotherMemoriesAnalysis": "Identify the context where brothers' memories are formed during college years."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "BrotherMemoriesAnalysis",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What specific context does \"BrotherMemoriesAnalysis\" task cover to ensure it addresses the scenario of late-night memories shared between brothers in a college setting?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What specific type of activity or event during late nights is implied by \"late night with his brothers,\" and how does this relate to the context identified in the \"BrotherMemoriesAnalysis\" task?"
+            },
+            {
+                "from": "CausalReasoner",
+                "content": "What specific type of institution does \"the man\" attend, and how does this relate to the context of late-night memories shared between brothers? This clarification ensures the TG aligns with the user query about college settings."
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -5,7 +5,6 @@ from TG.task_graph import TaskGraph, get_next_query_folder
 from state import State
 from llm import llm
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-# from IPython.display import Image, display
 
 task_graph_instructions = """You are a WiserAgent named {agent} tasked with generating a Task Graph (TG) to precisely solve the user's question below.
 User Query: {query}
@@ -61,11 +60,20 @@ def generate_task_graphs(state: State):
     tg_candidates = []
     subfolder_name = get_next_query_folder()
     for agent in agents:
-        system_message = task_graph_instructions.format(query=query, agent=agent.name)
+
+        agent_profile = f"""{{
+            'name': '{agent.name}',
+            'domain_expertise': '{agent.domain_expertise}',
+            'description': '{agent.description}',
+            'WS': {agent.WS},
+            'preferred_llm': '{agent.preferred_llm}'
+        }}"""
+        system_message = task_graph_instructions.format(query=query, agent=agent_profile)
+        # system_message = task_graph_instructions.format(query=query, agent=agent.name)
 
         message = [
             SystemMessage(content=system_message),
-            HumanMessage(content="Generate the most appropriate task graph.")
+            HumanMessage(content="Generate a task graph to solve the user query.")
         ]
 
         if isinstance(agent, tuple):
@@ -82,6 +90,10 @@ def generate_task_graphs(state: State):
                 print(f"Agent {agent.name} refused to generate TG.")
                 continue
             
+            # if tg.owner_agent.name != agent.name:
+            #     print(f"Warning: agent name mismatch. Expected: {agent.name}, Got: {tg.owner_agent.name}")
+            #     tg.owner_agent.name = agent.name
+
             # tg.pretty_print()
             tg.save_to_file(subfolder=subfolder_name)
             tg_candidates.append(tg)
@@ -89,6 +101,7 @@ def generate_task_graphs(state: State):
         except Exception as e:
             print(f"Error processing {agent.name}: {e}")
             continue
+
     print("Task Graphs generated.\n")
     state["messages"].append(AIMessage(content="Task Graphs generated..."))
     tg_visuals = [
@@ -101,9 +114,7 @@ def generate_task_graphs(state: State):
     }
       for tg in tg_candidates
     ]
-
     tool_call_id = f"tool_call_tg_summary_{len(state['messages'])}"
-
     state["messages"].append(
         AIMessage(
             content="Task Graphs details",

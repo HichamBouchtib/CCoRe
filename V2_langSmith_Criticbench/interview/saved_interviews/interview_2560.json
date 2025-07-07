@@ -1,0 +1,152 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "GetComputerDataCompanyPriceOnWednesday": "Retrieve the stock price of Computer Data Company on Wednesday from the provided table.",
+                "GetThompsonCorporationPriceOnWednesday": "Retrieve the stock price of Thompson Corporation on Wednesday from the provided table."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GetComputerDataCompanyPriceOnWednesday",
+                    "to": "CompareStockPrices"
+                },
+                {
+                    "condition": "success",
+                    "from": "GetThompsonCorporationPriceOnWednesday",
+                    "to": "CompareStockPrices"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What is the exact condition for the \"CompareStockPrices\" task? The TG does not specify how to compare the prices once retrieved."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the exact criterion for determining which stock cost less on Wednesday, and how will \"CompareStockPrices\" task make this determination?"
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "CheckComputerDataCompanyPrice": "Get the stock price of Computer Data Company on Wednesday",
+                "CheckThompsonCorporationPrice": "Get the stock price of Thompson Corporation on Wednesday"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckComputerDataCompanyPrice",
+                    "to": "ComparePrices"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckThompsonCorporationPrice",
+                    "to": "ComparePrices"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the stock price of Computer Data Company on Wednesday? This task seems unnecessary since the TG already includes a task to get this information. The task can be removed as the price will be obtained in the \"CheckComputerDataCompanyPrice\" step."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the logic behind including two separate \"success\" conditions in the orders section, when both tasks will eventually provide the necessary information for comparison? This seems redundant since the \"ComparePrices\" task can be triggered once either price is obtained."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the logic behind including two separate \"success\" conditions in the orders section when both tasks will eventually provide the necessary information for comparison? This seems redundant since the \"ComparePrices\" task can be triggered once either price is obtained. Consider merging the conditions into a single one to simplify the TG."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "ComputerDataPriceOnWednesday": "Retrieve the stock price of Computer Data Company on Wednesday",
+                "ThompsonCorpPriceOnWednesday": "Retrieve the stock price of Thompson Corporation on Wednesday"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ComputerDataPriceOnWednesday",
+                    "to": "AnswerDetermination"
+                },
+                {
+                    "condition": "success",
+                    "from": "ThompsonCorpPriceOnWednesday",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the exact condition for transitioning to \"AnswerDetermination\"? The TG does not specify how the prices will be compared once retrieved."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the condition for transitioning to \"AnswerDetermination\"? The TG does not specify how the prices will be compared once retrieved."
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "GetStockPrices": "Retrieve the stock prices from the provided table."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GetStockPrices",
+                    "to": "CompareStockPrices"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the source of the stock prices, and are they adjusted for any factors such as dividends or splits? This information might affect the comparison."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the basis for comparing stock prices, and are the prices in dollars? This information might affect the comparison."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the time frame for the stock prices, and are they adjusted for any factors such as dividends or splits? This information might affect the comparison."
+            }
+        ],
+        "Answers": []
+    }
+]

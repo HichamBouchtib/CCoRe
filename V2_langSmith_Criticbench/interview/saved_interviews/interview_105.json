@@ -1,0 +1,136 @@
+[
+    {
+        "TG_Owner": "CodeGenPro",
+        "task_graph": {
+            "owner_agent": "CodeGenPro",
+            "tasks": {
+                "CheckDictionaryValues": "Function to check if all values in a dictionary are the same",
+                "ValidateFunction": "Function to validate the correctness of the generated function with provided test cases"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckDictionaryValues",
+                    "to": "ValidateFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestMaster",
+                "content": "What happens if the dictionary is empty? The current TG does not cover this edge case in the test scenarios."
+            },
+            {
+                "from": "APIWizard",
+                "content": "What happens if the dictionary contains non-numeric values? The current TG does not cover this edge case in the test scenarios."
+            },
+            {
+                "from": "GitGuru",
+                "content": "What happens if the dictionary contains different numbers of values? The current TG does not cover this edge case in the test scenarios."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestMaster",
+        "task_graph": {
+            "owner_agent": "TestMaster",
+            "tasks": {
+                "CheckDictionaryValues": "Function to check if all values are the same in a dictionary."
+            },
+            "orders": [
+                {
+                    "condition": "always",
+                    "from": "Start",
+                    "to": "CheckDictionaryValues"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What happens if the dictionary is empty? The current TG does not account for this scenario, which could lead to potential errors in the implementation."
+            },
+            {
+                "from": "APIWizard",
+                "content": "What happens if the dictionary contains non-numeric values? The current TG does not specify how to handle this scenario, which could lead to potential errors in the implementation."
+            },
+            {
+                "from": "GitGuru",
+                "content": "What happens if the dictionary contains different key types (e.g., strings and integers)? The current TG does not specify how to handle this scenario, which could lead to potential errors in the implementation."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIWizard",
+        "task_graph": {
+            "owner_agent": "APIWizard",
+            "tasks": {
+                "CheckDictionaryValues": "Function to check if all values in a dictionary are the same."
+            },
+            "orders": [
+                {
+                    "condition": "all_values_same",
+                    "from": "CheckDictionaryValues",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the expected behavior if the dictionary is empty? The current TG does not address this scenario, which could lead to undefined behavior in the function."
+            },
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior if the dictionary contains non-numeric values? The current TG does not specify how the function should handle dictionaries with non-identical numeric and non-numeric values."
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitGuru",
+        "task_graph": {
+            "owner_agent": "GitGuru",
+            "tasks": {
+                "CheckDictionaryValues": "Function to check if all values are the same in a dictionary",
+                "ReturnResult": "Function to return the result of the value check"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckDictionaryValues",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the expected behavior if the dictionary is empty? The current TG does not address this scenario, which could lead to unexpected results."
+            },
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior if the dictionary contains non-numeric values? The current TG does not address this scenario, which could lead to unexpected results."
+            },
+            {
+                "from": "APIWizard",
+                "content": "What is the expected behavior if the dictionary contains mixed numeric and non-numeric values? The current TG does not address this scenario, which could lead to unexpected results."
+            }
+        ],
+        "Answers": []
+    }
+]

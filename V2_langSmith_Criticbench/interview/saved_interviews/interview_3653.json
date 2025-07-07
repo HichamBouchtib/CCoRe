@@ -1,0 +1,89 @@
+[
+    {
+        "TG_Owner": "LogicalInfer",
+        "task_graph": {
+            "owner_agent": "LogicalInfer",
+            "tasks": {
+                "AddOneDayToDate": "Adding one day to the provided date."
+            },
+            "orders": [
+                {
+                    "condition": "date_calculated",
+                    "from": "AddOneDayToDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the date format expected for the input and output, considering the given options? The TG assumes a YYYY/MM/DD format, but the options are in MM/DD/YYYY. This discrepancy should be addressed to avoid confusion."
+            },
+            {
+                "from": "KnowRep",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "AddOneDayToDate": "Adding one day to the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "AddOneDayToDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the date format expected for the input and output, considering the given options? The TG does not specify if the dates should be treated as 24-hour cycles within a day or if they should strictly follow calendar rules."
+            },
+            {
+                "from": "KnowRep",
+                "content": "What is the expected date format for the output, considering the given options are in MM/DD/YYYY? The TG does not specify if the dates should strictly follow calendar rules or if they should be treated as 24-hour cycles within a day."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowRep",
+        "task_graph": {
+            "owner_agent": "KnowRep",
+            "tasks": {
+                "AddDate": "Adding the date to the calendar or datetime library to manipulate it."
+            },
+            "orders": [
+                {
+                    "condition": "date_addition",
+                    "from": "AddDate",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the current date in MM/DD/YYYY format to ensure accurate date addition?"
+            },
+            {
+                "from": "RuleMaster",
+                "content": "What is the time zone of the flight date to ensure accurate date addition?"
+            }
+        ],
+        "Answers": []
+    }
+]

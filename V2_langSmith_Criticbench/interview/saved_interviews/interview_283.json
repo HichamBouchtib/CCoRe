@@ -1,0 +1,97 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateYesterday": "Determine what day is yesterday based on the provided date and its relation to today.",
+                "IdentifyCorrectOption": "Match the calculated date with the given options.",
+                "UnderstandDateContext": "Comprehend the context of the date given by Jane."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "UnderstandDateContext",
+                    "to": "CalculateYesterday"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateYesterday",
+                    "to": "IdentifyCorrectOption"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date, and how is it related to May 6, 1992? This information is crucial for determining yesterday's date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date, and how many years ago was May 6, 1992? This information will help verify if the context of \"ten years ago\" aligns with the given options."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateDateDifference": "Determine the difference between today's date and May 6, 1992.",
+                "FindYesterdayDate": "Identify the date that is yesterday from the calculated date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDateDifference",
+                    "to": "FindYesterdayDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is today's date in MM/DD/YYYY format? The current TG does not specify how to determine today's date, which is necessary for calculating the difference between today and May 6, 1992."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is today's date in MM/DD/YYYY format?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date ten years ago from May 6, 1992."
+            },
+            "orders": [
+                {
+                    "condition": "completed",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the date of May 6, 1992 in MM/DD/YYYY format? The current TG does not include this information, which is necessary to solve the problem."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the date format expected for the answer, and how does \"yesterday\" relate to May 6, 1992 in this context? The TG should include a task to calculate yesterday's date from May 6, 1992."
+            }
+        ],
+        "Answers": []
+    }
+]

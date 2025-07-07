@@ -1,0 +1,104 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateDaysPassed": "Determine the number of days Jane has been consuming eggs.",
+                "CalculateYesterdayDate": "Compute the date for one day before the identified end date.",
+                "IdentifyEndDate": "Find out the date when Jane ran out of eggs based on the initial purchase date and calculated days passed."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysPassed",
+                    "to": "IdentifyEndDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "IdentifyEndDate",
+                    "to": "CalculateYesterdayDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the basis for determining the end date in the \"IdentifyEndDate\" task? The TG does not specify how to calculate the end date from the initial purchase date and the number of days passed."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateDaysPassed": "Determine the number of days passed since Jane bought eggs until she ran out.",
+                "FindDateYesterday": "Identify the date yesterday based on the total days calculated."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysPassed",
+                    "to": "FindDateYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the date on which Jane ran out of eggs? This information is necessary to calculate the number of days passed since she bought the eggs."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the date on which Jane ran out of eggs? This information is necessary to calculate the number of days passed since she bought the eggs. However, this task should provide a specific date rather than just stating that it is needed. Consider adding a task to determine the exact date when Jane ran out of eggs based on the given information."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "CalculateDaysPassed": "Determine the number of days Jane has been consuming eggs since May 9th, 2017.",
+                "CalculateYesterdayDate": "Compute the date for one day before the identified end date.",
+                "IdentifyEndDate": "Find out the date when Jane ran out of eggs based on the total consumption period."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysPassed",
+                    "to": "IdentifyEndDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "IdentifyEndDate",
+                    "to": "CalculateYesterdayDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the rationale for including a task to \"CalculateDaysPassed\" when this information can be directly derived from the number of eggs consumed and the start date? This task seems unnecessary given the problem context."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the rationale for including a task to \"IdentifyEndDate\" when it can be directly derived from the number of days passed and the start date? This task seems unnecessary given the problem context."
+            }
+        ],
+        "Answers": []
+    }
+]

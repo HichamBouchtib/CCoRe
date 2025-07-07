@@ -1,0 +1,202 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "DefineFunction": "Define a function named check_literals that takes two arguments: the string and a list of literals to search for using regex.",
+                "ImplementRegexSearch": "Implement the logic inside the function to use regex to find the literals in the given string.",
+                "TestFunction": "Write test cases to ensure the function works as expected."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "ImplementRegexSearch"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImplementRegexSearch",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if multiple literals are provided in the list and any of them match the string?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if multiple literals are provided in the list and all of them match the string?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if no literals are provided in the list?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "TestDebugWizard",
+                "content": "The expected behavior when multiple literals are provided in the list and any of them match the string would be to return 'Matched!' as soon as a literal matches. The function does not need to check for additional matches if one has already found a match. This approach ensures efficiency by stopping further checks once a match is identified."
+            },
+            {
+                "to": "APIProvisioner",
+                "content": "If multiple literals are provided in the list and all of them match the string, the function should return a response indicating that all literals were matched. However, since the specific behavior is not defined in the initial query, we can infer from common practice that the function might return a message like 'All Matched!' or it could return a list of matches for each literal. Given the provided tests, the function seems to return a simple string indicating the match status. Therefore, a possible expected behavior could be returning 'All Matched!' if all literals are found in the string."
+            },
+            {
+                "to": "GitHelper",
+                "content": "If no literals are provided in the list, the function should return a specific indication that there were no search terms to match. Based on the test cases provided, an appropriate behavior could be to return 'No literals provided!' or a similar message indicating that the function did not find any matching literals because none were specified."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "DefineFunction": "Write a function to search literals using regex.",
+                "ImplementFunction": "Implement the defined function.",
+                "RunTests": "Run provided tests on the implemented function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "ImplementFunction"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImplementFunction",
+                    "to": "RunTests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if multiple literals are provided in the list? For example, how should the function handle `['fox', 'dog']` in the input string `'The quick brown fox jumps over the lazy dog.'`?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the input string is empty or contains only spaces? For example, how should the function handle `['fox']` in the input string `'   '`?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the list of literals contains duplicates? For example, how should the function handle `['fox', 'fox']` in the input string `'The quick brown fox jumps over the lazy dog.'`?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenLangExpert",
+                "content": "The function should handle multiple literals by checking for matches of each literal in the input string. If any of the literals are found in the string, it should return 'Matched!'. If none of the literals are found, it should return 'Not Matched!'. For example, given the input string `'The quick brown fox jumps over the lazy dog.'` and the list `['fox', 'dog']`, the function would check for both 'fox' and 'dog' in the string. Since both are present, the function would return 'Matched!'."
+            },
+            {
+                "to": "APIProvisioner",
+                "content": "The function should handle an empty string or a string containing only spaces by returning 'Not Matched!' if no literals are specified, or by indicating that there are no patterns to match. For the given example `['fox']` in the input string `'   '`, the function should return 'Not Matched!', as there are no characters to search for using the regex pattern provided."
+            },
+            {
+                "to": "GitHelper",
+                "content": "The function should handle duplicate literals in the list by considering them as a single match. In other words, if both 'fox' and 'fox' are present in the input list `['fox', 'fox']`, the function should return 'Matched!' if 'fox' is found in the string `'The quick brown fox jumps over the lazy dog.'`. Duplicates do not need to be treated as separate matches."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "DefineFunction": "Write a function to search for literal strings in a string using regex.",
+                "TestFunction": "Run tests on the defined function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if multiple literal strings are provided in the list? Will the function return 'Matched!' as soon as one of them matches, or will it consider all of them?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenLangExpert",
+                "content": "The function `check_literals` will return 'Matched!' as soon as one of the literal strings in the list matches. This behavior can be achieved by iterating through the list of literals and using regex to search for each one individually within the given string. If a match is found, the function returns 'Matched!'. Only if no matches are found after checking all literals will it return 'Not Matched!'."
+            },
+            {
+                "to": "TestDebugWizard",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "GitHelper",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "DefineFunction": "Write a function to search for literals using regex.",
+                "TestFunction": "Run the provided test cases on the defined function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if multiple literals are provided in the list? For example, how should the function handle `check_literals('The quick brown fox jumps over the lazy dog.', ['fox', 'dog'])`?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the input string does not contain any of the literals provided in the list? For example, how should the function handle `check_literals('The quick brown fox jumps over the lazy dog.', ['cat'])`?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if an empty list of literals is provided? For example, how should the function handle `check_literals('The quick brown fox jumps over the lazy dog.', [])`?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenLangExpert",
+                "content": "The function `check_literals` should be designed to check for any of the literals in the list within the given string. If multiple literals are provided, the function should return 'Matched!' if any of them are found in the string and 'Not Matched!' if none of them are found.\n\nFor example, calling `check_literals('The quick brown fox jumps over the lazy dog.', ['fox', 'dog'])` would return 'Matched!' because both 'fox' and 'dog' are present in the string."
+            },
+            {
+                "to": "TestDebugWizard",
+                "content": "The function `check_literals` should return 'Not Matched!' when the input string does not contain any of the literals provided in the list. For example, for the call `check_literals('The quick brown fox jumps over the lazy dog.', ['cat'])`, the expected output is 'Not Matched!'."
+            },
+            {
+                "to": "APIProvisioner",
+                "content": "If an empty list of literals is provided to the function, it should return a specific indication that no patterns were searched for. A suitable behavior could be returning 'No patterns provided!' or raising an exception to indicate that the input is invalid. For example:\n\n```python\ndef check_literals(text, literals):\n    if not literals:\n        return 'No patterns provided!'\n    \n    # Continue with the existing logic for searching patterns in the text\n    for pattern in literals:\n        match = re.search(pattern, text)\n        if match:\n            return f'Matched! ({pattern})'\n    return 'Not Matched!'\n```\n\nThis way, the function clearly communicates that no search was performed due to the absence of provided patterns."
+            }
+        ]
+    }
+]

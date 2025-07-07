@@ -1,0 +1,183 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "CheckAccessibilityOfApartment": "Checking if furniture can be brought into an apartment considering its layout and size.",
+                "CheckAccessibilityOfLoft": "Checking if furniture can be brought into a loft considering its layout and size.",
+                "CheckAccessibilityOfRug": "Checking if furniture can be brought on a rug.",
+                "CheckAccessibilityOfStairs": "Checking if furniture can be brought up stairs.",
+                "CheckAccessibilityOfStore": "Checking if furniture can be brought to a store."
+            },
+            "orders": [
+                {
+                    "condition": "apartment",
+                    "from": "CheckAccessibilityOfApartment",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "loft",
+                    "from": "CheckAccessibilityOfLoft",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "store",
+                    "from": "CheckAccessibilityOfStore",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "rug",
+                    "from": "CheckAccessibilityOfRug",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "stairs",
+                    "from": "CheckAccessibilityOfStairs",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "Why is \"rug\" included as a location where furniture might be hard to get to, when it should likely be considered as a surface rather than a destination? The task for checking accessibility on a rug does not align with the user query."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "Why is \"rug\" included as a location where furniture might be hard to get to, when it should likely be considered as a surface rather than a destination? The task for checking accessibility on a rug does not align with the user query. Consider removing this task or redefining its purpose within the context of the user's question."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "Why is \"store\" included as a location where furniture might be hard to get to? The task for checking accessibility at a store does not align with the user's query, which asks about destinations rather than places where furniture is already located. Consider removing this task or redefining its purpose within the context of the user's question."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "CheckAccessibilityOfApartment": "Evaluate the accessibility of furniture delivery to an apartment.",
+                "CheckAccessibilityOfLoft": "Evaluate the accessibility of furniture delivery to a loft.",
+                "CheckAccessibilityOfStairs": "Evaluate the accessibility of furniture delivery when stairs are present.",
+                "CheckAccessibilityOfStore": "Evaluate the accessibility of furniture delivery to a store."
+            },
+            "orders": [
+                {
+                    "condition": "apartment_result",
+                    "from": "CheckAccessibilityOfApartment",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "loft_result",
+                    "from": "CheckAccessibilityOfLoft",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "store_result",
+                    "from": "CheckAccessibilityOfStore",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "stairs_result",
+                    "from": "CheckAccessibilityOfStairs",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "Why is a \"rug\" included as an answer choice but not as a task in the TG?"
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "Why is \"rug\" included as an answer choice but not as a task in the TG?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausalReasoning",
+        "task_graph": {
+            "owner_agent": "WiserCausalReasoning",
+            "tasks": {
+                "CheckAccessibility": "Evaluate the accessibility of furniture delivery to each location based on common logistical challenges.",
+                "CompareChallenges": "Compare the identified challenges for each option to determine where it might be hardest to get furniture."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckAccessibility",
+                    "to": "CompareChallenges"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What specific logistical challenges will be considered in the \"CheckAccessibility\" task? For example, are factors such as elevator availability, staircase width, and parking space included?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What specific criteria will be used to evaluate the accessibility of furniture delivery in the \"CheckAccessibility\" task? For example, are factors such as elevator availability, staircase width, and parking space included, and how will these factors impact the difficulty of delivering furniture to each location?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What specific criteria will be used to compare the challenges identified in the \"CheckAccessibility\" task within the \"CompareChallenges\" task? For example, how will these criteria determine which location is hardest for furniture delivery?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "CompareOptions": "Compare the accessibility for each option provided by the user.",
+                "EvaluateAccessibility": "Assess the ease or difficulty of moving furniture to a given location based on its properties and the environment."
+            },
+            "orders": [
+                {
+                    "condition": "all_success",
+                    "from": "EvaluateAccessibility",
+                    "to": "CompareOptions"
+                },
+                {
+                    "condition": "best_option_found",
+                    "from": "CompareOptions",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What criteria will be used to evaluate the accessibility of moving furniture for each option?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What criteria will be used to evaluate the accessibility of moving furniture for each option, and how will these criteria be quantified or scored?"
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What specific properties of each location will be considered in the evaluation, and how will these properties impact the difficulty of moving furniture?"
+            }
+        ],
+        "Answers": []
+    }
+]

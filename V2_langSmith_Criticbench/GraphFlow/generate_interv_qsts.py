@@ -11,26 +11,52 @@ from interview.Interview import Interview
 from langchain_core.messages import AIMessage
 from wiseragents_creation  import append_or_update_AImessage2
 
-tg_interview_instructions = """You are a technical reviewer WiserAgent with expertise in {expertise}. 
-You are reviewing a Task Graph (TG) created to solve the following query:
+# tg_interview_instructions = """You are a technical reviewer WiserAgent with expertise in {expertise}. 
+# You are reviewing a Task Graph (TG) created to be an executable plan to solve the following specificaly the this user query:
+# "{query}"
+
+# Here is the TG:
+# {tg_details}
+
+# Here are the questions already asked about this TG:
+# {already_asked}
+
+# Your task is to:
+# - Suggest a new and non-redundant technical question, if something is missing or unclear.
+# - If all the main aspects are covered, simply respond: "No question, Thanks"
+
+# You can highlight:
+# - Logical dependencies
+# - Missing or unnecessary tasks
+# - Incomplete specifications
+# - etc...
+
+# Do not add greetings or generic commentary. Return only the final question (or the sentence above).
+# """
+
+DeepmonologueQsts_instructions = """You are a technical reviewer WiserAgent with expertise in {expertise}. 
+You are reviewing a Task Graph (TG) created to be an executable plan to solve the following specificaly the this user query:
 "{query}"
 
-Here is the TG:
+Here is the TG details:
 {tg_details}
 
 Here are the questions already asked about this TG:
 {already_asked}
 
 Your task is to:
-- Suggest **a new and non-redundant** technical question, if something is **missing or unclear**.
-- If all the main aspects are covered, simply respond: "No question, Thanks"
+- Carefully analyze the TG and suggest a **new and non-redundant** technical question.
+- Focus on **what can be clarified, improved, or challenged** in the TG.
+- Only if you truly believe the TG is entirely complete, with no ambiguities, reply: "No question, Thanks"
 
-Focus technicaly only on:
-- Logical dependencies
-- Missing or unnecessary tasks
-- Incomplete specifications
+You can point out:
+- Logical errors or unclear dependencies
+- Unnecessary or missing tasks
+- Misalignment with the initial user query
+- Anything that could be improved or clarified
 
-Do not add greetings or generic commentary. Return only the final question (or the sentence above).
+Avoid greetings or generic commentary.
+Return only your question (or the sentence above).
 """
 
 def generate_questions(state: State):
@@ -57,13 +83,13 @@ def generate_questions(state: State):
             # Join previous questions to give context
             previous_qst_block = "\n".join([f"- {q}" for q in asked_questions]) or "None"
 
-            system_message = tg_interview_instructions.format(
+            system_message = DeepmonologueQsts_instructions.format(
                 query=query,
                 expertise=agent.domain_expertise,
                 tg_details=tg_text,
                 already_asked=previous_qst_block
             )
-
+            # print("system_message: ", system_message)
             question_msg = llm.invoke([SystemMessage(content=system_message)])
             question_content = question_msg.content if hasattr(question_msg, 'content') else str(question_msg)
 

@@ -1,0 +1,150 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "BuildAlgebraExpression": "Construct the algebraic expression based on operators and operands provided.",
+                "EvaluateExpression": "Calculate the result of the constructed algebraic expression."
+            },
+            "orders": [
+                {
+                    "condition": "expression_built",
+                    "from": "BuildAlgebraExpression",
+                    "to": "EvaluateExpression"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What happens if the operator list contains a division operation and the operand list includes zero? How should this be handled in the TG?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What happens if the operator list contains an exponentiation operation and non-integer operands are involved? How should this be handled in the TG?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What happens if the operator list contains an invalid operation, such as a non-supported mathematical operator? How should this be handled in the TG?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "BuildAlgebraExpression": "Given the operator and operand lists, construct the algebraic expression based on the operators provided.",
+                "EvaluateExpression": "Calculate the result of the constructed algebraic expression."
+            },
+            "orders": [
+                {
+                    "condition": "expression_built",
+                    "from": "BuildAlgebraExpression",
+                    "to": "EvaluateExpression"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the data type of the elements in the `operand` list, and should they be restricted to non-negative integers as stated in the problem description?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the `operator` list contains an invalid operator, such as a string that does not correspond to any of the specified algebraic operations?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the `operator` list has a different length than the `operand` list minus one?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "BuildExpression": "Construct the algebraic expression based on parsed inputs.",
+                "EvaluateExpression": "Calculate the result of the constructed expression.",
+                "ParseInput": "Parse the input to extract operators and operands."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ParseInput",
+                    "to": "BuildExpression"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuildExpression",
+                    "to": "EvaluateExpression"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the operator list contains a division operation and the operand list contains a zero? How should this be handled in the TG?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "EvaluateExpression": "Calculate the result of the constructed algebraic expression.",
+                "GenerateAlgebraicExpression": "Construct an algebraic expression based on the provided operator and operand lists.",
+                "ParseFunctionDefinition": "Understand the function definition and identify key components such as operators and operands."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ParseFunctionDefinition",
+                    "to": "GenerateAlgebraicExpression"
+                },
+                {
+                    "condition": "success",
+                    "from": "GenerateAlgebraicExpression",
+                    "to": "EvaluateExpression"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the operator list contains a division operation but no floor division? Should the task handle this case, and if so, how should it proceed?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the operator list contains an exponentiation operation? Should the task handle this case, and if so, how should it proceed?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the operator list contains a subtraction operation but no addition operation? Should the task handle this case, and if so, how should it proceed?"
+            }
+        ],
+        "Answers": []
+    }
+]

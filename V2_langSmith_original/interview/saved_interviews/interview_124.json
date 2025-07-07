@@ -1,0 +1,154 @@
+[
+    {
+        "TG_Owner": "ThreatHunter",
+        "task_graph": {
+            "owner_agent": "ThreatHunter",
+            "tasks": {
+                "GenerateAnswer": "Formulate a response based on the understanding of the query.",
+                "QueryUnderstanding": "Understand the user's query to determine what information is needed."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryUnderstanding",
+                    "to": "GenerateAnswer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "NetGuardian",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "IntruderPreventor",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "NetGuardian",
+        "task_graph": {
+            "owner_agent": "NetGuardian",
+            "tasks": {
+                "InformationRetrieval": "Retrieve relevant information about AI agents for website protection.",
+                "QueryUnderstanding": "Understand the user's query to determine what information is needed.",
+                "TaskGraphGeneration": "Generate a task graph based on the retrieved information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryUnderstanding",
+                    "to": "InformationRetrieval"
+                },
+                {
+                    "condition": "success",
+                    "from": "InformationRetrieval",
+                    "to": "TaskGraphGeneration"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatHunter",
+                "content": "What is the source of the query that the \"QueryUnderstanding\" task is supposed to interpret? Is there a task missing to handle cases where the query might be ambiguous or require clarification from the user?"
+            },
+            {
+                "from": "IntruderPreventor",
+                "content": "What is the mechanism for handling user feedback during the clarification process if the query is ambiguous? Is there a task to manage this interaction?"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the mechanism for handling user feedback during the clarification process if the query is ambiguous? Is there a task to manage this interaction and ensure the correct task graph is generated?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "IntruderPreventor",
+        "task_graph": {
+            "owner_agent": "IntruderPreventor",
+            "tasks": {
+                "AnswerFormulation": "Formulate an answer based on the retrieved information.",
+                "InformationRetrieval": "Retrieve relevant information from databases or APIs related to the user's query.",
+                "QueryUnderstanding": "Understand the user's query to determine what information is needed."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryUnderstanding",
+                    "to": "InformationRetrieval"
+                },
+                {
+                    "condition": "success",
+                    "from": "InformationRetrieval",
+                    "to": "AnswerFormulation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatHunter",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "NetGuardian",
+                "content": "What is the rationale for including both \"QueryUnderstanding\" and \"InformationRetrieval\" as separate tasks? Can't the \"InformationRetrieval\" task inherently include the understanding of the query?"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the rationale for including both \"QueryUnderstanding\" and \"InformationRetrieval\" as separate tasks? Can't the \"InformationRetrieval\" task inherently include the understanding of the query, thus making \"QueryUnderstanding\" redundant?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "Malware Analyst",
+        "task_graph": {
+            "owner_agent": "Malware Analyst",
+            "tasks": {
+                "GenerateAnswer": "Formulate a precise answer based on the understanding of the query.",
+                "QueryUnderstanding": "Understand the user's query to provide an accurate response."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "QueryUnderstanding",
+                    "to": "GenerateAnswer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatHunter",
+                "content": "What is the expected input format for the user's query?"
+            },
+            {
+                "from": "NetGuardian",
+                "content": "What is the expected output format for the generated answer?"
+            },
+            {
+                "from": "IntruderPreventor",
+                "content": "What is the expected action if the QueryUnderstanding task fails to interpret the query accurately?"
+            },
+            {
+                "from": "MalwareAnalyst",
+                "content": "What is the expected behavior if the GenerateAnswer task requires additional information that was not provided by QueryUnderstanding?"
+            }
+        ],
+        "Answers": []
+    }
+]

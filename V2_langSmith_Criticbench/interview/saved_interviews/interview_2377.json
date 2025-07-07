@@ -1,0 +1,155 @@
+[
+    {
+        "TG_Owner": "CodeOptimizer",
+        "task_graph": {
+            "owner_agent": "CodeOptimizer",
+            "tasks": {
+                "CreateFunction": "Implement a function that uses the defined pattern to search for matches in given strings.",
+                "DefinePattern": "Define a regex pattern to match words containing 'z'."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefinePattern",
+                    "to": "CreateFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior when the input string does not contain any word characters? Should it return 'Not matched!' or raise an error?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior when the input string contains multiple words, and one of them matches the pattern? Should it return 'Found a match!' for any match or only if all words contain 'z'?"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the expected behavior when the input string contains a word boundary around 'z', such as in \"az.\" or \".za\"? Should it still return 'Found a match!'?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SyntaxChecker",
+        "task_graph": {
+            "owner_agent": "SyntaxChecker",
+            "tasks": {
+                "CreateFunction": "Write the function according to the defined pattern.",
+                "DefinePattern": "Define a regex pattern to match words containing 'z'.",
+                "TestFunction": "Run tests on the created function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefinePattern",
+                    "to": "CreateFunction"
+                },
+                {
+                    "condition": "success",
+                    "from": "CreateFunction",
+                    "to": "TestFunction"
+                },
+                {
+                    "condition": "all_tests_passed",
+                    "from": "TestFunction",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior when the input string starts or ends with whitespace? The current tests do not cover this scenario."
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior when the input string contains multiple words, and only one of them matches the pattern? The current tests do not cover this scenario."
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the expected behavior when the input string contains no words at all? The current tests do not cover this scenario."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "StyleFormatter",
+        "task_graph": {
+            "owner_agent": "StyleFormatter",
+            "tasks": {
+                "DefinePattern": "Create a regex pattern to match words containing 'z'.",
+                "TestFunction": "Run tests on the implemented function.",
+                "WriteFunction": "Implement the function based on the defined pattern."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefinePattern",
+                    "to": "WriteFunction"
+                },
+                {
+                    "condition": "success",
+                    "from": "WriteFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior for edge cases like \"z.\" or \".z\"?"
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestAutomator",
+        "task_graph": {
+            "owner_agent": "TestAutomator",
+            "tasks": {
+                "CreateFunction": "Write a function based on the defined regex pattern.",
+                "DefineRegexPattern": "Define a regex pattern that matches words containing 'z'."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineRegexPattern",
+                    "to": "CreateFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the definition of a \"word\" in this context, considering the space in \"  lang  .\"? Should it be treated as multiple words or a single word with leading/trailing spaces?"
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior when the input string does not contain any word characters at all, e.g., \".*\"? Should it return 'Not matched!' or raise an error?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior when the input string contains multiple words, e.g., \"python and zcode\"? Should it return 'Found a match!' for each word containing 'z', or should it consider the entire string as a single entity?"
+            }
+        ],
+        "Answers": []
+    }
+]

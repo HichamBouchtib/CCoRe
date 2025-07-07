@@ -1,0 +1,227 @@
+[
+    {
+        "TG_Owner": "CodeMaster",
+        "task_graph": {
+            "owner_agent": "CodeMaster",
+            "tasks": {
+                "Validate_Digit_Count": "Check if the file name contains more than three digits.",
+                "Validate_Extension": "Check if the file extension is one of ['txt', 'exe', 'dll'].",
+                "Validate_Name": "Overall validation based on all conditions.",
+                "Validate_StartsWithLetter": "Check if the file name starts with a letter from the Latin alphabet."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Validate_Digit_Count",
+                    "to": "Validate_Name"
+                },
+                {
+                    "condition": "success",
+                    "from": "Validate_StartsWithLetter",
+                    "to": "Validate_Name"
+                },
+                {
+                    "condition": "success",
+                    "from": "Validate_Extension",
+                    "to": "Validate_Name"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestGenius",
+                "content": "What is the expected behavior if the file name contains exactly three digits? Is this considered valid or invalid?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestGenius",
+        "task_graph": {
+            "owner_agent": "TestGenius",
+            "tasks": {
+                "CountDigits": "Count the number of digits in the file name.",
+                "ReturnResult": "Based on the results of previous tasks, return 'Yes' or 'No'.",
+                "ValidateDigits": "Check if there are more than three digits in the file name.",
+                "ValidateDotPosition": "Ensure that the file name contains exactly one dot and it is not at the beginning or end of the string.",
+                "ValidateFileExtension": "Check if the extension part of the file name matches one of the allowed extensions: ['txt', 'exe', 'dll'].",
+                "ValidateFileNameStartsWithLetter": "Verify that the substring before the dot starts with a letter from the Latin alphabet."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ValidateDigits",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "success",
+                    "from": "ValidateDotPosition",
+                    "to": "ValidateFileNameStartsWithLetter"
+                },
+                {
+                    "condition": "success",
+                    "from": "ValidateFileNameStartsWithLetter",
+                    "to": "ValidateFileExtension"
+                },
+                {
+                    "condition": "success",
+                    "from": "ValidateFileExtension",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CountDigits",
+                    "to": "ValidateDigits"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeMaster",
+                "content": "What is the expected behavior if the file name contains multiple dots? Is it considered valid if any of them are in a correct position?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "What is the expected behavior if the file name contains multiple dots, and none of them are in a correct position? Is such a file name considered valid?"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What is the expected behavior if the file name contains no digits at all? Is such a file name considered valid, and how does this affect the \"CountDigits\" task in the TG?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIWizard",
+        "task_graph": {
+            "owner_agent": "APIWizard",
+            "tasks": {
+                "CheckDigits": "Validate that the file name contains no more than three digits.",
+                "CheckDotPresence": "Ensure there is exactly one dot in the file name.",
+                "CheckFileExtension": "Confirm that the extension matches one of ['txt', 'exe', 'dll'].",
+                "CheckFileNameStartsWithLetter": "Verify that the substring before the dot starts with a letter from the Latin alphabet.",
+                "FinalValidation": "Return 'Yes' if all conditions are met, otherwise return 'No'.",
+                "ValidateFileName": "Overall validation function to check file name against given rules."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckDigits",
+                    "to": "CheckDotPresence"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckDotPresence",
+                    "to": "CheckFileNameStartsWithLetter"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckFileNameStartsWithLetter",
+                    "to": "CheckFileExtension"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckFileExtension",
+                    "to": "FinalValidation"
+                },
+                {
+                    "condition": "valid",
+                    "from": "FinalValidation",
+                    "to": "End"
+                },
+                {
+                    "condition": "invalid",
+                    "from": "FinalValidation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeMaster",
+                "content": "What is the expected behavior if the file name contains more than one dot? Is it considered invalid, and how should it be handled in the validation process?"
+            },
+            {
+                "from": "TestGenius",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitGuru",
+        "task_graph": {
+            "owner_agent": "GitGuru",
+            "tasks": {
+                "CheckForSingleDot": "Verify that there is exactly one dot in the file's name.",
+                "CountDigitsInName": "Count the number of digits in the file's name.",
+                "FinalCheck": "Return 'Yes' if all conditions are met, otherwise return 'No'.",
+                "StartsWithLetter": "Ensure the substring before the dot starts with a letter from the Latin alphabet.",
+                "ValidFileExtension": "Confirm if the extension after the dot matches 'txt', 'exe', or 'dll'.",
+                "ValidateFileNameStructure": "Check if the file name structure is valid based on given conditions."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountDigitsInName",
+                    "to": "ValidateFileNameStructure"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckForSingleDot",
+                    "to": "ValidateFileNameStructure"
+                },
+                {
+                    "condition": "success",
+                    "from": "StartsWithLetter",
+                    "to": "ValidateFileNameStructure"
+                },
+                {
+                    "condition": "success",
+                    "from": "ValidFileExtension",
+                    "to": "ValidateFileNameStructure"
+                },
+                {
+                    "condition": "all_success",
+                    "from": "ValidateFileNameStructure",
+                    "to": "FinalCheck"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeMaster",
+                "content": "What is the expected behavior if the file name contains no digits at all? Is this a valid scenario, and how should it be handled in the TG?"
+            },
+            {
+                "from": "TestGenius",
+                "content": "What is the expected behavior if the file name contains more than three digits but no other invalid characters? Should this still return 'No', or should it be considered valid?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "What is the expected behavior if the file name contains exactly three digits, but they are not consecutive? Is this considered valid, and how should it be handled in the TG?"
+            }
+        ],
+        "Answers": []
+    }
+]

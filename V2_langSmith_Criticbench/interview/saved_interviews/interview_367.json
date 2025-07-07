@@ -1,0 +1,155 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "ExtractFirstElement": "Extract the first element from each sublist of a two-dimensional list.",
+                "SpecifyElement": "Extract a specified element (not necessarily the first) from each sublist of a two-dimensional list."
+            },
+            "orders": [
+                {
+                    "condition": "0",
+                    "from": "ExtractFirstElement",
+                    "to": "End"
+                },
+                {
+                    "condition": "specified_index",
+                    "from": "SpecifyElement",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the range of values that `specified_index` can take, and how should the function handle cases where this index is out of bounds for a sublist?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior when the input list is empty? Should the function return an empty list in such cases?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior when `specified_index` is negative, and should it be treated as an absolute index from the end of the sublist?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "DefineFunction": "Write a function to extract every first or specified element from a given two-dimensional list.",
+                "GenerateTests": "Create test cases based on the provided assertions.",
+                "ImplementCode": "Write the code for the defined function.",
+                "RunTests": "Execute the tests to ensure the function works as expected."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "GenerateTests"
+                },
+                {
+                    "condition": "success",
+                    "from": "GenerateTests",
+                    "to": "ImplementCode"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImplementCode",
+                    "to": "RunTests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input list is empty? Should the function return an empty list in such cases?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if a non-integer value is specified as the index? Should the function raise an error or handle it in some other way?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the specified index exceeds the length of any sublist? Should it return an empty list for such cases, or handle it differently?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "ExtractFirstElement": "Extract the first element from each sublist in a two-dimensional list.",
+                "GenerateFunctionCode": "Generate Python function code based on task descriptions."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ExtractFirstElement",
+                    "to": "GenerateFunctionCode"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input list is empty?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the input list contains an empty sublist?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the input list contains a non-integer element?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "DefineFunction": "Write a function to extract every first or specified element from a given two-dimensional list.",
+                "TestFunction": "Run the defined function against provided test cases."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if an index greater than the length of any sublist is provided?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if an empty list is provided as input?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if a non-integer value is provided as the index?"
+            }
+        ],
+        "Answers": []
+    }
+]

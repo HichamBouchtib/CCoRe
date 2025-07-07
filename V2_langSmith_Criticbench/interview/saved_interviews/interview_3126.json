@@ -1,0 +1,272 @@
+[
+    {
+        "TG_Owner": "DataPreprocessorAgent",
+        "task_graph": {
+            "owner_agent": "DataPreprocessorAgent",
+            "tasks": {
+                "CountingObjects": "Count the number of objects mentioned."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountingObjects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the source of the objects mentioned in the task? Are they all distinct entities, or could there be any overlap (e.g., a fridge with built-in microwave)?"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the definition of \"objects\" in this context? Are we counting items like the fridge and microwave as separate objects, or are they considered part of a larger entity if one contains the other?"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What is the expected format of the answer? Should it be a numerical value, or are there specific details about the objects that need to be included in the response?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "The objects mentioned in the task\u2014fridge, chair, and microwave\u2014are distinct entities. There is no overlap where one object contains another. Each item is a separate object in this context."
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "In this context, \"objects\" refers to distinct items or entities. Therefore, the fridge and microwave would be counted as separate objects even if one contains the other. The chair is also a separate object. So, based on the initial query, you have three objects: a fridge, a chair, and a microwave."
+            },
+            {
+                "to": "HyperTunerAgent",
+                "content": "The expected format of the answer should be a numerical value representing the count of objects. In this case, the response would be \"3\" since there are three objects mentioned: a fridge, a chair, and a microwave. No specific details about the objects need to be included in the response; only the count is required."
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "FeatureEngineerAgent",
+        "task_graph": {
+            "owner_agent": "FeatureEngineerAgent",
+            "tasks": {
+                "CountingObjects": "Count the number of objects based on provided items."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountingObjects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of \"items\" in this context, and are we considering only the objects explicitly mentioned (fridge, chair, microwave) or any additional objects that might be present?"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the criteria for considering an object in this count? Are we counting by name only, or do we need to consider physical objects regardless of their names?"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "In this context, \"items\" refers to the objects that are explicitly mentioned in the query. Therefore, we are considering only the fridge, chair, and microwave. There is no indication to include any additional objects that might be present in the scenario."
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "The criteria for considering an object in this count are based on the physical items present. Whether an item has a name like \"fridge\" or \"chair\" or not, each distinct physical entity is counted as one object. Therefore, in the given example, you have three objects: a fridge, a chair, and a microwave."
+            },
+            {
+                "to": "HyperTunerAgent",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ModelSelectorAgent",
+        "task_graph": {
+            "owner_agent": "ModelSelectorAgent",
+            "tasks": {
+                "CountingObjects": "Count the number of objects in a given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountingObjects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the format of the given list in the \"CountingObjects\" task? Is it a simple comma-separated string or a structured data format?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the expected input format for the \"CountingObjects\" task when dealing with a list of objects like \"fridge, chair, microwave\"?"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What is the expected output format of the \"CountingObjects\" task, and how will it determine the number of objects from the given list?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What is the expected input format for the \"CountingObjects\" task when dealing with a list of objects like \"fridge, chair, microwave\"? This will help clarify how the task interprets and processes the given items."
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "The \"CountingObjects\" task in the TG expects a simple comma-separated string format. This means that the list of objects can be presented as a single string with items separated by commas, such as \"fridge, chair, microwave\"."
+            },
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "The expected input format for the \"CountingObjects\" task when dealing with a list of objects like \"fridge, chair, microwave\" should be a comma-separated string or a list. For example:\n\n- Comma-separated string: \"fridge, chair, microwave\"\n- List: [\"fridge\", \"chair\", \"microwave\"]\n\nThis format allows the task to process and count the individual items in the input."
+            },
+            {
+                "to": "HyperTunerAgent",
+                "content": "The expected output format of the \"CountingObjects\" task would be a simple numerical value representing the count of objects in the given list. For example, if the input list is [\"fridge\", \"chair\", \"microwave\"], the output would be 3.\n\nTo determine the number of objects from the given list, the task would typically iterate through each element in the list and increment a counter variable until all elements have been processed. The final value of the counter would then be returned as the result."
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "The expected input format for the \"CountingObjects\" task when dealing with a list of objects like \"fridge, chair, microwave\" should be a simple list of strings. For example:\n\n```python\nobjects = [\"fridge\", \"chair\", \"microwave\"]\n```\n\nThis list contains the names of the objects as separate string elements. The task would then count these elements to determine the number of objects."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "HyperTunerAgent",
+        "task_graph": {
+            "owner_agent": "HyperTunerAgent",
+            "tasks": {
+                "CountObjects": "Counts the number of objects based on given items."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountObjects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the source of the items (\"fridge\", \"chair\", and \"microwave\") being counted? Are these items provided as input, or are they predefined in the system?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the format of the input for the \"CountObjects\" task? Are the items (\"fridge\", \"chair\", and \"microwave\") provided as a list, or are they hardcoded in the system?"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the expected output format of the \"CountObjects\" task? Is it a simple integer value, or is there a specific structure for the response?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What is the expected input format for the \"CountObjects\" task when provided with items like \"fridge\", \"chair\", and \"microwave\"? Is it a list, a string, or another format?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "The items \"fridge,\" \"chair,\" and \"microwave\" are provided as input in the initial query. They are not predefined in the system but are specified by the user when posing the question."
+            },
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "The input for the \"CountObjects\" task is provided as a list of items. In this case, the items [\"fridge\", \"chair\", and \"microwave\"] are passed to the task as a list. This allows the task to be flexible and handle any number of objects without hardcoding them into the system."
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "The expected output format of the \"CountObjects\" task is a simple integer value representing the number of objects. There is no specific structure required beyond this integer response."
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "The expected input format for the \"CountObjects\" task when provided with items like \"fridge\", \"chair\", and \"microwave\" should be a list. This allows the task to easily iterate over each item and perform the counting operation."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "EvaluatorAgent",
+        "task_graph": {
+            "owner_agent": "EvaluatorAgent",
+            "tasks": {
+                "CountingObjects": "Count the number of objects mentioned in the user query."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountingObjects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of an \"object\" in this context? Are a fridge and a microwave considered objects, and are they distinct from a chair?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is considered an \"object\" in this context? Are a fridge and a microwave distinct objects, and how does the chair fit into this definition?"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the expected output format for the number of objects? Should the answer be a numerical value, or is a textual description acceptable?"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "In this context, an \"object\" refers to a physical item or entity. Both the fridge and the microwave are considered objects as they are tangible items. Similarly, the chair is also an object. Each of these items is distinct from one another, making them separate entities in the count."
+            },
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "In this context, an \"object\" refers to a distinct physical item. Both the fridge and the microwave are considered separate objects because they are individual appliances with their own functions. The chair is also a distinct object as it is a separate piece of furniture.\n\nThese items can be counted individually based on their separability and distinctness in the given scenario."
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "The expected output format for the number of objects should be a numerical value. In this case, the answer would be \"3\"."
+            },
+            {
+                "to": "HyperTunerAgent",
+                "content": "You are welcome!"
+            }
+        ]
+    }
+]

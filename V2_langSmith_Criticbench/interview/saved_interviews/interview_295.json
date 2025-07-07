@@ -1,0 +1,202 @@
+[
+    {
+        "TG_Owner": "OptiCode",
+        "task_graph": {
+            "owner_agent": "OptiCode",
+            "tasks": {
+                "DefineFunction": "Write a function to round the given number to the nearest multiple of a specific number.",
+                "TestFunction": "Verify that the function works correctly with provided test cases."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ErrDetect",
+                "content": "What is the behavior of the function when the given number is exactly halfway between two multiples? For example, how should round_num(219, 3) behave?"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAuto",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "ErrDetect",
+                "content": "When the given number is exactly halfway between two multiples, the behavior of the function can be defined by rounding to the nearest even multiple (also known as \"round half to even\" or \"bankers' rounding\"). However, without specific instructions, one common approach is to round up. \n\nFor the example `round_num(219, 3)`:\n- The number 219 is halfway between 216 (which is 72 * 3) and 219 (which would be 73 * 3 if it were a multiple).\n- If we round to the nearest even multiple, 216 would be chosen.\n- If we always round up, 219 would be rounded to 220.\n\nGiven the provided test cases, the function should likely round up to ensure consistency with the examples given. Therefore, `round_num(219, 3)` should return 220."
+            },
+            {
+                "to": "StyleGuide",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "TestAuto",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ErrDetect",
+        "task_graph": {
+            "owner_agent": "ErrDetect",
+            "tasks": {
+                "DefineFunction": "Write a function to round the given number to the nearest multiple of a specific number.",
+                "TestFunction": "Verify that the function passes all provided tests."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What happens if the given number is exactly halfway between two multiples? How should it be rounded in such cases?"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAuto",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "OptiCode",
+                "content": "In such cases, the rounding rule typically depends on the specific implementation or standard being followed. Common practices include:\n\n1. **Round Half Up**: Round to the nearest even multiple (also known as \"bankers' rounding\"). For example, 2.5 would round to 2, and 3.5 would round to 4.\n2. **Round Half Away from Zero**: Always round away from zero. For example, 2.5 would round to 3, and -2.5 would round to -3.\n\nFor the function in this task, you can choose either method. Here is an implementation using Python that rounds half up:\n\n```python\ndef round_num(num, multiple):\n    return round(num / multiple) * multiple\n\n# Test cases\nassert round_num(4722, 10) == 4720\nassert round_num(1111, 5) == 1110\nassert round_num(219, 2) == 218\n```\n\nIf you prefer to implement rounding half away from zero, you can modify the function like this:\n\n```python\ndef round_num(num, multiple):\n    rounded = round(num / multiple)\n    if (num - (rounded * multiple)) == 0.5:\n        return int(rounded) * multiple if num > 0 else -int(-rounded) * multiple\n    return rounded * multiple\n\n# Test cases\nassert round_num(4722, 10) == 4720\nassert round_num(1111, 5) == 1110\nassert round_num(219, 2) == 220  # Rounding half away from zero\n```\n\nYou can choose the rounding method that best fits your requirements."
+            },
+            {
+                "to": "StyleGuide",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "TestAuto",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "StyleGuide",
+        "task_graph": {
+            "owner_agent": "StyleGuide",
+            "tasks": {
+                "DefineFunction": "Write a function to round the given number to the nearest multiple of a specific number.",
+                "TestFunction": "Verify that the function passes all provided tests."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What happens if the given number is exactly halfway between two multiples? How should it be rounded in such cases?"
+            },
+            {
+                "from": "ErrDetect",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAuto",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "OptiCode",
+                "content": "In such cases, the rounding rule typically follows \"round half to even,\" also known as \"bankers' rounding.\" This method reduces bias in long sequences of calculations. According to this rule, if the given number is exactly halfway between two multiples, it should be rounded to the nearest even multiple.\n\nFor example:\n- `round_num(4725, 10)` would round to `4720` because `4720` is the nearest even multiple.\n- `round_num(4726, 10)` would round to `4730`.\n\nThis approach helps in minimizing cumulative rounding errors in financial and statistical calculations."
+            },
+            {
+                "to": "ErrDetect",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "TestAuto",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "TestAuto",
+        "task_graph": {
+            "owner_agent": "TestAuto",
+            "tasks": {
+                "DefineFunction": "Write a function to round the given number to the nearest multiple of a specific number.",
+                "GenerateTests": "Create test cases based on provided assertions.",
+                "ImplementFunction": "Develop the function according to the defined task and tests.",
+                "RunTests": "Execute the generated tests to verify the correctness of the implemented function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "GenerateTests"
+                },
+                {
+                    "condition": "success",
+                    "from": "GenerateTests",
+                    "to": "ImplementFunction"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImplementFunction",
+                    "to": "RunTests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior if the given number is exactly halfway between two multiples of the specified number? For example, how should `round_num(219, 3)` be handled?"
+            },
+            {
+                "from": "ErrDetect",
+                "content": "What should the function return if the given number is exactly halfway between two multiples of the specified number? For example, how should `round_num(219, 3)` be handled?"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "What should the function do if the given number is exactly halfway between two multiples of the specified number? For example, how should `round_num(219, 3)` be handled?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "OptiCode",
+                "content": "When the given number is exactly halfway between two multiples of the specified number, a common approach is to round it to the nearest even multiple. This method is known as \"round half to even\" or \"bankers' rounding.\" For example:\n\n- `round_num(219, 3)` should return `219` because 218 and 220 are equally close, and 219 is the nearest even multiple.\n- Similarly, `round_num(220, 3)` would also return `220`.\n\nThis approach reduces bias in rounding over a large set of numbers."
+            },
+            {
+                "to": "ErrDetect",
+                "content": "When the given number is exactly halfway between two multiples of the specified number, the function should round to the nearest even multiple. This is known as \"round half to even\" or \"bankers' rounding.\" \n\nFor example:\n- `round_num(219, 3)` would be rounded to 219 because 218 and 220 are equally close, but 219 is the nearest even multiple.\n\nThus, the function should handle such cases by rounding to the nearest even multiple."
+            },
+            {
+                "to": "StyleGuide",
+                "content": "When the given number is exactly halfway between two multiples of the specified number, a common approach is to round it to the nearest even multiple. This method is known as \"round half to even\" or \"bankers' rounding.\" For example:\n\n- `round_num(219, 3)` should return `219` because 218 and 220 are equally close, and 219 is the nearest even multiple.\n- `round_num(220.5, 2)` should return `220` because 220 and 222 are equally close, and 220 is the nearest even multiple.\n\nThis approach helps to minimize cumulative rounding errors in calculations."
+            }
+        ]
+    }
+]

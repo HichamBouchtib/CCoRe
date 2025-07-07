@@ -1,0 +1,150 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "CalculateDailyCalories": "Determine the number of calories left for the day based on daily target and consumed calories.",
+                "CalculateGramsPerServing": "Find out how many grams can be eaten per serving given the calorie content and daily remaining calories.",
+                "TotalGramsAllowed": "Calculate the total grams allowed to eat within the daily calorie limit."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDailyCalories",
+                    "to": "CalculateGramsPerServing"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateGramsPerServing",
+                    "to": "TotalGramsAllowed"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What is the calorie content per gram of the bag of chips? This information is needed to calculate the grams allowed to eat based on the remaining daily calories."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the calorie content per gram of the bag of chips? This information is needed to calculate the grams allowed to eat based on the remaining daily calories. Additionally, the TG does not account for the fact that a 300g bag has 5 servings, which means each serving is 60 grams. This detail should be considered in the calculations."
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "CalculateGramsAllowed": "Calculate how many grams can be eaten within the daily calorie target after accounting for already consumed calories.",
+                "CalculateServingsPerGram": "Determine the number of servings per gram based on the given information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateServingsPerGram",
+                    "to": "CalculateGramsAllowed"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the calorie content per gram of the bag of chips? This information is needed to calculate how many grams can be eaten within the daily calorie target after accounting for already consumed calories."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the calorie target per serving, and how does it relate to the daily calorie target? This information is needed to determine the number of grams that can be eaten within the daily calorie target after accounting for already consumed calories."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the calorie target per day, and how does it relate to the already consumed calories? This information is needed to determine the number of grams that can be eaten within the daily calorie target after accounting for already consumed calories."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "CalculateDailyIntake": "Determine the daily calorie intake based on the target and consumed calories.",
+                "CalculateGramsPerServing": "Find out how many grams of chips can be eaten per serving.",
+                "TotalGramsAllowed": "Calculate the total grams allowed to eat within the daily calorie limit."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDailyIntake",
+                    "to": "TotalGramsAllowed"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateGramsPerServing",
+                    "to": "TotalGramsAllowed"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the calorie content per gram of chips, and how does it affect the calculation of total grams allowed to eat?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the relationship between the calorie content per serving and the total grams allowed to eat, and how does this affect the calculation?"
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the rationale for including both \"CalculateGramsPerServing\" and \"TotalGramsAllowed\" tasks, given that the total grams allowed can be directly calculated from the daily calorie target and the calories per gram of chips? This seems to introduce redundancy."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "CalculateDailyCaloriesPerGram": "Calculate the number of grams that can be eaten based on daily calorie target and calories per gram.",
+                "DetermineEatableGrams": "Determine how many grams can be consumed given the already consumed calories."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDailyCaloriesPerGram",
+                    "to": "DetermineEatableGrams"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the calorie content per gram of the bag of chips? This information is needed to calculate the number of grams that can be eaten based on the daily calorie target."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the calorie content per gram of the bag of chips, and how does it relate to the daily calorie target? This information is needed to calculate the number of grams that can be eaten based on the daily calorie target."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the calorie content per gram of the bag of chips, and how does it relate to the already consumed calories? This information is needed to determine the number of grams that can be consumed given the daily calorie target and the calories already consumed."
+            }
+        ],
+        "Answers": []
+    }
+]

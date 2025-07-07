@@ -1,0 +1,148 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "ColorMatch": "Find out if the identified act's name matches a primary color in the RGB model.",
+                "PlatinumSalesCheck": "Identify the act that achieved Platinum sales for Innocent Records"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PlatinumSalesCheck",
+                    "to": "ColorMatch"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the name of the act that achieved Platinum sales for Innocent Records? This task is necessary to proceed with the ColorMatch task and should be included in the TG."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the definition of \"Platinum sales\" for Innocent Records, and how will it be determined? This clarification is necessary to ensure accurate identification of the act."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the specific primary color in the RGB model that the act's name must match for the ColorMatch task? This clarification ensures that the task is correctly aligned with the user query."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "ColorMatchSearch": "Searching for an album name that matches a primary color in the RGB model.",
+                "PlatinumSalesCheck": "Checking the sales of Innocent Records albums to find which one achieved Platinum status."
+            },
+            "orders": [
+                {
+                    "condition": "platinum_found",
+                    "from": "PlatinumSalesCheck",
+                    "to": "ColorMatchSearch"
+                },
+                {
+                    "condition": "no_platinum",
+                    "from": "ColorMatchSearch",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the definition of \"platinum_found\" in the context of Innocent Records' album sales?"
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the definition of \"no_platinum\" in the context of Innocent Records' album sales, and how will it be determined if no platinum-selling albums are found?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the criteria for determining if an album has achieved Platinum sales, and how will this information be obtained?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausalReasoning",
+        "task_graph": {
+            "owner_agent": "WiserCausalReasoning",
+            "tasks": {
+                "ColorMatchCheck": "Find if any of these albums share their name with a primary color in the RGB model",
+                "PlatinumSalesCheck": "Identify albums that achieved Platinum sales for Innocent Records"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PlatinumSalesCheck",
+                    "to": "ColorMatchCheck"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the definition of \"Platinum sales\" for Innocent Records, and how will it be determined in this TG?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the source of the album names and sales data for Innocent Records, and how will this information be obtained in the TG?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the criteria for determining if an album has achieved Platinum sales, and how will this be applied in the TG?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "ColorMatchCheck": "Identifying if any album title from Innocent Records matches a primary color in the RGB model.",
+                "PlatinumSalesCheck": "Checking the sales of Innocent Records albums to identify which one achieved Platinum status."
+            },
+            "orders": [
+                {
+                    "condition": "platinum_album_found",
+                    "from": "PlatinumSalesCheck",
+                    "to": "ColorMatchCheck"
+                },
+                {
+                    "condition": "no_platinum_album",
+                    "from": "PlatinumSalesCheck",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the definition of \"platinum status\" in the context of album sales, and how is it determined?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the source of the album sales data for Innocent Records, and how can we ensure its accuracy?"
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the criteria for an album title to match a primary color in the RGB model, and how will this be determined?"
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -9,7 +9,7 @@ from tools.context import Context
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from wiseragents_creation  import append_or_update_AImessage1
 
-answer_instructions = """
+DeepmonologueAnswer_instructions = """
 You're WiserAgent {TG_Owner}, the original creator of this task graph (TG): {tg}, which was designed to solve this initial query: {query}. Now, other domain-specialized WiserAgents are interviewing you technically, one by one, to evaluate and improve your TG if needed. Respond to its question: {question}.
 Rely on the retrieved information from web or wikipedia if available:
 - Web: {web}
@@ -40,7 +40,7 @@ def generate_answers(state: State):
                 web = context.get_web_context(agent_name, question_text) or ""
                 wikipedia = context.get_wikipedia_context(agent_name, question_text) or ""
 
-                system_message = answer_instructions.format(
+                system_message = DeepmonologueAnswer_instructions.format(
                     question=question_text,
                     tg=entry.task_graph.to_json_string(),
                     TG_Owner=entry.TG_Owner.name,

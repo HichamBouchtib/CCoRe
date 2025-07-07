@@ -1,0 +1,135 @@
+[
+    {
+        "TG_Owner": "ThreatDetect",
+        "task_graph": {
+            "owner_agent": "ThreatDetect",
+            "tasks": {
+                "Test Execution": "Executing a test to understand the user's query better."
+            },
+            "orders": [
+                {
+                    "condition": "test_passed",
+                    "from": "Test Execution",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "IntrusionPrevent",
+                "content": "What is the criteria for passing the test? The condition `test_passed` lacks a definition."
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "What criteria will be used to determine if the test passes? The condition `test_passed` is referenced but lacks a definition."
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "IntrusionPrevent",
+        "task_graph": {
+            "owner_agent": "IntrusionPrevent",
+            "tasks": {
+                "GenerateAnswer": "Provide an answer based on the understanding of the user's query.",
+                "QueryUnderstanding": "Understand the user's query to determine if it requires a specific task or not."
+            },
+            "orders": [
+                {
+                    "condition": "query_needs_answer",
+                    "from": "QueryUnderstanding",
+                    "to": "GenerateAnswer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the source of the query \"test\"? The TG assumes the query needs an answer without checking if it's a predefined, known query or a user input."
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "What is the expected format of the answer provided by the \"GenerateAnswer\" task? The TG currently does not specify this format."
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "What is the criteria for determining when a query does not need an answer, and how should the TG handle such cases?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "NetSecMonitor",
+        "task_graph": {
+            "owner_agent": "NetSecMonitor",
+            "tasks": {
+                "Test Execution": "Executing a test to understand the user's query better."
+            },
+            "orders": [
+                {
+                    "condition": "test_result",
+                    "from": "Test Execution",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the expected format and content of the test result that will trigger the \"End\" task?"
+            },
+            {
+                "from": "IntrusionPrevent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "MalwareAnalyze",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "MalwareAnalyze",
+        "task_graph": {
+            "owner_agent": "MalwareAnalyze",
+            "tasks": {
+                "Test Execution": "Executing a test to understand the user's query better."
+            },
+            "orders": [
+                {
+                    "condition": "test_passed",
+                    "from": "Test Execution",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatDetect",
+                "content": "What is the expected outcome of the test and how will it be determined if the test has passed?"
+            },
+            {
+                "from": "IntrusionPrevent",
+                "content": "What criteria will be used to determine if the test has passed?"
+            },
+            {
+                "from": "NetSecMonitor",
+                "content": "What specific actions will be taken if the test has passed, and how will these actions differ from those if the test fails?"
+            }
+        ],
+        "Answers": []
+    }
+]

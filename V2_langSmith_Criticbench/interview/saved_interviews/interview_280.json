@@ -1,0 +1,183 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "EvaluateOptions": "Review the given answer choices and determine which one best fits the criteria for showing off silk.",
+                "ShowOffSilkGarments": "Select an item that would effectively showcase silk's qualities"
+            },
+            "orders": [
+                {
+                    "condition": "complete",
+                    "from": "ShowOffSilkGarments",
+                    "to": "EvaluateOptions"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the rationale behind including \"ShowOffSilkGarments\" as a task when the answer choices are items, not garments? This task seems to misalign with the provided options."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the rationale behind evaluating options for \"ShowOffSilkGarments\" when the answer choices include items like jeans and parachutes, which are not necessarily garments? This task seems to misalign with the provided options."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the rationale for including both \"EvaluateOptions\" and \"ShowOffSilkGarments\" as separate tasks when one task could potentially cover both steps? This redundancy might lead to unnecessary complexity in the TG."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "ShowOffSilkOnExpensiveClothing": "Check if expensive clothing is appropriate for displaying silk.",
+                "ShowOffSilkOnGarments": "Assess garments in general as a means of showcasing silk.",
+                "ShowOffSilkOnJeans": "Determine if jeans are a suitable item to show off silk.",
+                "ShowOffSilkOnMulberryTree": "Evaluate the mulberry tree as an option for showing off silk.",
+                "ShowOffSilkOnParachutes": "Analyze parachutes as an item to demonstrate silk."
+            },
+            "orders": [
+                {
+                    "condition": "failure",
+                    "from": "ShowOffSilkOnJeans",
+                    "to": "ShowOffSilkOnGarments"
+                },
+                {
+                    "condition": "failure",
+                    "from": "ShowOffSilkOnMulberryTree",
+                    "to": "ShowOffSilkOnGarments"
+                },
+                {
+                    "condition": "success",
+                    "from": "ShowOffSilkOnExpensiveClothing",
+                    "to": "ShowOffSilkOnGarments"
+                },
+                {
+                    "condition": "failure",
+                    "from": "ShowOffSilkOnParachutes",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the rationale behind evaluating mulberry trees as a potential item to show off silk, given that silk is derived from silkworms which feed on mulberry leaves? This task seems irrelevant and could be removed."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the rationale behind evaluating parachutes as a potential item to show off silk, given that parachutes are typically made from nylon or other synthetic materials and not silk? This task seems irrelevant and could be removed."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the rationale behind evaluating jeans as a potential item to show off silk, given that jeans are typically made from denim and not silk? This task seems irrelevant and could be removed."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausality",
+        "task_graph": {
+            "owner_agent": "WiserCausality",
+            "tasks": {
+                "IdentifyItemForSilkShowoff": "Determine the most suitable item for showcasing silk based on given options."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyItemForSilkShowoff",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the rationale behind choosing \"IdentifyItemForSilkShowoff\" as the sole task, and why is it not broken down into sub-tasks such as identifying characteristics of silk and matching them with the given options?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the rationale behind excluding \"mulberry tree\" from consideration, given its relevance to silk production?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the rationale for excluding \"garments\" and including \"expensive clothing\" as potential options, given that garments are a broader category that encompasses expensive clothing?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "ShowOffSilkOnExpensiveClothing": "To show off silk on expensive clothing",
+                "ShowOffSilkOnGarments": "To show off silk on garments",
+                "ShowOffSilkOnJeans": "To show off silk on jeans",
+                "ShowOffSilkOnMulberryTree": "To show off silk on mulberry tree",
+                "ShowOffSilkOnParachutes": "To show off silk on parachutes"
+            },
+            "orders": [
+                {
+                    "condition": "jean_is_suitable",
+                    "from": "ShowOffSilkOnJeans",
+                    "to": "AnswerCheck"
+                },
+                {
+                    "condition": "mulberry_tree_is_suitable",
+                    "from": "ShowOffSilkOnMulberryTree",
+                    "to": "AnswerCheck"
+                },
+                {
+                    "condition": "garments_are_suitable",
+                    "from": "ShowOffSilkOnGarments",
+                    "to": "AnswerCheck"
+                },
+                {
+                    "condition": "expensive_clothing_is_suitable",
+                    "from": "ShowOffSilkOnExpensiveClothing",
+                    "to": "AnswerCheck"
+                },
+                {
+                    "condition": "parachutes_are_suitable",
+                    "from": "ShowOffSilkOnParachutes",
+                    "to": "AnswerCheck"
+                },
+                {
+                    "condition": "correct_answer_found",
+                    "from": "AnswerCheck",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the criterion for determining if \"jean,\" \"garments,\" \"expensive clothing,\" and \"parachutes\" are suitable to show off silk? The current TG does not specify how these items will be evaluated."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What criteria will be used to determine if a mulberry tree is suitable for showing off silk, and how does this relate to the other tasks in the TG?"
+            }
+        ],
+        "Answers": []
+    }
+]

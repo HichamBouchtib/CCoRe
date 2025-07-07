@@ -1,0 +1,214 @@
+[
+    {
+        "TG_Owner": "CodeGenPro",
+        "task_graph": {
+            "owner_agent": "CodeGenPro",
+            "tasks": {
+                "CheckArrayLength": "Check if the array length is greater than 1 since an empty or single-element array is always sorted.",
+                "FindNonDecreasingSubarray": "Identify a subarray where elements are in non-decreasing order.",
+                "ReturnResult": "Based on the verification, return True or False.",
+                "VerifyRotationPossibility": "Determine if the entire array can be rotated to form a non-decreasing sequence based on the identified subarray."
+            },
+            "orders": [
+                {
+                    "condition": "length_greater_than_1",
+                    "from": "CheckArrayLength",
+                    "to": "FindNonDecreasingSubarray"
+                },
+                {
+                    "condition": "not length_greater_than_1",
+                    "from": "CheckArrayLength",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "subarray_found",
+                    "from": "FindNonDecreasingSubarray",
+                    "to": "VerifyRotationPossibility"
+                },
+                {
+                    "condition": "rotation_possible",
+                    "from": "VerifyRotationPossibility",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "not rotation_possible",
+                    "from": "VerifyRotationPossibility",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestMaster",
+                "content": "What is the criteria for determining if a subarray is in non-decreasing order, and how does this affect the verification of rotation possibility?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What is the criteria for determining if a subarray is in non-decreasing order, and how does this affect the verification of rotation possibility? This question aims to clarify the logic used in identifying the subarray and its impact on determining the overall array's rotation possibility."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestMaster",
+        "task_graph": {
+            "owner_agent": "TestMaster",
+            "tasks": {
+                "CheckArrayOrder": "Determine if the array can be sorted by a single right shift operation",
+                "HandleEmptyArray": "Return True for an empty array",
+                "RightShiftOperation": "Perform one right shift operation on the given array",
+                "VerifySortedArray": "Verify if the shifted array is in non-decreasing order"
+            },
+            "orders": [
+                {
+                    "condition": "not sorted",
+                    "from": "CheckArrayOrder",
+                    "to": "RightShiftOperation"
+                },
+                {
+                    "condition": "success",
+                    "from": "RightShiftOperation",
+                    "to": "VerifySortedArray"
+                },
+                {
+                    "condition": "sorted",
+                    "from": "VerifySortedArray",
+                    "to": "AnswerTrue"
+                },
+                {
+                    "condition": "empty",
+                    "from": "CheckArrayOrder",
+                    "to": "HandleEmptyArray"
+                },
+                {
+                    "condition": "success",
+                    "from": "HandleEmptyArray",
+                    "to": "AnswerTrue"
+                },
+                {
+                    "condition": "not sorted",
+                    "from": "VerifySortedArray",
+                    "to": "AnswerFalse"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What happens if the array is already sorted in non-decreasing order? Is it considered a valid case, and where does it fit in the task graph?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "What happens if the array is already sorted in non-decreasing order without needing a right shift operation? Is this considered a valid case, and where does it fit in the task graph?"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What happens if the array requires more than one right shift operation to become sorted in non-decreasing order? Is this a valid case, and where does it fit in the task graph?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIWizard",
+        "task_graph": {
+            "owner_agent": "APIWizard",
+            "tasks": {
+                "CheckArrayOrder": "Determine if the array can be sorted by performing right shift operations.",
+                "RightShiftOperation": "Perform a single right shift operation on the array."
+            },
+            "orders": [
+                {
+                    "condition": "not_sorted",
+                    "from": "CheckArrayOrder",
+                    "to": "RightShiftOperation"
+                },
+                {
+                    "condition": "sorted",
+                    "from": "RightShiftOperation",
+                    "to": "CheckArrayOrder"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What happens if the array is already sorted in non-decreasing order? Is it considered a valid case for returning True, or should the function still perform right shift operations to check if a single operation can sort it?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "What happens if the array has exactly two elements and they are in reverse order? Is it considered a valid case for returning False, or should it return True since one right shift can sort it?"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What happens if the array contains duplicate elements, even though the problem statement guarantees unique elements? This scenario is not covered and could clarify edge cases."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitGuru",
+        "task_graph": {
+            "owner_agent": "GitGuru",
+            "tasks": {
+                "CheckArrayOrder": "Determine if the array can be sorted by performing right shift operations",
+                "EmptyArrayCheck": "Check if the given array is empty",
+                "IsSorted": "Check if the array is sorted in non-decreasing order",
+                "RightShiftOperation": "Perform a single right shift operation on the array"
+            },
+            "orders": [
+                {
+                    "condition": "true",
+                    "from": "EmptyArrayCheck",
+                    "to": "TrueReturn"
+                },
+                {
+                    "condition": "not_sorted",
+                    "from": "CheckArrayOrder",
+                    "to": "RightShiftOperation"
+                },
+                {
+                    "condition": "success",
+                    "from": "RightShiftOperation",
+                    "to": "IsSorted"
+                },
+                {
+                    "condition": "sorted",
+                    "from": "IsSorted",
+                    "to": "TrueReturn"
+                },
+                {
+                    "condition": "unsorted",
+                    "from": "IsSorted",
+                    "to": "CheckArrayOrder"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What happens if the array is already sorted in non-decreasing order? Is it considered a valid case for returning True, or should the function still perform right shift operations to check if the array can be sorted by shifting?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

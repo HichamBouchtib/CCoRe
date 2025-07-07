@@ -1,0 +1,109 @@
+[
+    {
+        "TG_Owner": "PrediWise",
+        "task_graph": {
+            "owner_agent": "PrediWise",
+            "tasks": {
+                "CountItems": "Count how many of these identified items exist.",
+                "IdentifyItems": "Identify the items on the nightstand that are neither purple nor black."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyItems",
+                    "to": "CountItems"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogiWise",
+                "content": "What is the basis for identifying items as \"neither purple nor black\"? The TG does not specify how to categorize each item, which is crucial for determining the count."
+            },
+            {
+                "from": "AutoProve",
+                "content": "What criteria are used to categorize each item as \"neither purple nor black\"? The TG should specify how to determine which items fall into this category."
+            },
+            {
+                "from": "RepresWise",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "AutoProve",
+        "task_graph": {
+            "owner_agent": "AutoProve",
+            "tasks": {
+                "IdentifyItems": "Identify items that are neither purple nor black from the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyItems",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogiWise",
+                "content": "What is the list of items on the nightstand, and how do you determine which items are neither purple nor black?"
+            },
+            {
+                "from": "PrediWise",
+                "content": "What is the list of items on the nightstand, and how do you determine which items are neither purple nor black? The TG does not explicitly define the items, which is crucial for determining the answer."
+            },
+            {
+                "from": "RepresWise",
+                "content": "What is the list of items on the nightstand, and how do you determine which items are neither purple nor black? The TG does not explicitly define the items, which is crucial for determining the answer. Additionally, the TG should include a task to count the identified items that meet the criteria."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RepresWise",
+        "task_graph": {
+            "owner_agent": "RepresWise",
+            "tasks": {
+                "CountFilteredItems": "Count the filtered items.",
+                "FilterByColor": "Filter out items based on color criteria (neither purple nor black).",
+                "IdentifyItems": "Identify the items mentioned in the query."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyItems",
+                    "to": "FilterByColor"
+                },
+                {
+                    "condition": "success",
+                    "from": "FilterByColor",
+                    "to": "CountFilteredItems"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogiWise",
+                "content": "What is the significance of the \"CountFilteredItems\" task if it does not involve counting the filtered items? The task description should clearly specify what actions are to be taken in each step."
+            },
+            {
+                "from": "PrediWise",
+                "content": "What is the basis for filtering items in the \"FilterByColor\" task if no specific color criteria are defined? The TG should clearly specify the colors to filter by."
+            },
+            {
+                "from": "AutoProve",
+                "content": "What specific criteria are used to filter items in the \"FilterByColor\" task, and how does this relate to the user query about items that are neither purple nor black? The TG should clearly define these criteria."
+            }
+        ],
+        "Answers": []
+    }
+]

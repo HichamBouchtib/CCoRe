@@ -1,0 +1,178 @@
+[
+    {
+        "TG_Owner": "CodeGenPro",
+        "task_graph": {
+            "owner_agent": "CodeGenPro",
+            "tasks": {
+                "CheckBelowZero": "Check if the current balance is below zero after processing all operations.",
+                "InitializeBalance": "Set the initial balance of the bank account to zero.",
+                "ProcessOperations": "Iterate through each operation in the list and update the balance accordingly."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "InitializeBalance",
+                    "to": "ProcessOperations"
+                },
+                {
+                    "condition": "success",
+                    "from": "ProcessOperations",
+                    "to": "CheckBelowZero"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior if the input list `operations` is empty? Is the function supposed to return `False` in this case, or should it raise an error?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestMaster",
+        "task_graph": {
+            "owner_agent": "TestMaster",
+            "tasks": {
+                "CheckOperations": "Iterate through the operations list to calculate the balance at each step.",
+                "DetectBelowZero": "Determine if the balance falls below zero during iteration."
+            },
+            "orders": [
+                {
+                    "condition": "balance < 0",
+                    "from": "CheckOperations",
+                    "to": "DetectBelowZero"
+                },
+                {
+                    "condition": "all operations checked",
+                    "from": "CheckOperations",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the initial balance of the bank account, and does it need to be considered in the `below_zero` function?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "What is the criteria for determining if all operations have been checked in the `CheckOperations` task? The current TG does not specify how to transition from \"all operations checked\" to the end state."
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIWizard",
+        "task_graph": {
+            "owner_agent": "APIWizard",
+            "tasks": {
+                "below_zero_function_analysis": "Analyze the given function to understand its logic and requirements.",
+                "function_improvement_suggestions": "Suggest improvements or optimizations for the given function.",
+                "test_cases_generation": "Generate test cases based on the provided examples."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "below_zero_function_analysis",
+                    "to": "test_cases_generation"
+                },
+                {
+                    "condition": "failure",
+                    "from": "below_zero_function_analysis",
+                    "to": "function_improvement_suggestions"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the expected behavior of the function when an empty list is passed as an argument? This scenario is not covered by the provided test cases."
+            },
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior of the function when a list containing only negative numbers is passed as an argument? This scenario is not covered by the provided test cases."
+            },
+            {
+                "from": "GitGuru",
+                "content": "What is the expected behavior of the function when a list containing both positive and negative numbers, but never falls below zero, is passed as an argument? This scenario is not covered by the provided test cases."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitGuru",
+        "task_graph": {
+            "owner_agent": "GitGuru",
+            "tasks": {
+                "CheckBelowZero": "Checking if the current balance is below zero.",
+                "InitializeList": "Initializing the list of operations with a zero balance.",
+                "IterateOperations": "Iterating through each operation in the list.",
+                "ReturnResult": "Returning True if the balance goes below zero, otherwise False.",
+                "UpdateBalance": "Updating the account balance after each operation."
+            },
+            "orders": [
+                {
+                    "condition": "always",
+                    "from": "InitializeList",
+                    "to": "IterateOperations"
+                },
+                {
+                    "condition": "success",
+                    "from": "IterateOperations",
+                    "to": "UpdateBalance"
+                },
+                {
+                    "condition": "always",
+                    "from": "UpdateBalance",
+                    "to": "CheckBelowZero"
+                },
+                {
+                    "condition": "true",
+                    "from": "CheckBelowZero",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "false",
+                    "from": "CheckBelowZero",
+                    "to": "IterateOperations"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the initial balance of the account, and does it need to be explicitly set in the \"InitializeList\" task? The TG assumes a zero balance, but this should be clearly stated if it's a requirement."
+            },
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior if the input list `operations` is empty? The TG does not specify this scenario."
+            },
+            {
+                "from": "APIWizard",
+                "content": "What is the expected behavior if the input list `operations` contains non-integer values? The TG and the function signature do not address this scenario."
+            }
+        ],
+        "Answers": []
+    }
+]

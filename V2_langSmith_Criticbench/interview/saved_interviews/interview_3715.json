@@ -1,0 +1,97 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateYesterdayDate": "Calculate the date that is one week ago from today's date.",
+                "CheckOptions": "Verify which of the provided options matches the calculated date.",
+                "IdentifyCurrentDate": "Determine the current date based on the given context."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyCurrentDate",
+                    "to": "CalculateYesterdayDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateYesterdayDate",
+                    "to": "CheckOptions"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date based on the context provided, and how does it affect the calculation of one week ago?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date, and how does it relate to May 6, 1992 being considered like \"yesterday\"? This context seems unclear and should be clarified."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateTodayDate": "Determine the current date in MM/DD/YYYY format.",
+                "SubtractOneWeek": "Subtract one week from today's date to find the required date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateTodayDate",
+                    "to": "SubtractOneWeek"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date in MM/DD/YYYY format, and how does it relate to May 6, 1992 being like \"yesterday\" to Jane? This clarification is necessary to understand the context of the problem."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date, and how does it differ from May 6, 1992, to accurately determine what \"yesterday\" means in this context?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date one week ago from today based on the given context."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date in MM/DD/YYYY based on the given context?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is today's date in MM/DD/YYYY based on the given context?"
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,174 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "CalculateArea": "Calculate the area using the found width and the given length.",
+                "DefineVariables": "Define the variables for length (L) and width (W).",
+                "SetUpEquations": "Set up equations based on given information.",
+                "SolveForWidth": "Solve the equation to find the width of the parking space."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineVariables",
+                    "to": "SetUpEquations"
+                },
+                {
+                    "condition": "success",
+                    "from": "SetUpEquations",
+                    "to": "SolveForWidth"
+                },
+                {
+                    "condition": "success",
+                    "from": "SolveForWidth",
+                    "to": "CalculateArea"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What is the length of the painted sides, and are they all the same length? The TG does not specify how many sides are painted, which is crucial for setting up the equations correctly."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the total length of the painted sides, and how many sides are painted? This information is necessary to correctly set up the equations."
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "CalculateArea": "Compute the area of the rectangle with the determined dimensions.",
+                "CalculateOtherSides": "Find the lengths of the other two sides based on the total painted perimeter and one known side.",
+                "CalculateUnpaintedSideLength": "Determine the length of the unpainted side using the given information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateUnpaintedSideLength",
+                    "to": "CalculateOtherSides"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateOtherSides",
+                    "to": "CalculateArea"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the length of the third painted side, and how does it contribute to the total painted perimeter? This information seems missing in the TG and is necessary to solve the problem."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the length of the unpainted side, and how does it relate to the total painted perimeter? This information seems unclear in the TG and is necessary to solve the problem."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the length of the unpainted side, and how does it relate to the total painted perimeter? This information seems unclear in the TG and is necessary to solve the problem. Additionally, the TG should specify that one of the painted sides is equal to the length of the unpainted side (9 feet) to correctly calculate the other two sides."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "CalculateArea": "Calculate the area of the parking space using the determined dimensions.",
+                "CalculatePerimeter": "Calculate the perimeter of the rectangle using the given information.",
+                "SolveForWidth": "Solve for the width of the rectangle based on the calculated perimeter and one side length."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculatePerimeter",
+                    "to": "SolveForWidth"
+                },
+                {
+                    "condition": "success",
+                    "from": "SolveForWidth",
+                    "to": "CalculateArea"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the rationale for including a \"CalculatePerimeter\" task when the perimeter is not needed to solve the problem directly? The area can be calculated directly with the given information."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the rationale for including a \"CalculatePerimeter\" task when it is not necessary to solve the problem directly? The area can be calculated directly with the given information."
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "CalculateArea": "Compute the area of the rectangle with the found dimensions.",
+                "CalculatePaintedSidesPerimeter": "Calculate the perimeter contributed by the painted sides.",
+                "CalculateUnpaintedSideLength": "Determine the length of the unpainted side using the given information.",
+                "FindRemainingSideLengths": "Find the lengths of the remaining two sides based on the total perimeter and one known side."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateUnpaintedSideLength",
+                    "to": "CalculatePaintedSidesPerimeter"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculatePaintedSidesPerimeter",
+                    "to": "FindRemainingSideLengths"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindRemainingSideLengths",
+                    "to": "CalculateArea"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the total perimeter of the rectangle, and how does it relate to the given information?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the total perimeter of the rectangle, and how does it relate to the given information if we already know the length of one side and the sum of the lengths of the painted sides?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the relationship between the perimeter of the rectangle and the given information if we already know the length of one side and the sum of the lengths of the painted sides? This can help clarify how to directly find the area without explicitly calculating intermediate steps."
+            }
+        ],
+        "Answers": []
+    }
+]

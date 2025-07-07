@@ -1,0 +1,202 @@
+[
+    {
+        "TG_Owner": "CodeGenPro",
+        "task_graph": {
+            "owner_agent": "CodeGenPro",
+            "tasks": {
+                "DefineFunction": "A function that calculates the surface area of a cuboid given its length, width, and height.",
+                "TestFunction": "Verify if the defined function works correctly by running it against provided test cases."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior if any of the dimensions (length, width, height) are negative?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "TestMaster",
+                "content": "The expected behavior for a function calculating the surface area of a cuboid should handle negative dimensions by considering their absolute values. This is because surface area is a measure of area, which is always non-negative. Therefore, if any of the length, width, or height are negative, the function should use the absolute value of these dimensions to compute the surface area."
+            },
+            {
+                "to": "APIWizard",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "GitGuru",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "TestMaster",
+        "task_graph": {
+            "owner_agent": "TestMaster",
+            "tasks": {
+                "DefineFunction": "Create a function to calculate the surface area of a cuboid.",
+                "RunTests": "Execute the tests provided by the user to ensure correctness.",
+                "WriteCode": "Implement the function according to the user's requirements."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "WriteCode"
+                },
+                {
+                    "condition": "success",
+                    "from": "WriteCode",
+                    "to": "RunTests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the expected format of the input parameters for the `surfacearea_cuboid` function? Are they integers, floats, or can they include negative values?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenPro",
+                "content": "The expected format of the input parameters for the `surfacearea_cuboid` function should be positive numbers. Typically, dimensions like length, width, and height are considered to be positive values in geometric calculations. However, if the problem statement allows for negative values or non-integer inputs (like floating-point numbers), then those would also be valid based on the provided test cases which include integers. For this specific task graph, it is safe to assume that the parameters should be positive integers unless otherwise specified."
+            },
+            {
+                "to": "APIWizard",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "GitGuru",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "APIWizard",
+        "task_graph": {
+            "owner_agent": "APIWizard",
+            "tasks": {
+                "DefineFunction": "Write a Python function to calculate the surface area of a cuboid",
+                "TestFunction": "Verify the correctness of the defined function using provided test cases"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the input format for the function, and are there any constraints on the dimensions of the cuboid?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior if any of the dimensions are negative, and should the function handle such cases?"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What is the expected behavior if any of the dimensions are zero, and should the function handle such cases?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenPro",
+                "content": "The input format for the function should be three positive numbers representing the length, width, and height of the cuboid. There are no specific constraints mentioned in the initial query, but typically, dimensions of a physical object like a cuboid would be positive real numbers. For the purpose of this task, we can assume that the inputs will always be positive integers as specified by the test cases."
+            },
+            {
+                "to": "TestMaster",
+                "content": "The expected behavior when any of the dimensions are negative can vary depending on the application requirements. However, in most mathematical and practical contexts, a cuboid's dimensions (length, width, and height) should be positive values representing physical measurements.\n\nIf the function is to strictly adhere to these constraints, it would be reasonable to raise an error or exception when any dimension is negative. This ensures that only valid inputs are processed, maintaining the integrity of the calculations.\n\nHere\u2019s how you might handle such cases in the `DefineFunction`:\n\n```python\ndef surfacearea_cuboid(length, width, height):\n    if length < 0 or width < 0 or height < 0:\n        raise ValueError(\"All dimensions must be positive numbers.\")\n    \n    # Calculate the surface area of a cuboid\n    surface_area = 2 * (length * width + width * height + height * length)\n    return surface_area\n```\n\nThis implementation ensures that only valid, non-negative inputs are processed and provides clear feedback if invalid data is provided."
+            },
+            {
+                "to": "GitGuru",
+                "content": "The expected behavior when any of the dimensions are zero should be considered. In such cases, a cuboid would effectively become a lower-dimensional shape (a line segment or a point), and its surface area would logically be zero since there would be no \"surface\" to measure.\n\nTo handle this case in the function, you could add a condition to check if any of the dimensions are zero and return zero immediately if so. This approach ensures that the function behaves consistently and avoids unnecessary calculations.\n\nHere's how you might modify the function:\n\n```python\ndef surfacearea_cuboid(length, width, height):\n    # Check for invalid dimensions\n    if length == 0 or width == 0 or height == 0:\n        return 0\n    \n    # Calculate the surface area of a cuboid\n    surface_area = 2 * (length * width + width * height + height * length)\n    return surface_area\n\n# Test cases\nassert surfacearea_cuboid(1, 2, 3) == 22\nassert surfacearea_cuboid(5, 7, 9) == 286\nassert surfacearea_cuboid(10, 15, 21) == 1350\nassert surfacearea_cuboid(0, 2, 3) == 0\n```\n\nThis implementation ensures that the function handles zero dimensions correctly and maintains its correctness for valid inputs."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "GitGuru",
+        "task_graph": {
+            "owner_agent": "GitGuru",
+            "tasks": {
+                "DefineFunction": "A task to define the function for calculating the surface area of a cuboid",
+                "TestFunction": "Testing the function with provided test cases",
+                "WriteCode": "Writing the code for the defined function"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "WriteCode"
+                },
+                {
+                    "condition": "success",
+                    "from": "WriteCode",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenPro",
+                "content": "What is the expected format for the code in the \"WriteCode\" task? Should it be a single function definition, or can multiple functions be included?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "CodeGenPro",
+                "content": "The expected format for the code in the \"WriteCode\" task should be a single function definition that calculates the surface area of a cuboid. Multiple functions are not required for this specific task, as only the surface area calculation is needed. Including additional functions would complicate the code unnecessarily unless there are other requirements or functionalities to be implemented."
+            },
+            {
+                "to": "TestMaster",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "APIWizard",
+                "content": "You are welcome!"
+            }
+        ]
+    }
+]

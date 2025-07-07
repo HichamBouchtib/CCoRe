@@ -1,0 +1,128 @@
+[
+    {
+        "TG_Owner": "LogicalInfer",
+        "task_graph": {
+            "owner_agent": "LogicalInfer",
+            "tasks": {
+                "CalculateCurrentYear": "Calculate the current year when Jane is 16 years old",
+                "DetermineBirthDate": "Identify the birth date of Jane based on the provided information",
+                "DetermineYesterdayDate": "Derive the date of yesterday from the birth date and the current year",
+                "FindLastDayOfFebruary": "Find out if February has 28 or 29 days in the calculated current year"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineBirthDate",
+                    "to": "CalculateCurrentYear"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentYear",
+                    "to": "FindLastDayOfFebruary"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindLastDayOfFebruary",
+                    "to": "DetermineYesterdayDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the current date, and how does it relate to Jane's 16-year-old birthday? The TG does not specify the current date, which is crucial for determining yesterday's date."
+            },
+            {
+                "from": "KnowRep",
+                "content": "What is the current date, and how does it relate to Jane's 16-year-old birthday? The TG does not specify the current date, which is crucial for determining yesterday's date. Additionally, the TG should clarify whether the current year is 2017 or another year, as this affects the determination of February having 28 or 29 days."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "CalculateTodayDate": "Determine today's date based on Jane's age and current year.",
+                "CalculateYesterdayDate": "Compute yesterday's date from today's date.",
+                "CheckLeapYear": "Verify if the birth year is a leap year to determine February has 29 days or not.",
+                "DetermineBirthDate": "Calculate the birth date of Jane based on her age and year of birth.",
+                "FindLastDayOfFebruary": "Identify the last day of February for the given birth year."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineBirthDate",
+                    "to": "CheckLeapYear"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckLeapYear",
+                    "to": "FindLastDayOfFebruary"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindLastDayOfFebruary",
+                    "to": "CalculateTodayDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateTodayDate",
+                    "to": "CalculateYesterdayDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "Why is \"CheckLeapYear\" necessary if today is Jane's 16th birthday and we already know her birth year? The current year can be calculated directly from her age, making this task redundant."
+            },
+            {
+                "from": "KnowRep",
+                "content": "Why is \"DetermineBirthDate\" necessary if we already know Jane's birth year and the specific date within February? This task seems redundant given the information provided."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowRep",
+        "task_graph": {
+            "owner_agent": "KnowRep",
+            "tasks": {
+                "Calculate_Current_Date": "Compute today's date considering Jane is 16 years old",
+                "Determine_Birthdate": "Identify the birth date of Jane based on the given information",
+                "Find_Yesterday_Date": "Derive yesterday's date from today's date"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Determine_Birthdate",
+                    "to": "Calculate_Current_Date"
+                },
+                {
+                    "condition": "success",
+                    "from": "Calculate_Current_Date",
+                    "to": "Find_Yesterday_Date"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the current date if today is Jane's 16-year-old birthday, and how does it relate to February having 28 days in non-leap years versus 29 days in leap years?"
+            },
+            {
+                "from": "RuleMaster",
+                "content": "What is the leap year status of 2001, and how does it affect Jane's birthdate?"
+            }
+        ],
+        "Answers": []
+    }
+]

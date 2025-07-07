@@ -1,0 +1,92 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateDaysPassed": "Calculating the number of days passed since Jane quit her job.",
+                "DetermineDate": "Determining the date yesterday based on the calculated days passed."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysPassed",
+                    "to": "DetermineDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date in MM/DD/YYYY format, and how was it determined? This information is necessary to accurately calculate the date 176 days before yesterday."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the reference date from which 176 days are counted, and how was it determined? This information is necessary to accurately calculate the date yesterday."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateDate": "Calculate the date from the given start date and number of days passed",
+                "FindYesterday": "Determine the date of yesterday based on the calculated date"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDate",
+                    "to": "FindYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the start date format expected for the \"CalculateDate\" task, and will it handle dates in the format MM/DD/YYYY?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the date format expected for the output of the \"FindYesterday\" task, and will it handle dates in the format MM/DD/YYYY?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "CalculateDate": "Calculate the date after adding days to the given start date",
+                "FindYesterday": "Determine the date of yesterday based on the calculated date"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDate",
+                    "to": "FindYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the start date being used in the \"CalculateDate\" task, and how are the 176 days being added to it? The TG does not specify the exact start date, which is crucial for calculating the correct date."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the start date being used in the \"CalculateDate\" task, and how are the 176 days being added to it? The TG does not specify the exact start date, which is crucial for calculating the correct date. Additionally, the TG should include a task to handle the specific date format required (MM/DD/YYYY) and ensure the calculation accounts for leap years if necessary."
+            }
+        ],
+        "Answers": []
+    }
+]

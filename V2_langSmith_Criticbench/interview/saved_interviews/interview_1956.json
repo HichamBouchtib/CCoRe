@@ -1,0 +1,207 @@
+[
+    {
+        "TG_Owner": "DataMender",
+        "task_graph": {
+            "owner_agent": "DataMender",
+            "tasks": {
+                "Repeat The School of Music three times": "Repeat the given phrase three times.",
+                "Who plays the bass loud?": "Generate a question to be asked before repeating the phrase."
+            },
+            "orders": [
+                {
+                    "condition": "asked",
+                    "from": "Who plays the bass loud?",
+                    "to": "Repeat The School of Music three times"
+                },
+                {
+                    "condition": "completed",
+                    "from": "Repeat The School of Music three times",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureCraft",
+                "content": "What happens if \"Who plays the bass loud?\" is not asked? Is there a default action to take in such cases?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "FeatureCraft",
+                "content": "If \"Who plays the bass loud?\" is not asked, the task graph will proceed to the next task without generating that question. The phrase \"Repeat The School of Music three times\" will still be executed as planned, starting from the first repetition. There is no default action specified in the current TG for such cases; it simply skips the generation of the question and moves on to repeating the phrase."
+            },
+            {
+                "to": "ModelMaster",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "MetricMaestro",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "FeatureCraft",
+        "task_graph": {
+            "owner_agent": "FeatureCraft",
+            "tasks": {
+                "Repeat The School of Music three times": "Repeating the phrase 'The School of Music' three times.",
+                "Who plays the bass loud?": "Ask the question before repeating the phrase."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Who plays the bass loud?",
+                    "to": "Repeat The School of Music three times"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataMender",
+                "content": "What will happen if \"Who plays the bass loud?\" is not answered before repeating \"The School of Music\"?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "What will happen if \"Who plays the bass loud?\" is not answered before repeating \"The School of Music\"? This scenario is not covered in the current TG and should be addressed to ensure the plan is robust."
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "What will happen if \"Who plays the bass loud?\" is asked multiple times without receiving an answer before starting to repeat \"The School of Music\"? This scenario should be addressed to ensure the plan handles potential delays or interruptions."
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataMender",
+                "content": "If \"Who plays the bass loud?\" is not answered before repeating \"The School of Music,\" the TG will proceed to the next task automatically due to the defined order. The question will be skipped, and \"The School of Music\" will be repeated three times without first addressing who plays the bass loudly."
+            },
+            {
+                "to": "ModelMaster",
+                "content": "If \"Who plays the bass loud?\" is not answered before repeating \"The School of Music,\" the TG will proceed to the next task automatically due to the defined order. The question will be skipped, and \"The School of Music\" will be repeated three times without first addressing the question. This could result in an incomplete or unexpected sequence of actions, potentially leading to confusion or incorrect output. To ensure the plan is robust, it's advisable to include a condition that checks if the question has been answered before proceeding to repeat the phrase."
+            },
+            {
+                "to": "MetricMaestro",
+                "content": "In the given task graph (TG), \"Who plays the bass loud?\" is a single task that needs to be completed before moving on to repeating \"The School of Music\" three times. If \"Who plays the bass loud?\" is asked multiple times without receiving an answer, the TG should handle this by ensuring that the question is only asked once and then proceed to repeat \"The School of Music\" if no response is received within a predefined time frame or after a certain number of retries.\n\nTo address potential delays or interruptions, you can implement a retry mechanism for the \"Who plays the bass loud?\" task. For example:\n\n1. Attempt to ask the question once.\n2. If no answer is received, wait for a short period (e.g., 5 seconds).\n3. Retry asking the question up to a maximum number of retries (e.g., 3 times).\n4. After all retries, if no response is received, proceed to repeat \"The School of Music\" three times.\n\nHere's an updated version of the TG with this mechanism:\n\n```json\n{\n    \"owner_agent\": \"FeatureCraft\",\n    \"tasks\": {\n        \"Repeat The School of Music three times\": \"Repeating the phrase 'The School of Music' three times.\",\n        \"Who plays the bass loud?\": \"Ask the question before repeating the phrase.\"\n    },\n    \"orders\": [\n        {\n            \"condition\": \"success\",\n            \"from\": \"Who plays the bass loud?\",\n            \"to\": \"Repeat The School of Music three times\"\n        }\n    ],\n    \"retry_policy\": {\n        \"task\": \"Who plays the bass loud?\",\n        \"max_retries\": 3,\n        \"retry_delay\": 5\n    },\n    \"refused\": false,\n    \"answer\": null\n}\n```\n\nThis ensures that the task graph can handle potential delays or interruptions gracefully."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ModelMaster",
+        "task_graph": {
+            "owner_agent": "ModelMaster",
+            "tasks": {
+                "Repeat The School of Music three times": "Repeating the phrase 'The School of Music' three times.",
+                "Who plays the bass loud?": "Ask the question before repeating the phrase."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Who plays the bass loud?",
+                    "to": "Repeat The School of Music three times"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataMender",
+                "content": "What will happen if \"Who plays the bass loud?\" is not answered satisfactorily before repeating \"The School of Music\"?"
+            },
+            {
+                "from": "FeatureCraft",
+                "content": "What will happen if \"Who plays the bass loud?\" is not answered satisfactorily before repeating \"The School of Music\"? This scenario is not addressed in the current TG."
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataMender",
+                "content": "If \"Who plays the bass loud?\" is not answered satisfactorily before repeating \"The School of Music,\" the task graph will proceed to the next task as defined by the order condition. Specifically, it will move from \"Who plays the bass loud?\" to \"Repeat The School of Music three times.\" However, since the question was not answered satisfactorily, the response might be incomplete or incorrect, potentially leading to an unsatisfactory outcome for the overall task."
+            },
+            {
+                "to": "FeatureCraft",
+                "content": "If \"Who plays the bass loud?\" is not answered satisfactorily before repeating \"The School of Music,\" the TG will proceed to the next task as defined by the orders. According to the current TG, after receiving a response (or lack thereof) to \"Who plays the bass loud?\", it will then repeat \"The School of Music\" three times. However, since the question is not answered satisfactorily, there might be an expectation that the phrase \"The School of Music\" should still be repeated as instructed, but without the preceding question. \n\nTo handle this scenario more gracefully, you could add a condition or fallback task to check if the question was answered before proceeding with the repetition. If the question is not satisfactorily answered, the TG could prompt for clarification or repeat the entire sequence from the beginning."
+            },
+            {
+                "to": "MetricMaestro",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "MetricMaestro",
+        "task_graph": {
+            "owner_agent": "MetricMaestro",
+            "tasks": {
+                "Repeat1": "First repetition of 'The School of Music'.",
+                "Repeat2": "Second repetition of 'The School of Music'.",
+                "Repeat3": "Third repetition of 'The School of Music'.",
+                "Who plays the bass loud?": "Ask the question before repeating the phrase."
+            },
+            "orders": [
+                {
+                    "condition": "asked",
+                    "from": "Who plays the bass loud?",
+                    "to": "Repeat1"
+                },
+                {
+                    "condition": "success",
+                    "from": "Repeat1",
+                    "to": "Repeat2"
+                },
+                {
+                    "condition": "success",
+                    "from": "Repeat2",
+                    "to": "Repeat3"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataMender",
+                "content": "What is the expected response format for each repetition of \"The School of Music\"?"
+            },
+            {
+                "from": "FeatureCraft",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataMender",
+                "content": "Each repetition of \"The School of Music\" should be formatted as a simple statement without any additional text or questions. For example:\n\n1. Who plays the bass loud?\n2. The School of Music.\n3. The School of Music.\n4. The School of Music."
+            },
+            {
+                "to": "FeatureCraft",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "ModelMaster",
+                "content": "You are welcome!"
+            }
+        ]
+    }
+]

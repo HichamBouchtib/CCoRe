@@ -1,0 +1,95 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateTomorrowDate": "Compute the date for tomorrow based on the current date.",
+                "CheckDateValidity": "Verify if the provided date is valid."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckDateValidity",
+                    "to": "CalculateTomorrowDate"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckDateValidity",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date format expected by the \"CheckDateValidity\" task, and how will it handle dates like February 30th?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the expected behavior of the \"CalculateTomorrowDate\" task when the current date is December 31st?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "DateTomorrow": "Calculate the date for tomorrow given today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateTomorrow",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date in MM/DD/YYYY format to correctly calculate tomorrow's date?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date for tomorrow based on the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date format, and should it affect the calculation? The TG does not specify whether the input date \"5/4/2004\" is in MM/DD/YYYY format, which could impact the date calculation."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the expected date format for the output, and should it match the input format? The TG does not specify whether the output date should be in MM/DD/YYYY format."
+            }
+        ],
+        "Answers": []
+    }
+]

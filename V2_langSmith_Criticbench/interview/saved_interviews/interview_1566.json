@@ -1,0 +1,89 @@
+[
+    {
+        "TG_Owner": "LogicalInfer",
+        "task_graph": {
+            "owner_agent": "LogicalInfer",
+            "tasks": {
+                "RescheduleMeetingDate": "Determine the date of tomorrow based on today's meeting rescheduled time and date."
+            },
+            "orders": [
+                {
+                    "condition": "date_calculated",
+                    "from": "RescheduleMeetingDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the current date, and how does it relate to the rescheduled meeting time of 11 am tomorrow?"
+            },
+            {
+                "from": "KnowRep",
+                "content": "What is today's date, and how does it affect the calculation of tomorrow's date?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "DateCalculation": "Calculate the date for tomorrow based on today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is today's date? The current TG does not specify today's date, which is necessary to calculate tomorrow's date."
+            },
+            {
+                "from": "KnowRep",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowRep",
+        "task_graph": {
+            "owner_agent": "KnowRep",
+            "tasks": {
+                "DateCalculation": "Calculate the date for tomorrow given today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the current date, and how does it affect the calculation of tomorrow's date?"
+            },
+            {
+                "from": "RuleMaster",
+                "content": "What is the current date, and how does it affect the calculation of tomorrow's date? This question can help clarify if the TG correctly handles the input date and calculates tomorrow's date accurately."
+            }
+        ],
+        "Answers": []
+    }
+]

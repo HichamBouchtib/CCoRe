@@ -1,0 +1,141 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "FetchPeroxide": "Fetching a bottle of peroxide from the storage location."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FetchPeroxide",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the storage location where peroxide is typically kept in a home setting? This can help clarify the task and ensure it aligns with common social norms and etiquette for first aid."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the typical storage location for peroxide in a home setting, and how does this align with common first aid practices?"
+            },
+            {
+                "from": "WiserObjects",
+                "content": "What is the typical storage location for peroxide in a home setting, and how does this align with common first aid practices? This can help ensure the TG accurately reflects where one would typically keep peroxide for treating minor injuries like scraped knees."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "FetchingPeroxide": "Fetched a bottle of peroxide from the given location."
+            },
+            "orders": [
+                {
+                    "condition": "peroxide_fetched",
+                    "from": "FetchingPeroxide",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the condition for \"peroxide_fetched\" and where are we expected to find the peroxide? The TG does not specify the location from which peroxide should be fetched, which is crucial given the context of the user query."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the expected location from which peroxide should be fetched, given the context of the user query about treating a scraped knee?"
+            },
+            {
+                "from": "WiserObjects",
+                "content": "What is the expected location from which peroxide should be fetched, given the context of the user query about treating a scraped knee? The TG currently does not specify this crucial detail."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausality",
+        "task_graph": {
+            "owner_agent": "WiserCausality",
+            "tasks": {
+                "FetchingPeroxide": "She fetched a bottle of peroxide from the what?",
+                "IdentifyingLocation": "Identify the location where she would keep peroxide for quick access."
+            },
+            "orders": [
+                {
+                    "condition": "location_not_found",
+                    "from": "FetchingPeroxide",
+                    "to": "IdentifyingLocation"
+                },
+                {
+                    "condition": "location_found",
+                    "from": "FetchingPeroxide",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the condition for fetching peroxide if it is not found in the identified location?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the condition for fetching peroxide if it is found in the identified location but not in the specified container?"
+            },
+            {
+                "from": "WiserObjects",
+                "content": "What is the condition for fetching peroxide if it is found in the identified location but not in a suitable container?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjects",
+        "task_graph": {
+            "owner_agent": "WiserObjects",
+            "tasks": {
+                "AnsweringQuestion": "Determine where she would most likely fetch a bottle of peroxide.",
+                "FetchingPeroxide": "She fetched a bottle of peroxide from the what?"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FetchingPeroxide",
+                    "to": "AnsweringQuestion"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the logical reasoning behind including a \"FetchingPeroxide\" task when the answer choices suggest peroxide might not need to be fetched at all, as it could already be in the medicine cabinet? This task seems unnecessary given the context."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the rationale for including both \"AnsweringQuestion\" and \"FetchingPeroxide\" tasks when the answer choices suggest peroxide might already be in a location like a medicine cabinet, making the fetching task redundant? This task seems unnecessary given the context."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the rationale for including both \"AnsweringQuestion\" and \"FetchingPeroxide\" tasks when peroxide might already be in a location like a medicine cabinet, making the fetching task redundant? This task seems unnecessary given the context. Consider removing the \"FetchingPeroxide\" task if peroxide is likely to be pre-located in one of the answer choices."
+            }
+        ],
+        "Answers": []
+    }
+]

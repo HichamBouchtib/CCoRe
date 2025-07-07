@@ -1,0 +1,160 @@
+[
+    {
+        "TG_Owner": "EverydayWise",
+        "task_graph": {
+            "owner_agent": "EverydayWise",
+            "tasks": {
+                "CheckDeskDrawer": "Checking the desk drawer to find a stapler.",
+                "CheckDesktop": "Checking the desktop area for a stapler.",
+                "SearchManual": "Searching for information in manuals about where to find a stapler.",
+                "ShopAtOfficeSupplyStore": "Shopping at an office supply store to purchase or locate a stapler.",
+                "VisitOfficeBuilding": "Visiting an office building to locate a stapler."
+            },
+            "orders": [
+                {
+                    "condition": "stapler_found",
+                    "from": "CheckDeskDrawer",
+                    "to": "End"
+                },
+                {
+                    "condition": "stapler_found",
+                    "from": "VisitOfficeBuilding",
+                    "to": "End"
+                },
+                {
+                    "condition": "stapler_found",
+                    "from": "SearchManual",
+                    "to": "End"
+                },
+                {
+                    "condition": "stapler_found",
+                    "from": "ShopAtOfficeSupplyStore",
+                    "to": "End"
+                },
+                {
+                    "condition": "stapler_found",
+                    "from": "CheckDesktop",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "Why is \"End\" not defined as a task, and what conditions would trigger it?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "Why are there multiple paths to find a stapler when the user query specifically asks for where one can be found in many places, and not necessarily how to find it? Consider focusing on a single location that is most likely to have a stapler available."
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "Why are there multiple paths to find a stapler when the user query specifically asks for where one can be found in many places? Consider focusing on a single location that is most likely to have a stapler available."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialEtiquetteAgent",
+            "tasks": {
+                "IdentifyCommonLocationsForStaplers": "Determine common places where staplers are typically found."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyCommonLocationsForStaplers",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the context in which \"many places\" will be considered? The TG does not specify if we are looking for common locations within a single room, multiple rooms, an entire building, or across different buildings. This ambiguity could affect the answer choices provided."
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the scope of \"many places\" in this context? Is it referring to common locations within a single room, multiple rooms, an entire building, or across different buildings? Clarifying this will help determine the most appropriate answer choices."
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProblemSolver",
+        "task_graph": {
+            "owner_agent": "ProblemSolver",
+            "tasks": {
+                "EvaluateAnswerChoices": "Compare the given answer choices against the identified common locations.",
+                "IdentifyCommonLocations": "Determine common places where a stapler might be found in many places."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyCommonLocations",
+                    "to": "EvaluateAnswerChoices"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the context in which \"many places\" will be considered? Is it within a single office, multiple offices, or any location where an office supply might be found?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the scope of \"many places\"? Is it intended to refer to a single office, multiple offices within a building, or any location where an office supply might be found across different contexts?"
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "What is the intended scope of \"many places\" in this context, and how does it affect the identification of common locations for a stapler?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "LogicalDeductor",
+        "task_graph": {
+            "owner_agent": "LogicalDeductor",
+            "tasks": {
+                "EvaluateAnswerChoices": "Evaluate the provided answer choices based on the identified common locations.",
+                "IdentifyCommonLocationsForStaplers": "Identify common locations where staplers are typically found."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyCommonLocationsForStaplers",
+                    "to": "EvaluateAnswerChoices"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the rationale for including both \"desk drawer\" and \"desktop\" as separate answer choices, when they are essentially similar locations?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the rationale for including both \"office building\" and \"manual\" as answer choices when they are not specific locations where a stapler would typically be found?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the rationale for including \"office building\" as a location when the task is to find a stapler in many places, and how does it differ from other locations like \"desk drawer\" or \"desktop\"?"
+            }
+        ],
+        "Answers": []
+    }
+]

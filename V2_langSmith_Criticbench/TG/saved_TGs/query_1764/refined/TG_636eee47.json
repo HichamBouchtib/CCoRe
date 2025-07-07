@@ -1,0 +1,50 @@
+{
+    "owner_agent": "CodeOptimizer",
+    "tasks": {
+        "DeterminePathDirection": "Decide on the direction for the next cell based on current position and k value.",
+        "EndTraversal": "Terminate traversal when all possible paths of length k have been evaluated.",
+        "EvaluatePath": "Check if the path is valid and meets the criteria for minimum path length, ensuring lexicographical order.",
+        "InitializeGridTraversal": "Start the traversal of the grid with a starting point.",
+        "MoveToNeighborCell": "Move to an adjacent cell in the chosen direction.",
+        "UpdateMinimumPath": "Update the minimum path if the current path is better."
+    },
+    "orders": [
+        {
+            "condition": "always",
+            "from": "InitializeGridTraversal",
+            "to": "DeterminePathDirection"
+        },
+        {
+            "condition": "valid_neighbor_exists",
+            "from": "DeterminePathDirection",
+            "to": "MoveToNeighborCell"
+        },
+        {
+            "condition": "always",
+            "from": "MoveToNeighborCell",
+            "to": "EvaluatePath"
+        },
+        {
+            "condition": "path_is_better",
+            "from": "EvaluatePath",
+            "to": "UpdateMinimumPath"
+        },
+        {
+            "condition": "always",
+            "from": "UpdateMinimumPath",
+            "to": "DeterminePathDirection"
+        },
+        {
+            "condition": "no_valid_neighbors",
+            "from": "DeterminePathDirection",
+            "to": "EndTraversal"
+        },
+        {
+            "condition": "path_length_reaches_k",
+            "from": "EvaluatePath",
+            "to": "EndTraversal"
+        }
+    ],
+    "refused": false,
+    "answer": "Find the minimum lexicographical path of length k in a grid with unique values."
+}

@@ -1,0 +1,165 @@
+[
+    {
+        "TG_Owner": "OptimusCode",
+        "task_graph": {
+            "owner_agent": "OptimusCode",
+            "tasks": {
+                "CheckAscendingOrder": "Verify if the list is sorted in ascending order without any duplicates of the same number.",
+                "CheckDuplicates": "Identify if there are duplicate numbers in the list."
+            },
+            "orders": [
+                {
+                    "condition": "True",
+                    "from": "CheckAscendingOrder",
+                    "to": "End"
+                },
+                {
+                    "condition": "False",
+                    "from": "CheckDuplicates",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SyntaxGuard",
+                "content": "What happens if the list contains negative numbers? The current TG does not account for this, as the problem statement specifies no negative numbers."
+            },
+            {
+                "from": "FormatMaster",
+                "content": "What happens if there are no duplicates but the list is not sorted in ascending order? The current TG does not address this scenario."
+            },
+            {
+                "from": "TestPro",
+                "content": "What happens if there are no duplicates and the list is sorted in descending order? The current TG does not address this scenario."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SyntaxGuard",
+        "task_graph": {
+            "owner_agent": "SyntaxGuard",
+            "tasks": {
+                "CheckFunctionSyntax": "Verify the syntax of the provided Python function is correct.",
+                "ValidateLogic": "Ensure the logic within the function correctly checks if a list is sorted and handles duplicates as specified."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckFunctionSyntax",
+                    "to": "ValidateLogic"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckFunctionSyntax",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptimusCode",
+                "content": "What is the expected behavior for an empty list? Is it considered sorted according to the problem specification?"
+            },
+            {
+                "from": "FormatMaster",
+                "content": "What is the expected behavior of `is_sorted(lst)` when the input list contains a single duplicate number, but the list is still considered sorted? For example, how should `[1, 2, 2, 3, 4]` be handled according to the problem specification?"
+            },
+            {
+                "from": "TestPro",
+                "content": "What is the expected behavior of `is_sorted(lst)` when the input list contains multiple duplicates in non-consecutive positions, and the list is not sorted? For example, how should `[1, 3, 2, 2, 4]` be handled according to the problem specification?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "FormatMaster",
+        "task_graph": {
+            "owner_agent": "FormatMaster",
+            "tasks": {
+                "CheckSingleElementList": "Verify if the list has only one element which makes it inherently sorted.",
+                "CompareAdjacentElements": "Iterate through the list to compare each pair of adjacent elements for ascending order.",
+                "DetectDuplicates": "Identify any duplicate values in the list, returning False immediately if found.",
+                "ReturnResult": "Combine results from previous tasks and return the final boolean value."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckSingleElementList",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "success",
+                    "from": "CompareAdjacentElements",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "failure",
+                    "from": "DetectDuplicates",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptimusCode",
+                "content": "What is the rationale behind checking for single-element lists separately instead of incorporating this logic into the adjacent element comparison? This seems redundant since a single-element list trivially satisfies the condition of being sorted."
+            },
+            {
+                "from": "SyntaxGuard",
+                "content": "What is the rationale behind including a separate task for detecting duplicates if the adjacent element comparison can inherently check for duplicates as well? This seems to introduce redundancy."
+            },
+            {
+                "from": "TestPro",
+                "content": "What is the rationale for having a separate task to check if the list has only one element, given that this condition can be easily checked within the \"CompareAdjacentElements\" task? This seems redundant as single-element lists are inherently sorted."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestPro",
+        "task_graph": {
+            "owner_agent": "TestPro",
+            "tasks": {
+                "CheckDuplicates": "Verify that no duplicates of the same number are present in the list.",
+                "CheckFunctionality": "Ensure the function works as expected for various test cases."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckFunctionality",
+                    "to": "CheckDuplicates"
+                },
+                {
+                    "condition": "no_duplicates",
+                    "from": "CheckDuplicates",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptimusCode",
+                "content": "What happens if the list is empty? This scenario should be considered in both the `CheckDuplicates` and `CheckFunctionality` tasks."
+            },
+            {
+                "from": "SyntaxGuard",
+                "content": "What happens if the list contains a single element that is not isolated (e.g., [1, 1])? This scenario should be considered in both the `CheckDuplicates` and `CheckFunctionality` tasks."
+            },
+            {
+                "from": "FormatMaster",
+                "content": "What happens if the list contains consecutive identical elements, such as [1, 2, 2, 3]? This scenario should be considered in both the `CheckDuplicates` and `CheckFunctionality` tasks."
+            }
+        ],
+        "Answers": []
+    }
+]

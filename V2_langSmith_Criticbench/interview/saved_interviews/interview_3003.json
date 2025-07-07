@@ -1,0 +1,90 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateYesterday": "Compute the date of yesterday using the identified current date.",
+                "IdentifyDeadline": "Determine the current date based on the given deadline."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyDeadline",
+                    "to": "CalculateYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date if the deadline is Jun 1, 2021, and it is 2 days away from now?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date if the deadline is Jun 1, 2021, and it is 2 days away from now? This question is redundant with the existing task description. The TG should clarify whether the current date needs to be explicitly calculated or if the focus is on calculating yesterday's date directly."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateYesterdayDate": "Calculating the date of yesterday from today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateYesterdayDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is today's date, and how are you determining that the deadline is 2 days away from now? This information is necessary to calculate yesterday's date accurately."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is today's exact date, and how are you determining that Jun 1, 2021, is exactly 2 days away from now? This information is necessary to calculate yesterday's date accurately."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date yesterday from the given deadline."
+            },
+            "orders": [
+                {
+                    "condition": "completed",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the deadline date in MM/DD/YYYY format?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date in MM/DD/YYYY format?"
+            }
+        ],
+        "Answers": []
+    }
+]

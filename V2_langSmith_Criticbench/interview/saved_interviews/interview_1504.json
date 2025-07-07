@@ -1,0 +1,154 @@
+[
+    {
+        "TG_Owner": "CodeOptimizer",
+        "task_graph": {
+            "owner_agent": "CodeOptimizer",
+            "tasks": {
+                "CheckListForZeroSumPairs": "Iterate through the list to find pairs that sum to zero.",
+                "ReturnResult": "Based on findings, return True or False."
+            },
+            "orders": [
+                {
+                    "condition": "pair_found",
+                    "from": "CheckListForZeroSumPairs",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the condition for transitioning from \"CheckListForZeroSumPairs\" to \"ReturnResult\"? The current TG does not specify what exactly triggers this transition."
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the criteria for determining \"pair_found\" in the \"CheckListForZeroSumPairs\" task? The current TG does not specify how a pair is identified as summing to zero."
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the criteria for considering a pair as \"distinct\" in the context of \"CheckListForZeroSumPairs\"? The current TG does not specify if elements can be from different occurrences in the list or if they must be unique."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SyntaxChecker",
+        "task_graph": {
+            "owner_agent": "SyntaxChecker",
+            "tasks": {
+                "CheckFunctionSyntax": "Verify the syntax of the provided Python function to ensure it is correct.",
+                "TestFunction": "Run test cases for the function to validate its correctness."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckFunctionSyntax",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior for an empty list input? The current TG does not cover this scenario in the test cases."
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior if the input list contains duplicate zeros? The current TG does not cover this scenario in the test cases."
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the expected behavior if the input list contains only negative numbers? The current TG does not cover this scenario in the test cases."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "StyleFormatter",
+        "task_graph": {
+            "owner_agent": "StyleFormatter",
+            "tasks": {
+                "CheckFunctionSignature": "Verify the function signature for correctness.",
+                "RefactorCode": "Improve code readability and structure while preserving functionality.",
+                "ValidateExamples": "Ensure that provided examples match the function's behavior."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckFunctionSignature",
+                    "to": "ValidateExamples"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckFunctionSignature",
+                    "to": "RefactorCode"
+                },
+                {
+                    "condition": "pass",
+                    "from": "ValidateExamples",
+                    "to": "RefactorCode"
+                },
+                {
+                    "condition": "completed",
+                    "from": "RefactorCode",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior when the input list contains duplicate zeros?"
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior when the input list contains both positive and negative zeros?"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the expected behavior when the input list contains a single zero and no other elements?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestAutomator",
+        "task_graph": {
+            "owner_agent": "TestAutomator",
+            "tasks": {
+                "Generate Test Cases": "Create test cases for the function pairs_sum_to_zero based on provided examples.",
+                "Run Tests": "Execute generated test cases against the function to verify its correctness."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Generate Test Cases",
+                    "to": "Run Tests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior of the function when the input list contains duplicate zeros?"
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior of the function when the input list contains both positive and negative pairs that sum to zero, but also includes a zero?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior of the function when the input list contains only negative numbers?"
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,256 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "CheckDayRange": "Verify that the day value falls within the valid range for the given month.",
+                "CheckMonthRange": "Ensure that the month value is between 1 and 12.",
+                "ValidateDateFormat": "Check if the date string is in the correct format (mm-dd-yyyy).",
+                "ValidateEmptyString": "Confirm that the date string is not empty."
+            },
+            "orders": [
+                {
+                    "condition": "date_string_is_not_empty",
+                    "from": "ValidateEmptyString",
+                    "to": "End"
+                },
+                {
+                    "condition": "date_string_is_empty",
+                    "from": "ValidateEmptyString",
+                    "to": "ValidateDateFormat"
+                },
+                {
+                    "condition": "format_is_valid",
+                    "from": "ValidateDateFormat",
+                    "to": "CheckMonthRange"
+                },
+                {
+                    "condition": "format_is_invalid",
+                    "from": "ValidateDateFormat",
+                    "to": "End"
+                },
+                {
+                    "condition": "month_in_range",
+                    "from": "CheckMonthRange",
+                    "to": "CheckDayRange"
+                },
+                {
+                    "condition": "month_out_of_range",
+                    "from": "CheckMonthRange",
+                    "to": "End"
+                },
+                {
+                    "condition": "day_in_range",
+                    "from": "CheckDayRange",
+                    "to": "End"
+                },
+                {
+                    "condition": "day_out_of_range",
+                    "from": "CheckDayRange",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What happens if a date string contains invalid characters other than digits in the month, day, and year parts? Is there a task to handle such cases?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "CheckDayRange": "Ensure the day value falls within the valid range for the given month.",
+                "CheckMonthRange": "Verify that the month value is between 1 and 12.",
+                "LeapYearCheck": "Determine if it's a leap year to adjust February's maximum days.",
+                "ValidateDateFormat": "Check if the date string is in the correct format (mm-dd-yyyy)."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ValidateDateFormat",
+                    "to": "CheckMonthRange"
+                },
+                {
+                    "condition": "failure",
+                    "from": "ValidateDateFormat",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckMonthRange",
+                    "to": "CheckDayRange"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckMonthRange",
+                    "to": "LeapYearCheck"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckDayRange",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "LeapYearCheck",
+                    "to": "CheckDayRange"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What happens if the date string does not match the format mm-dd-yyyy? Is there a specific error message or behavior defined for such cases, and is it covered by the current task graph?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What happens if a date in February has 29 days but is not a leap year? Is this scenario covered by the current task graph, and should it lead to a failure?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What happens if a date string is provided without leading zeros for single-digit months or days? For example, how should '3-11-2000' and '6-4-2020' be handled by the current task graph?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "CheckDayRange": "Ensure the day value falls within the valid range for the given month.",
+                "CheckMonthRange": "Verify that the month value is between 1 and 12.",
+                "ValidateDate": "Combine all checks to validate if the date string is a valid date.",
+                "ValidateDateFormat": "Check if the date string is in the correct format (mm-dd-yyyy)."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ValidateDateFormat",
+                    "to": "CheckMonthRange"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckMonthRange",
+                    "to": "CheckDayRange"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckDayRange",
+                    "to": "ValidateDate"
+                },
+                {
+                    "condition": "failure",
+                    "from": "ValidateDateFormat",
+                    "to": "End"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckMonthRange",
+                    "to": "End"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckDayRange",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What happens if a date string contains invalid characters other than digits and hyphens, such as '03-11-2000a'? Is there a task to handle this scenario?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "CheckDayRange": "Ensure the day value falls within the valid range for the given month.",
+                "CheckMonthRange": "Verify that the month value is between 1 and 12.",
+                "LeapYearCheck": "Determine if it's a leap year to adjust February's maximum days.",
+                "ValidateDateFormat": "Check if the date string is in the correct format (mm-dd-yyyy)."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ValidateDateFormat",
+                    "to": "CheckMonthRange"
+                },
+                {
+                    "condition": "failure",
+                    "from": "ValidateDateFormat",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckMonthRange",
+                    "to": "CheckDayRange"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckMonthRange",
+                    "to": "LeapYearCheck"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckDayRange",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "LeapYearCheck",
+                    "to": "CheckDayRange"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What happens if the date string does not match the format mm-dd-yyyy? Is there a specific error message or behavior defined for such cases, and is it covered by the current task graph?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What happens if a date in February has 29 days but is not a leap year? Is this scenario covered by the current task graph, and should it lead to a failure?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What happens if a date string is provided without leading zeros for single-digit months or days? For example, how should '3-11-2000' and '6-4-2020' be handled by the current task graph?"
+            }
+        ],
+        "Answers": []
+    }
+]

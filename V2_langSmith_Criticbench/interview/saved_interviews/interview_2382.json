@@ -1,0 +1,96 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateDateAMonthAgo": "Compute the date a month ago based on the identified date from task 'IdentifyYesterdayDate'.",
+                "IdentifyYesterdayDate": "Determine the date of yesterday given the user's input.",
+                "ValidateOptions": "Check which option matches the calculated date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyYesterdayDate",
+                    "to": "CalculateDateAMonthAgo"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateDateAMonthAgo",
+                    "to": "ValidateOptions"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the date format expected for the input \"Yesterday was 12/31/1929\"? The TG assumes a specific format but does not validate it."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the expected date format for the output of \"CalculateDateAMonthAgo\"? The TG does not specify whether the output should be in MM/DD/YYYY, DD-MM-YYYY, or another format."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date a month ago from December 31, 1929."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the date format expected for the answer, and why are options like (A) 04/01/1930 and (F) 12/04/1929 included when they do not logically follow from December 31, 1929?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the rationale for including options like (A) 04/01/1930 and (F) 12/04/1929, which do not logically follow from December 31, 1929, in the provided answer choices?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date a month ago from December 31, 1929."
+            },
+            "orders": [
+                {
+                    "condition": "completed",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the date format expected for the answer, and why are options like (A) 04/01/1930 and (F) 12/04/1929 included when they do not logically follow from the given date?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the rationale for including options like (A) 04/01/1930 and (F) 12/04/1929, which do not logically follow from December 31, 1929? These options could confuse the user as they do not represent a valid date a month ago."
+            }
+        ],
+        "Answers": []
+    }
+]

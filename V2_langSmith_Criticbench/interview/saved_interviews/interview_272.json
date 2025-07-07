@@ -1,0 +1,187 @@
+[
+    {
+        "TG_Owner": "LangGen",
+        "task_graph": {
+            "owner_agent": "LangGen",
+            "tasks": {
+                "CheckEmptyDict": "Check if the dictionary is empty",
+                "CheckLowercaseKeys": "Verify if all keys are lowercase strings",
+                "CheckMixedCaseKeys": "Verify if there is a mix of lowercase and uppercase keys",
+                "CheckUppercaseKeys": "Verify if all keys are uppercase strings",
+                "ReturnResult": "Return True or False based on the conditions"
+            },
+            "orders": [
+                {
+                    "condition": "empty",
+                    "from": "CheckEmptyDict",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "not_empty",
+                    "from": "CheckEmptyDict",
+                    "to": "CheckLowercaseKeys"
+                },
+                {
+                    "condition": "all_lowercase",
+                    "from": "CheckLowercaseKeys",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "mixed_case",
+                    "from": "CheckLowercaseKeys",
+                    "to": "CheckMixedCaseKeys"
+                },
+                {
+                    "condition": "all_uppercase",
+                    "from": "CheckUppercaseKeys",
+                    "to": "ReturnResult"
+                },
+                {
+                    "condition": "not_all_cases",
+                    "from": "CheckMixedCaseKeys",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior for dictionaries containing non-string keys? The current TG does not handle cases where keys are not strings, which could lead to unexpected results."
+            },
+            {
+                "from": "APIPro",
+                "content": "What is the expected behavior when the dictionary contains keys that are not strings? The current TG does not handle such cases, which could lead to unexpected results."
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestMaster",
+        "task_graph": {
+            "owner_agent": "TestMaster",
+            "tasks": {
+                "CheckKeyCaseConsistency": "Verify if all keys in the dictionary are either in lower case or upper case",
+                "ReturnResultBasedOnConditions": "Evaluate conditions and return appropriate boolean value based on key case consistency and non-emptiness of the dictionary",
+                "ValidateNonEmptyDict": "Ensure that the input dictionary is not empty"
+            },
+            "orders": [
+                {
+                    "condition": "failure",
+                    "from": "ValidateNonEmptyDict",
+                    "to": "CheckKeyCaseConsistency"
+                },
+                {
+                    "condition": "success",
+                    "from": "ValidateNonEmptyDict",
+                    "to": "ReturnResultBasedOnConditions"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckKeyCaseConsistency",
+                    "to": "ReturnResultBasedOnConditions"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LangGen",
+                "content": "What is the expected behavior when the dictionary keys are of mixed case? The current TG does not explicitly handle this scenario, and it's unclear if the function should return False in such cases."
+            },
+            {
+                "from": "APIPro",
+                "content": "What is the expected behavior when the dictionary contains non-string keys? The current TG does not address this scenario, and it's unclear if the function should still return False even if some keys are non-strings."
+            },
+            {
+                "from": "GitGuru",
+                "content": "What is the expected behavior when the dictionary contains keys that are not strings? The current TG does not address this scenario, and it's unclear if the function should still return False even if some keys are non-strings."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIPro",
+        "task_graph": {
+            "owner_agent": "APIPro",
+            "tasks": {
+                "Check Dictionary Keys Case": "Given a dictionary, check if all keys are in lower case or upper case.",
+                "Return Boolean Value": "Based on the result of checking dictionary keys, return True or False."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Check Dictionary Keys Case",
+                    "to": "Return Boolean Value"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Check Dictionary Keys Case",
+                    "to": "Return Boolean Value"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LangGen",
+                "content": "What happens if the dictionary contains non-string keys? Is this scenario covered in the current TG?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "What happens if the dictionary is empty? Is this scenario covered in the current TG?"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What happens if the dictionary contains keys of different cases mixed together? Is this scenario covered in the current TG?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitGuru",
+        "task_graph": {
+            "owner_agent": "GitGuru",
+            "tasks": {
+                "CheckDictionaryKeysCase": "Given a dictionary, return True if all keys are strings in lower case or all keys are strings in upper case, else return False. The function should return False is the given dictionary is empty.",
+                "ValidateInputType": "Ensure that the input provided to the check_dict_case function is of type dict."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ValidateInputType",
+                    "to": "CheckDictionaryKeysCase"
+                },
+                {
+                    "condition": "failure",
+                    "from": "ValidateInputType",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LangGen",
+                "content": "What happens if the dictionary contains non-string keys? Is it considered invalid, or should the function still return a boolean based on the string keys?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "What happens if the dictionary is not empty but contains a mix of lower and upper case keys, including non-string keys? Should the function still return False, or should it consider only the string keys?"
+            },
+            {
+                "from": "APIPro",
+                "content": "What happens if the dictionary contains keys that are neither strings nor non-empty? Should these keys affect the case check, or should they be ignored?"
+            }
+        ],
+        "Answers": []
+    }
+]

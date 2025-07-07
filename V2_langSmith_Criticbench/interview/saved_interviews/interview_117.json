@@ -1,0 +1,154 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "RemoveDuplicatesWithCustomValue": "Function to remove tuple elements that occur more than once and replace the duplicates with a custom value."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "RemoveDuplicatesWithCustomValue",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the custom value to be used when replacing duplicates, and can it be configurable?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the default custom value if not specified, and how should the function handle empty tuples?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior when the input tuple contains only unique elements?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "CheckInputTuple": "Validate the input tuple to ensure it is a valid tuple of integers or other hashable types.",
+                "FunctionImplementation": "Implement the function to pass all generated test cases.",
+                "GenerateTestCases": "Create test cases for the function based on provided examples.",
+                "RemoveDuplicates": "Iterate through the tuple and remove elements that occur more than once, replacing them with 'MSP'."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GenerateTestCases",
+                    "to": "FunctionImplementation"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckInputTuple",
+                    "to": "RemoveDuplicates"
+                },
+                {
+                    "condition": "failure",
+                    "from": "RemoveDuplicates",
+                    "to": "GenerateTestCases"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input tuple contains non-hashable elements, and how should such cases be handled?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "GitHelper",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "RemoveDuplicatesWithCustomValue": "Function to remove tuple elements that occur more than once and replace the duplicates with a custom value."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "RemoveDuplicatesWithCustomValue",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the custom value to replace duplicates, and can it be configurable? The current TG assumes a fixed value ('MSP'), but the user query does not specify this."
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior when the input tuple is empty? Should the function return an empty tuple in this case?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior when all elements in the input tuple are unique? Should the function return the original tuple unchanged, or should it still apply the custom value to any potential duplicates (though none would exist)?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "CheckInputTuple": "Validate the input tuple to ensure it is a valid tuple of integers and duplicates.",
+                "GenerateCode": "Write Python code for the function based on the processed tuple.",
+                "ProcessTuple": "Remove duplicate elements from the tuple and replace them with 'MSP'."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckInputTuple",
+                    "to": "ProcessTuple"
+                },
+                {
+                    "condition": "success",
+                    "from": "ProcessTuple",
+                    "to": "GenerateCode"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input tuple contains non-integer elements? The current TG does not specify how to handle such cases."
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the input tuple is empty? The current TG does not specify how to handle such cases."
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

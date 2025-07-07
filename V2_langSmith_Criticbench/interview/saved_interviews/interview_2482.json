@@ -1,0 +1,96 @@
+[
+    {
+        "TG_Owner": "LogicalInfer",
+        "task_graph": {
+            "owner_agent": "LogicalInfer",
+            "tasks": {
+                "IdentifyObjects": "Identify the objects that are neither green nor brown on the nightstand."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyObjects",
+                    "to": "AnswerQuery"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the basis for determining the objects that are neither green nor brown in the TG? Are there any other colors mentioned or relevant objects on the nightstand that should be considered?"
+            },
+            {
+                "from": "KnowRep",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "IdentifyNonGreenOrBrownItems": "Determine how many items are neither green nor brown."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyNonGreenOrBrownItems",
+                    "to": "AnswerQuery"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the exact definition of \"things\" in this context? Are we considering only tangible objects like the cat toy and bracelet, or does it include other items that might be on the nightstand?"
+            },
+            {
+                "from": "KnowRep",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowRep",
+        "task_graph": {
+            "owner_agent": "KnowRep",
+            "tasks": {
+                "CategorizeObjects": "Categorize the identified objects based on their color",
+                "CountNonMatchingObjects": "Count how many objects are neither green nor brown",
+                "IdentifyObjects": "Identify the objects mentioned in the query"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyObjects",
+                    "to": "CategorizeObjects"
+                },
+                {
+                    "condition": "success",
+                    "from": "CategorizeObjects",
+                    "to": "CountNonMatchingObjects"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the basis for categorizing objects as neither green nor brown in the \"CategorizeObjects\" task? The TG does not specify how to handle objects that are a mix of colors or have no discernible color."
+            },
+            {
+                "from": "RuleMaster",
+                "content": "What criteria are used to determine if an object is neither green nor brown in the \"CountNonMatchingObjects\" task, especially considering objects that might have a different primary color?"
+            }
+        ],
+        "Answers": []
+    }
+]

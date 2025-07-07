@@ -1,0 +1,160 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "CheckConditions": "Implement logic inside the function to determine if the triangle is isosceles based on the given conditions.",
+                "DefineFunction": "Create a function named check_isosceles that takes three arguments representing the sides of a triangle."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "CheckConditions"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the definition of an isosceles triangle, and are there any specific conditions or edge cases not covered in the provided tests that should be considered?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the rationale behind ordering \"CheckConditions\" to follow \"DefineFunction\"? This order seems unnecessary since the conditions can be checked within the function definition itself."
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the rationale for having a separate task \"CheckConditions\" when the conditions can be directly implemented within the function definition in \"DefineFunction\"? This seems redundant and can be integrated into the same task."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "AddTests": "Add tests based on provided assertions",
+                "DefineFunction": "Write a function to check if the triangle is isosceles or not",
+                "RunTests": "Execute the tests to ensure the function works as expected"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "AddTests"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddTests",
+                    "to": "RunTests"
+                },
+                {
+                    "condition": "all_tests_passed",
+                    "from": "RunTests",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the definition of an isosceles triangle, and are there any edge cases not covered by the provided tests that should be considered in the function?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the input sides do not form a valid triangle?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the input sides are not positive numbers?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "CheckIsosceles": "Implement logic to determine if the triangle is isosceles.",
+                "DefineFunction": "Define a function to check if a triangle is isosceles based on given side lengths.",
+                "ValidateInput": "Ensure the input values are valid (positive numbers)."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "ValidateInput"
+                },
+                {
+                    "condition": "success",
+                    "from": "ValidateInput",
+                    "to": "CheckIsosceles"
+                },
+                {
+                    "condition": "result",
+                    "from": "CheckIsosceles",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input values are not positive numbers? How should the function handle such cases?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if two sides of the triangle are equal and the third side is zero? How should the function handle such cases?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if all three sides of the triangle are equal? How should the function handle such cases in relation to determining if the triangle is isosceles?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "DefineFunction": "Write a function to check if the triangle is isosceles based on given side lengths",
+                "TestFunction": "Run tests to ensure the function works as expected"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What will happen if the function is given side lengths that do not form a valid triangle?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

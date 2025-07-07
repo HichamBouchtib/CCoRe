@@ -1,0 +1,117 @@
+[
+    {
+        "TG_Owner": "LogicalInfer",
+        "task_graph": {
+            "owner_agent": "LogicalInfer",
+            "tasks": {
+                "DateCalculation": "Calculate the date one week ago from today based on the provided information."
+            },
+            "orders": [
+                {
+                    "condition": "date_calculated",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the current date based on the information provided? The TG does not specify how the \"date_calculated\" condition will determine the date one week ago without knowing today's date."
+            },
+            {
+                "from": "KnowRep",
+                "content": "What is the current date based on the information provided? The TG should include a task to determine today's date before calculating the date one week ago."
+            }
+        ],
+        "Answers": [
+            {
+                "to": "RuleMaster",
+                "content": "Based on the initial query \"2015 is coming in 36 hours,\" we can infer that today's date is December 29, 2014. This is because if 2015 (January 1, 2015) is coming in 36 hours from now, then the current date must be two days before December 31, 2014, which is December 29, 2014.\n\nTo find the date one week ago from today (December 29, 2014), we subtract seven days:\n\n- December 29, 2014\n- December 28, 2014\n- December 27, 2014\n- December 26, 2014\n- December 25, 2014\n- December 24, 2014\n- December 23, 2014\n\nTherefore, the date one week ago from today is December 23, 2014. The correct answer among the given options is (B) 12/23/2014."
+            },
+            {
+                "to": "KnowRep",
+                "content": "Based on the initial query \"2015 is coming in 36 hours,\" we can infer that today's date is December 29, 2014. This is because if 2015 starts in 36 hours from now, it means the current time is very close to midnight of December 31, 2014.\n\nTo solve this task graph (TG) properly, we need to add a new task to determine today's date before calculating the date one week ago. Here\u2019s how the updated TG would look:\n\n```json\n{\n    \"owner_agent\": \"LogicalInfer\",\n    \"tasks\": {\n        \"DateCalculation\": \"Calculate the date one week ago from today based on the provided information.\",\n        \"DetermineTodayDate\": \"Determine today's date based on the given information.\"\n    },\n    \"orders\": [\n        {\n            \"condition\": \"today_date_determined\",\n            \"from\": \"DetermineTodayDate\",\n            \"to\": \"DateCalculation\"\n        },\n        {\n            \"condition\": \"date_calculated\",\n            \"from\": \"DateCalculation\",\n            \"to\": \"End\"\n        }\n    ],\n    \"refused\": false,\n    \"answer\": null\n}\n```\n\nThe current date based on the information provided is December 29, 2014."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "CalculateCurrentDate": "Determine the current date based on the given information.",
+                "SubtractOneWeek": "Subtract one week from the calculated current date to find the required date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentDate",
+                    "to": "SubtractOneWeek"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the current date if 2015 is coming in 36 hours? This condition seems ambiguous and should be clarified."
+            },
+            {
+                "from": "KnowRep",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "LogicalInfer",
+                "content": "Based on the given condition \"2015 is coming in 36 hours,\" we can determine that the current date is December 31, 2014. Here's the reasoning:\n\n- If 2015 is starting in 36 hours, it means the current time is just before midnight on December 31, 2014.\n\nTherefore, the current date is **12/31/2014**."
+            },
+            {
+                "to": "KnowRep",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "KnowRep",
+        "task_graph": {
+            "owner_agent": "KnowRep",
+            "tasks": {
+                "DateCalculation": "Calculate the date one week ago from today given that 2015 is coming in 36 hours."
+            },
+            "orders": [
+                {
+                    "condition": "date_calculated",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the current date if 2015 is coming in 36 hours, and how was it calculated? This information seems missing for accurately determining the date one week ago."
+            },
+            {
+                "from": "RuleMaster",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "LogicalInfer",
+                "content": "To determine the current date when 2015 is coming in 36 hours, we need to understand that this statement implies it's currently December 29, 2014. Here\u2019s how:\n\n- If 2015 starts in 36 hours from now, and knowing a non-leap year has 8760 hours (365 days * 24 hours), we can deduce that the current date is just before New Year's Day.\n- Counting 36 hours forward from December 31, 2014, would take us to January 1, 2015. Therefore, 36 hours prior to this would be December 29, 2014.\n\nTo find the date one week ago from today (December 29, 2014), we subtract seven days:\n\n- December 29 - 7 days = December 22, 2014\n\nThus, the date one week ago from today is December 22, 2014. The correct answer among the provided options is (C) 12/22/2014."
+            },
+            {
+                "to": "RuleMaster",
+                "content": "You are welcome!"
+            }
+        ]
+    }
+]

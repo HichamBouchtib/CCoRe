@@ -1,0 +1,97 @@
+[
+    {
+        "TG_Owner": "LogicalInfer",
+        "task_graph": {
+            "owner_agent": "LogicalInfer",
+            "tasks": {
+                "CalculateCurrentDate": "Determine the current date based on the deadline being 2 days away.",
+                "SubtractAMonth": "Subtract one month from the calculated current date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentDate",
+                    "to": "SubtractAMonth"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the current date if the deadline is Jun 1, 2021, and it is 2 days away? This task graph does not explicitly state the current date, which could lead to ambiguity. Consider specifying the exact current date or ensuring that the calculation logic is clear."
+            },
+            {
+                "from": "KnowRep",
+                "content": "What is the exact current date, and how does it relate to June 1, 2021, being two days away? This clarification ensures the Task Graph accurately reflects the user's query."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "CalculateCurrentDate": "Determine the current date.",
+                "FormatDate": "Format the resulting date into MM/DD/YYYY format.",
+                "SubtractDays": "Subtract days from the current date to find a specific date in the past."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentDate",
+                    "to": "SubtractDays"
+                },
+                {
+                    "condition": "success",
+                    "from": "SubtractDays",
+                    "to": "FormatDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the exact number of days to subtract to find a date a month ago, and how does this account for different month lengths?"
+            },
+            {
+                "from": "KnowRep",
+                "content": "What is the exact date of today, and how does the \"SubtractDays\" task handle edge cases such as dates at the end of February during a non-leap year?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowRep",
+        "task_graph": {
+            "owner_agent": "KnowRep",
+            "tasks": {
+                "CalculateDate": "Calculate the date a month ago from today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is today's date? The current TG does not specify today's date, which is necessary to calculate the date a month ago."
+            },
+            {
+                "from": "RuleMaster",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

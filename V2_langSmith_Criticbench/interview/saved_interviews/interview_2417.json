@@ -1,0 +1,163 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "FilmReleaseDateSearcherTheGuest": "Find the release date of the movie 'The Guest'.",
+                "FilmReleaseDateSearcherYoureNext": "Find the release date of the movie 'You're Next'."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FilmReleaseDateSearcherTheGuest",
+                    "to": "FilmReleaseDateSearcherYoureNext"
+                },
+                {
+                    "condition": "success",
+                    "from": "FilmReleaseDateSearcherYoureNext",
+                    "to": "AnswerGenerator"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the criteria for ordering the film release date search tasks? The TG does not specify why \"The Guest\" should be searched before \"You're Next\". This order might affect the logic of the task graph."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the rationale for ordering the film release date search tasks in a specific sequence? Clarifying this can help ensure the task graph logically addresses the user's query."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "CompareDates": "Compare the release dates to determine which movie was filmed first",
+                "FilmReleaseDateSearcher": "Search for the release dates of 'The Guest' and 'You're Next'"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FilmReleaseDateSearcher",
+                    "to": "CompareDates"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the source of the release dates used in the \"FilmReleaseDateSearcher\" task? Ensure the dates are from reliable sources to accurately determine which movie was filmed first."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the criteria for determining which source to use if multiple sources are available in the \"FilmReleaseDateSearcher\" task? Ensuring consistency in source selection can improve the accuracy of the comparison."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the criteria for considering a movie's release date as definitive in the \"CompareDates\" task, especially if there are discrepancies between different sources?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausalReasoning",
+        "task_graph": {
+            "owner_agent": "WiserCausalReasoning",
+            "tasks": {
+                "FilmReleaseDateQuery1": "Query the release date of 'The Guest'",
+                "FilmReleaseDateQuery2": "Query the release date of 'You're Next'"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FilmReleaseDateQuery1",
+                    "to": "FilmReleaseDateQuery2"
+                },
+                {
+                    "condition": "The Guest's date is earlier",
+                    "from": "FilmReleaseDateQuery1",
+                    "to": "DetermineFirstFilm"
+                },
+                {
+                    "condition": "You're Next's date is earlier",
+                    "from": "FilmReleaseDateQuery2",
+                    "to": "DetermineFirstFilm"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the definition of \"earlier\" in this context, considering both films might have had different release dates in various regions?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the source of the release dates for \"The Guest\" and \"You're Next\"? Ensuring the accuracy of these dates is crucial for determining which film was released first."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "FilmReleaseDateQuery1": "Query release date of 'The Guest'",
+                "FilmReleaseDateQuery2": "Query release date of 'You're Next'"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FilmReleaseDateQuery1",
+                    "to": "FilmReleaseDateQuery2"
+                },
+                {
+                    "condition": "success",
+                    "from": "FilmReleaseDateQuery1",
+                    "to": "DetermineOrder"
+                },
+                {
+                    "condition": "success",
+                    "from": "FilmReleaseDateQuery2",
+                    "to": "DetermineOrder"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the definition of \"DetermineOrder\" and how does it function in determining which movie was filmed first?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the logic behind ordering \"FilmReleaseDateQuery2\" after \"FilmReleaseDateQuery1\"? This order does not align with the goal of determining which movie was filmed first, as release dates may differ from filming dates."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the rationale for including both \"FilmReleaseDateQuery1\" and \"FilmReleaseDateQuery2\" if their results will ultimately be used to determine the order of filming? Shouldn't there be a task that queries the filming dates directly instead of relying on release dates, which may differ?"
+            }
+        ],
+        "Answers": []
+    }
+]

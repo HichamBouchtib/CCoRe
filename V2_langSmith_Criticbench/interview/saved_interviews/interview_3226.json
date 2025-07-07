@@ -1,0 +1,169 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "HistoricalContextCheck": "Verify if the found Prime Minister is a woman",
+                "PrimeMinisterSearch": "Find the name of the Prime Minister directly before or after Stanley Baldwin"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PrimeMinisterSearch",
+                    "to": "HistoricalContextCheck"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the time period of Stanley Baldwin's tenure as Prime Minister? This information is crucial to ensure we search for the correct Prime Ministers before and after him."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the specific time period of Stanley Baldwin's tenure as Prime Minister? This will help in accurately identifying the Prime Ministers directly before and after him."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the exact year range of Stanley Baldwin's tenure as Prime Minister? This will help in accurately identifying the Prime Ministers directly before and after him, especially considering potential gaps in female representation during that period."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "PrimeMinisterSearch": "Find the name of the Prime Minister directly before or after Stanley Baldwin."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PrimeMinisterSearch",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the time period of Stanley Baldwin's tenure as Prime Minister? This information is crucial to determine whether a woman was Prime Minister directly before or after him."
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "What is the specific time period during which Stanley Baldwin served as Prime Minister? This information is crucial to determine whether a woman was Prime Minister directly before or after him."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the exact sequence of Prime Ministers around Stanley Baldwin's tenure, including their names and years, to determine if a woman held office directly before or after him?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausalReasoning",
+        "task_graph": {
+            "owner_agent": "WiserCausalReasoning",
+            "tasks": {
+                "CheckFollowingPM": "Determine if a woman was Prime Minister directly after Stanley Baldwin's tenure",
+                "CheckPrecedingPM": "Determine if a woman was Prime Minister directly before Stanley Baldwin's tenure",
+                "IdentifyStanleyBaldwinPeriods": "Find out the periods when Stanley Baldwin was Prime Minister"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyStanleyBaldwinPeriods",
+                    "to": "CheckPrecedingPM"
+                },
+                {
+                    "condition": "success",
+                    "from": "IdentifyStanleyBaldwinPeriods",
+                    "to": "CheckFollowingPM"
+                },
+                {
+                    "condition": "true",
+                    "from": "CheckPrecedingPM",
+                    "to": "End"
+                },
+                {
+                    "condition": "true",
+                    "from": "CheckFollowingPM",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the exact period during which Stanley Baldwin served as Prime Minister, to accurately determine the preceding and following PMs?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the definition of \"directly before\" and \"directly after\" in terms of time gap, to ensure accurate identification of the preceding and following Prime Ministers?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the definition of \"directly before\" and \"directly after\" in terms of time gap, to ensure accurate identification of the preceding and following Prime Ministers? No question, Thanks."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "CheckFollowingPM": "Find out if there was a woman Prime Minister after Stanley Baldwin's term",
+                "CheckPrecedingPM": "Find out if there was a woman Prime Minister before Stanley Baldwin's term",
+                "IdentifyStanleyBaldwinTerm": "Determine the term of Stanley Baldwin as Prime Minister"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyStanleyBaldwinTerm",
+                    "to": "CheckPrecedingPM"
+                },
+                {
+                    "condition": "success",
+                    "from": "IdentifyStanleyBaldwinTerm",
+                    "to": "CheckFollowingPM"
+                },
+                {
+                    "condition": "womanPMBefore",
+                    "from": "CheckPrecedingPM",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "womanPMAfter",
+                    "from": "CheckFollowingPM",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the definition of \"term\" used for Stanley Baldwin, and how is it determined? This clarification is necessary to ensure accurate identification of his term."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the definition of \"directly before\" and \"directly after\" in the context of Prime Ministers, to ensure accurate determination of the terms?"
+            },
+            {
+                "from": "WiserCausalReasoning",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

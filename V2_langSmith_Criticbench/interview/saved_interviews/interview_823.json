@@ -1,0 +1,168 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "CalculateOriginalRetailPrice": "Calculate the original retail price based on the given information.",
+                "CalculatePercentIncrease": "Find out how much more the sale price is compared to the wholesale cost.",
+                "CalculateSalePrice": "Determine the sale price of the appliance.",
+                "DefineVariables": "Define the wholesale cost as a variable."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineVariables",
+                    "to": "CalculateOriginalRetailPrice"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateOriginalRetailPrice",
+                    "to": "CalculateSalePrice"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateSalePrice",
+                    "to": "CalculatePercentIncrease"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What is the relationship between the wholesale cost and the original retail price in the \"CalculateOriginalRetailPrice\" task, and how does it affect the calculation of the sale price? The TG does not specify the exact formula to be used for these calculations."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the relationship between the wholesale cost and the original retail price in the \"CalculateOriginalRetailPrice\" task, and how does it affect the calculation of the sale price? The TG should specify the exact formula to be used for these calculations. Additionally, there seems to be a logical error as the task \"DefineVariables\" is not clearly linked to the other tasks in terms of its necessity or impact on the subsequent steps."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the exact relationship between the original retail price and the sale price in the \"CalculateSalePrice\" task, and how does it impact the calculation of the percent increase in the \"CalculatePercentIncrease\" task? The TG should specify these relationships clearly."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "RetailPriceToSalePrice": "Determine the sale price as a percentage of the original retail price.",
+                "SalePriceToWholesaleProfitPercentage": "Find out how much more the sale price is compared to the wholesale cost.",
+                "WholesaleCostToRetailPrice": "Calculate the original retail price based on wholesale cost."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "WholesaleCostToRetailPrice",
+                    "to": "RetailPriceToSalePrice"
+                },
+                {
+                    "condition": "success",
+                    "from": "RetailPriceToSalePrice",
+                    "to": "SalePriceToWholesaleProfitPercentage"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the relationship between the sale price and the original retail price in the \"RetailPriceToSalePrice\" task, and how does this relate to the wholesale cost? The current TG does not directly address how the sale price compares to the wholesale cost, which is the core of the question."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the relationship between the original retail price and the wholesale cost in the \"WholesaleCostToRetailPrice\" task, and how does this relate to determining the sale price as a percentage of the original retail price? The current TG does not explicitly show how the original retail price is derived from the wholesale cost, which is crucial for solving the problem."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the relationship between the sale price and the wholesale cost in the \"SalePriceToWholesaleProfitPercentage\" task, and how does this relate to determining the final percentage increase? The current TG does not directly address this relationship."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "RetailPriceToSalePrice": "Determine the sale price as a percentage of the original retail price.",
+                "SalePriceToWholesaleProfitPercentage": "Find out how much more the sale price is compared to the wholesale cost.",
+                "WholesaleCostToRetailPrice": "Calculate the original retail price based on wholesale cost."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "WholesaleCostToRetailPrice",
+                    "to": "RetailPriceToSalePrice"
+                },
+                {
+                    "condition": "success",
+                    "from": "RetailPriceToSalePrice",
+                    "to": "SalePriceToWholesaleProfitPercentage"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the relationship between the sale price and the original retail price in the \"RetailPriceToSalePrice\" task, and how does this relate to the wholesale cost? The current TG does not directly address how the sale price compares to the wholesale cost, which seems crucial for solving the problem."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the relationship between the original retail price and the wholesale cost in the \"WholesaleCostToRetailPrice\" task, and how does this relate to determining the sale price as a percentage of the original retail price? The current TG does not explicitly show how the original retail price is derived from the wholesale cost, which is essential for solving the problem."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the relationship between the sale price and the wholesale cost in the \"SalePriceToWholesaleProfitPercentage\" task, and how does this relate to determining the final percentage increase? The current TG does not directly address this relationship."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "CalculateDiscountedPrice": "Compute the discounted selling price from the original retail price.",
+                "CalculateOriginalRetailPrice": "Determine the original retail price based on the wholesale cost.",
+                "CalculatePercentIncrease": "Find out how much percent more the appliance was sold for compared to its wholesale cost."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateOriginalRetailPrice",
+                    "to": "CalculateDiscountedPrice"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateDiscountedPrice",
+                    "to": "CalculatePercentIncrease"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the relationship between the wholesale cost and the original retail price in the \"CalculateOriginalRetailPrice\" task, and how does this relate to the 60 percent mentioned in the user query?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the relationship between the wholesale cost and the discounted selling price in the \"CalculateDiscountedPrice\" task, and how does this relate to finding out how much percent more the appliance was sold for compared to its wholesale cost in the \"CalculatePercentIncrease\" task?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the relationship between the original retail price and the discounted selling price in the \"CalculateDiscountedPrice\" task, and how does this relate to determining the percent increase over the wholesale cost in the \"CalculatePercentIncrease\" task?"
+            }
+        ],
+        "Answers": []
+    }
+]

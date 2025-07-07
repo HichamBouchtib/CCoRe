@@ -1,0 +1,155 @@
+[
+    {
+        "TG_Owner": "OptiCode",
+        "task_graph": {
+            "owner_agent": "OptiCode",
+            "tasks": {
+                "AnalyzeFunctionSignature": "Analyze the function signature for potential optimizations.",
+                "CheckDocstrings": "Verify if the docstring is clear and complete.",
+                "OptimizeCode": "Apply optimization techniques to improve code performance."
+            },
+            "orders": [
+                {
+                    "condition": "needs_optimization",
+                    "from": "AnalyzeFunctionSignature",
+                    "to": "OptimizeCode"
+                },
+                {
+                    "condition": "docstring_incomplete",
+                    "from": "CheckDocstrings",
+                    "to": "OptimizeCode"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ErrDetect",
+                "content": "What is the definition of \"needs_optimization\" and \"docstring_incomplete\" conditions, and how are they determined?"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "What is the rationale behind linking \"CheckDocstrings\" directly to \"OptimizeCode\" when the docstring completeness does not necessarily affect code performance optimizations?"
+            },
+            {
+                "from": "TestGen",
+                "content": "What is the rationale for including \"OptimizeCode\" as a direct successor of both \"AnalyzeFunctionSignature\" and \"CheckDocstrings\"? How does this structure ensure that all necessary checks are performed before optimization?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ErrDetect",
+        "task_graph": {
+            "owner_agent": "ErrDetect",
+            "tasks": {
+                "DefineFunction": "Define the function add with parameters x and y of type int.",
+                "DocstringVerification": "Verify that the docstring matches the function definition.",
+                "ExampleVerification": "Check if examples in the docstring match the function behavior."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "DocstringVerification"
+                },
+                {
+                    "condition": "success",
+                    "from": "DocstringVerification",
+                    "to": "ExampleVerification"
+                },
+                {
+                    "condition": "all_examples_match",
+                    "from": "ExampleVerification",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior if non-integer values are passed to the function `add`? Is there a need to include error handling for such cases in the TG?"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestGen",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "StyleGuide",
+        "task_graph": {
+            "owner_agent": "StyleGuide",
+            "tasks": {
+                "AddDocTests": "Add doctest examples to the function definition.",
+                "DefineFunctionSignature": "Define the function signature with proper types and docstring."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunctionSignature",
+                    "to": "AddDocTests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "Why is \"AddDocTests\" listed as a task if the provided function already includes doctest examples? This seems redundant given the current function definition."
+            },
+            {
+                "from": "ErrDetect",
+                "content": "Why is \"DefineFunctionSignature\" listed as a task if the function signature and docstring are already provided in the user query? This task seems unnecessary given the current information."
+            },
+            {
+                "from": "TestGen",
+                "content": "Why are both \"AddDocTests\" and \"DefineFunctionSignature\" listed as separate tasks when their actions seem to overlap with the provided function definition? Can these tasks be combined or removed to simplify the TG?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestGen",
+        "task_graph": {
+            "owner_agent": "TestGen",
+            "tasks": {
+                "Generate Test Cases": "Create test cases for the add function based on its docstring examples.",
+                "Run Tests": "Execute the generated test cases to verify the correctness of the add function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Generate Test Cases",
+                    "to": "Run Tests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior if non-integer values are passed to the `add` function, and should this be included in the test cases?"
+            },
+            {
+                "from": "ErrDetect",
+                "content": "What is the expected behavior of the `add` function when non-integer values are passed, and should this scenario be included in the test cases?"
+            },
+            {
+                "from": "StyleGuide",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

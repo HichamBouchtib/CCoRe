@@ -1,0 +1,189 @@
+[
+    {
+        "TG_Owner": "CodeOptimizer",
+        "task_graph": {
+            "owner_agent": "CodeOptimizer",
+            "tasks": {
+                "FindSecondSmallest": "Finds and returns the second smallest element from the sorted list.",
+                "SortList": "Sorts the given list to find the second smallest element efficiently."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "SortList",
+                    "to": "FindSecondSmallest"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior if the list contains duplicate elements equal to the smallest element?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior if the list contains duplicate elements smaller than the smallest unique element? For example, how should `next_smallest([1, 1, 2, 3])` be handled?"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the expected behavior if the list contains duplicate elements smaller than the smallest unique element? For example, how should `next_smallest([3, 1, 1, 2])` be handled?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SyntaxChecker",
+        "task_graph": {
+            "owner_agent": "SyntaxChecker",
+            "tasks": {
+                "CheckEmptyList": "Check if the input list is empty and return None if true.",
+                "FindSecondSmallest": "Identify the second smallest element from the sorted list.",
+                "HandleDuplicateElements": "Return None if there are duplicate elements in the list, as it would not have a distinct second smallest value.",
+                "SortList": "Sort the given list of integers in ascending order."
+            },
+            "orders": [
+                {
+                    "condition": "empty_list",
+                    "from": "CheckEmptyList",
+                    "to": "AnswerNone"
+                },
+                {
+                    "condition": "not_empty_list",
+                    "from": "CheckEmptyList",
+                    "to": "SortList"
+                },
+                {
+                    "condition": "has_duplicates",
+                    "from": "HandleDuplicateElements",
+                    "to": "AnswerNone"
+                },
+                {
+                    "condition": "no_duplicates",
+                    "from": "SortList",
+                    "to": "FindSecondSmallest"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindSecondSmallest",
+                    "to": "AnswerValue"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What happens if the list contains non-integer elements? This scenario is not addressed in the current TG and could lead to potential errors."
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "StyleFormatter",
+        "task_graph": {
+            "owner_agent": "StyleFormatter",
+            "tasks": {
+                "CheckIfListEmpty": "Verify if the list is empty after removing the smallest element.",
+                "FindSecondSmallestElement": "Identify the next smallest element in the modified list.",
+                "FindSmallestElement": "Identify the smallest element in the list.",
+                "RemoveSmallestElement": "Remove the identified smallest element from the list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FindSmallestElement",
+                    "to": "RemoveSmallestElement"
+                },
+                {
+                    "condition": "true",
+                    "from": "CheckIfListEmpty",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "RemoveSmallestElement",
+                    "to": "FindSecondSmallestElement"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindSecondSmallestElement",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior if the list contains duplicate smallest elements? The current TG does not account for this scenario in the \"RemoveSmallestElement\" task."
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestAutomator",
+        "task_graph": {
+            "owner_agent": "TestAutomator",
+            "tasks": {
+                "GenerateTestCases": "Create test cases based on provided examples.",
+                "RunTests": "Execute the generated tests to verify correctness.",
+                "ValidateFunctionSignature": "Ensure the function signature is correct.",
+                "WriteTests": "Write automated tests for the next_smallest function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ValidateFunctionSignature",
+                    "to": "GenerateTestCases"
+                },
+                {
+                    "condition": "success",
+                    "from": "GenerateTestCases",
+                    "to": "WriteTests"
+                },
+                {
+                    "condition": "success",
+                    "from": "WriteTests",
+                    "to": "RunTests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior if the list contains duplicate smallest elements? For example, how should `next_smallest([2, 1, 1, 3])` behave?"
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior if the list contains duplicate smallest elements and multiple occurrences of the second smallest element? For example, how should `next_smallest([2, 1, 1, 3])` behave?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior if the list contains only one unique element? For example, how should `next_smallest([5])` behave?"
+            }
+        ],
+        "Answers": []
+    }
+]

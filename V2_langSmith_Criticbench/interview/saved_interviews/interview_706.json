@@ -1,0 +1,155 @@
+[
+    {
+        "TG_Owner": "EverydayWise",
+        "task_graph": {
+            "owner_agent": "EverydayWise",
+            "tasks": {
+                "Confirmation of Understanding": "Confirm that the listener understood the point after illustration",
+                "Illustration Clarification Requested": "Clarify the point being illustrated if the listener did not understand",
+                "Understanding Check": "Check if the listener is understanding the point during illustration"
+            },
+            "orders": [
+                {
+                    "condition": "did_not_understand",
+                    "from": "Illustration Clarification Requested",
+                    "to": "Confirmation of Understanding"
+                },
+                {
+                    "condition": "understanding_check_passed",
+                    "from": "Understanding Check",
+                    "to": "Confirmation of Understanding"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the condition for transitioning from \"Illustration Clarification Requested\" to \"Understanding Check\"? The TG does not specify this condition, which introduces ambiguity."
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the condition for transitioning from \"Understanding Check\" to \"Illustration Clarification Requested\"? The TG does not specify this condition, which introduces ambiguity."
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialEtiquetteAgent",
+            "tasks": {
+                "Answer Selection": "Select the most appropriate answer from given choices",
+                "Illustration Clarification": "Determine the correct response when illustrating a point"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Illustration Clarification",
+                    "to": "Answer Selection"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the rationale behind including both \"Illustration Clarification\" and \"Answer Selection\" as separate tasks, when the second task seems to directly follow from the first? Can the TG be simplified by combining these tasks?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the rationale for including \"Illustration Clarification\" as a task if it seems to be more of a context determination rather than a distinct action that needs to be performed? Can this task be refined or removed to streamline the TG, and how does it align with the user query's requirement to determine an appropriate response based on understanding levels?"
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "What is the rationale for including \"Illustration Clarification\" as a distinct task when it seems to be an implicit part of determining the appropriate answer in the \"Answer Selection\" task? Can this task be integrated into \"Answer Selection\" to simplify the TG while ensuring all necessary steps are covered?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProblemSolver",
+        "task_graph": {
+            "owner_agent": "ProblemSolver",
+            "tasks": {
+                "IdentifyUserIntent": "Determine the user's intent based on the given answer choices.",
+                "SelectAnswer": "Choose the most appropriate answer from the provided options."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyUserIntent",
+                    "to": "SelectAnswer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the expected action when someone does not clearly understand the point being illustrated? Is there a task to handle this specific scenario?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the expected action when someone accepts the point being illustrated, and is there a task to handle this scenario?"
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "What is the expected action when someone is in the process of understanding the point being illustrated, and is there a task to handle this scenario?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "LogicalDeductor",
+        "task_graph": {
+            "owner_agent": "LogicalDeductor",
+            "tasks": {
+                "IllustratePoint": "Illustrating a point to someone.",
+                "MakeClear": "Making the point clearer for better understanding.",
+                "Understood": "Checking if the person understands the illustrated point."
+            },
+            "orders": [
+                {
+                    "condition": "not understood",
+                    "from": "IllustratePoint",
+                    "to": "Understood"
+                },
+                {
+                    "condition": "understood",
+                    "from": "IllustratePoint",
+                    "to": "MakeClear"
+                },
+                {
+                    "condition": "true",
+                    "from": "MakeClear",
+                    "to": "Understood"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the purpose of including both \"understood\" and \"understanding\" in the answer choices if neither is a task in the TG?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the purpose of including \"understanding\" in the answer choices if it is not a task in the TG and there is no condition for it?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the purpose of having a task \"Understood\" if it does not have any specific action associated with it in the TG?"
+            }
+        ],
+        "Answers": []
+    }
+]

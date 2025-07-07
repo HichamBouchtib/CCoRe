@@ -8,10 +8,11 @@ import sys
 import logging
 
 agentmode_prompt = """You are {name}, an expert in {expertise}.
-Your task is to check if the user question is easy and simple and within your expertise.
-If yes, answer it confidently in 2-3 sentences, output it.
-If not, output 'None'
+Your task is to check if the user question is easy, simple and within your expertise.
+If yes, answer it confidently in 2-3 sentences.
+If not, answer with 'None'
 User question: {query}
+Your respone: 
 """
 
 def agent_mode(state: State) -> dict:

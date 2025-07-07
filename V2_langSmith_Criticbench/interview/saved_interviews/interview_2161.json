@@ -1,0 +1,90 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateYesterday": "Compute yesterday's date based on the identified date components",
+                "IdentifyDateComponents": "Determine the date components (month, day, year) from the given statement"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyDateComponents",
+                    "to": "CalculateYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the purpose of the \"CalculateYesterday\" task if the user query already specifies \"yesterday\"? This task seems redundant given the context."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the purpose of including \"CalculateYesterday\" as a task when the TG already specifies \"yesterday\"? This task seems redundant given the context."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "DateYesterday": "Calculate the date of yesterday from a given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateYesterday",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the given date in MM/DD/YYYY format?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the date format expected for the input date? The TG does not specify whether the input date should be in MM/DD/YYYY or another format, which could lead to ambiguity."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date yesterday from the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the date format expected for the output, and why are options like 01/28/2011 included if they do not match the given date?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the expected date format for the output, and why are options like 01/28/2011 included if they do not match the given date? The TG does not address how to handle these mismatched options."
+            }
+        ],
+        "Answers": []
+    }
+]

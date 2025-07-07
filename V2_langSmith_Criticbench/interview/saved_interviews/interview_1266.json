@@ -1,0 +1,243 @@
+[
+    {
+        "TG_Owner": "EverydayWise",
+        "task_graph": {
+            "owner_agent": "EverydayWise",
+            "tasks": {
+                "CloseMouth": "Ensure that the person is not speaking while you are trying to communicate with them through sign language or writing.",
+                "MayDisagree": "Be prepared for the possibility that the deaf person may have different opinions or questions about the information provided.",
+                "SummarizeMainPoints": "Summarize the main points of the information to make it concise and easy to understand.",
+                "Talk": "Speak clearly and slowly, using simple language and gestures if necessary.",
+                "WriteDown": "Write down the information on a piece of paper or use a digital device for the deaf person to read."
+            },
+            "orders": [
+                {
+                    "condition": "true",
+                    "from": "SummarizeMainPoints",
+                    "to": "WriteDown"
+                },
+                {
+                    "condition": "true",
+                    "from": "CloseMouth",
+                    "to": "MayDisagree"
+                },
+                {
+                    "condition": "false",
+                    "from": "Talk",
+                    "to": "WriteDown"
+                },
+                {
+                    "condition": "false",
+                    "from": "Talk",
+                    "to": "SummarizeMainPoints"
+                },
+                {
+                    "condition": "true",
+                    "from": "MayDisagree",
+                    "to": "End"
+                },
+                {
+                    "condition": "true",
+                    "from": "WriteDown",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What is the rationale behind having both \"Talk\" and \"CloseMouth\" as separate tasks, when one logically follows from the other?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the rationale behind including both \"Talk\" and \"SummarizeMainPoints\" as separate tasks, when summarizing main points might naturally occur during speaking?"
+            },
+            {
+                "from": "LogicalDeductionAgent",
+                "content": "What is the rationale behind including both \"Talk\" and \"MayDisagree\" as separate tasks, when preparing for disagreement seems more relevant after establishing communication rather than being a standalone task?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialEtiquetteAgent",
+            "tasks": {
+                "CloseMouth": "Ensure mouth is closed when speaking to avoid lip-reading confusion",
+                "MayDisagree": "Be prepared that the deaf person may have different opinions or interpretations",
+                "SummarizeMainPoints": "Summarize the main points of the information for a deaf person",
+                "Talk": "Speak clearly and use visual aids if necessary",
+                "WriteDown": "Write down the information in text form"
+            },
+            "orders": [
+                {
+                    "condition": "need_to_summarize",
+                    "from": "Talk",
+                    "to": "SummarizeMainPoints"
+                },
+                {
+                    "condition": "not_lip_reading",
+                    "from": "Talk",
+                    "to": "CloseMouth"
+                },
+                {
+                    "condition": "preference_for_written",
+                    "from": "Talk",
+                    "to": "WriteDown"
+                },
+                {
+                    "condition": "expect_disagreement",
+                    "from": "Talk",
+                    "to": "MayDisagree"
+                },
+                {
+                    "condition": "not_lip_reading",
+                    "from": "SummarizeMainPoints",
+                    "to": "CloseMouth"
+                },
+                {
+                    "condition": "preference_for_written",
+                    "from": "SummarizeMainPoints",
+                    "to": "WriteDown"
+                },
+                {
+                    "condition": "preference_for_written",
+                    "from": "CloseMouth",
+                    "to": "WriteDown"
+                },
+                {
+                    "condition": "agreed",
+                    "from": "MayDisagree",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the condition for \"agreed\" in the \"MayDisagree\" task, and how does it affect the overall plan?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the rationale behind including both \"CloseMouth\" and \"WriteDown\" as potential next steps from \"SummarizeMainPoints\"? This seems redundant since writing down the main points would inherently address the need to avoid lip-reading confusion."
+            },
+            {
+                "from": "LogicalDeductionAgent",
+                "content": "What is the rationale behind including \"CloseMouth\" as a task if the primary method of communication for a deaf person would be through written text, and how does it fit into the overall plan?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProblemSolver",
+        "task_graph": {
+            "owner_agent": "ProblemSolver",
+            "tasks": {
+                "Express Information in Writing": "Write down the information to be conveyed",
+                "Speak Clearly with Visual Aids": "Speak clearly while using visual aids such as pictures or diagrams",
+                "Use Sign Language": "Use sign language if available"
+            },
+            "orders": [
+                {
+                    "condition": "no_disagreement",
+                    "from": "Express Information in Writing",
+                    "to": "End"
+                },
+                {
+                    "condition": "sign_language_available",
+                    "from": "Use Sign Language",
+                    "to": "End"
+                },
+                {
+                    "condition": "deaf_person_understands",
+                    "from": "Speak Clearly with Visual Aids",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What happens if sign language is not available and the deaf person does not understand visual aids?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What happens if the deaf person does not understand any of the provided methods?"
+            },
+            {
+                "from": "LogicalDeductionAgent",
+                "content": "What happens if the deaf person still does not understand any of the provided methods?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "LogicalDeductionAgent",
+        "task_graph": {
+            "owner_agent": "LogicalDeductionAgent",
+            "tasks": {
+                "CloseMouth": "Inform the speaker not to use verbal communication",
+                "MayDisagree": "Acknowledge that some may disagree with the chosen method",
+                "SummarizeMainPoints": "Summarize the main points of communication for a deaf person",
+                "Talk": "Propose talking as a primary means of communication",
+                "WriteDown": "Suggest writing down information as an alternative method"
+            },
+            "orders": [
+                {
+                    "condition": "deaf_person",
+                    "from": "SummarizeMainPoints",
+                    "to": "CloseMouth"
+                },
+                {
+                    "condition": "deaf_person",
+                    "from": "SummarizeMainPoints",
+                    "to": "WriteDown"
+                },
+                {
+                    "condition": "deaf_person",
+                    "from": "SummarizeMainPoints",
+                    "to": "MayDisagree"
+                },
+                {
+                    "condition": "not_deaf_person",
+                    "from": "CloseMouth",
+                    "to": "Talk"
+                },
+                {
+                    "condition": "not_deaf_person",
+                    "from": "WriteDown",
+                    "to": "Talk"
+                },
+                {
+                    "condition": "not_deaf_person",
+                    "from": "MayDisagree",
+                    "to": "Talk"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What is the rationale behind including \"CloseMouth\" as a task when the goal is to express information to a deaf person, and how does it relate to the other tasks in the graph?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What is the rationale behind including \"Talk\" as a task when the goal is to express information to a deaf person, and how does it fit with the other tasks in the graph?"
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,183 @@
+[
+    {
+        "TG_Owner": "EverydayKnowledgeAgent",
+        "task_graph": {
+            "owner_agent": "EverydayKnowledgeAgent",
+            "tasks": {
+                "BuyCondomsAtSupermarket": "Go to a supermarket to buy condoms."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsAtSupermarket",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialNormsEtiquetteAgent",
+                "content": "What is the rationale for excluding other answer choices like \"sock drawer\" and \"cd store\" from the TG, given they are provided in the user query?"
+            },
+            {
+                "from": "CausalityEffectsAgent",
+                "content": "What is the rationale for not including tasks or conditions related to the other answer choices like \"sock drawer\" and \"cd store\"? This exclusion may mislead users who expect a comprehensive exploration of all options."
+            },
+            {
+                "from": "ObjectPropertiesInteractionsAgent",
+                "content": "What is the rationale for not including tasks or conditions related to answer choices like \"sock drawer\" and \"cd store\", given they are part of the user query? This exclusion may lead to a misleading plan that does not address all provided options."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialNormsEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialNormsEtiquetteAgent",
+            "tasks": {
+                "AnswerSelection": "Select the most common answer from the survey results",
+                "CondomPurchaseSurvey": "Conduct a survey on where people typically buy condoms"
+            },
+            "orders": [
+                {
+                    "condition": "survey_completed",
+                    "from": "CondomPurchaseSurvey",
+                    "to": "AnswerSelection"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "What is the source of the survey results used to select the answer? The TG assumes the existence of survey results but does not include a task to obtain them."
+            },
+            {
+                "from": "CausalityEffectsAgent",
+                "content": "What is the criteria for selecting the \"most common answer\" in the AnswerSelection task, and how will ties be handled if necessary?"
+            },
+            {
+                "from": "ObjectPropertiesInteractionsAgent",
+                "content": "What is the rationale for using a survey to determine where to buy condoms, given that the task is to answer a specific question rather than gather new information? This approach may not directly address the user's query."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CausalityEffectsAgent",
+        "task_graph": {
+            "owner_agent": "CausalityEffectsAgent",
+            "tasks": {
+                "BuyCondomsAtCdStore": "Purchasing condoms at a CD store",
+                "BuyCondomsAtSupermarket": "Buying condoms from a supermarket",
+                "BuyCondomsInBedroom": "Locating condoms in a bedroom",
+                "BuyCondomsInMedicineChest": "Obtaining condoms from a medicine chest",
+                "BuyCondomsInSockDrawer": "Finding condoms in a sock drawer"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsAtSupermarket",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsInSockDrawer",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsAtCdStore",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsInMedicineChest",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsInBedroom",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "Why are there separate tasks for buying condoms at a CD store and finding them in a sock drawer when neither of these options is listed as an answer choice? This seems to introduce unnecessary complexity."
+            },
+            {
+                "from": "SocialNormsEtiquetteAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ObjectPropertiesInteractionsAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ObjectPropertiesInteractionsAgent",
+        "task_graph": {
+            "owner_agent": "ObjectPropertiesInteractionsAgent",
+            "tasks": {
+                "BuyCondomsAtCdStore": "Obtain condoms from a CD store",
+                "BuyCondomsAtSupermarket": "Purchase condoms from a supermarket",
+                "BuyCondomsInBedroom": "Locate condoms in a bedroom",
+                "BuyCondomsInMedicineChest": "Retrieve condoms from a medicine chest",
+                "BuyCondomsInSockDrawer": "Find condoms in a sock drawer"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsAtSupermarket",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsInSockDrawer",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsAtCdStore",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsInMedicineChest",
+                    "to": "End"
+                },
+                {
+                    "condition": "success",
+                    "from": "BuyCondomsInBedroom",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "Why are there separate tasks for each answer choice when they all lead to the same end state? This creates redundancy. Consider combining them into a single task with conditional branches based on the user's input."
+            },
+            {
+                "from": "SocialNormsEtiquetteAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "CausalityEffectsAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

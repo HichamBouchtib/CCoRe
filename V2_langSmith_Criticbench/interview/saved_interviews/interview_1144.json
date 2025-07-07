@@ -1,0 +1,164 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "Drawer Search": "Checking if the dad put his gun in a drawer.",
+                "Holster Check": "Verifying if the dad kept his gun in a holster.",
+                "Restroom Search": "Checking if the dad put his gun in the restroom."
+            },
+            "orders": [
+                {
+                    "condition": "found",
+                    "from": "Restroom Search",
+                    "to": "Answer Determination"
+                },
+                {
+                    "condition": "found",
+                    "from": "Drawer Search",
+                    "to": "Answer Determination"
+                },
+                {
+                    "condition": "found",
+                    "from": "Holster Check",
+                    "to": "Answer Determination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the rationale for including all three search tasks (Drawer Search, Holster Check, Restroom Search) when one of them is expected to yield the correct answer based on common social norms and etiquette? Can we optimize this TG by removing redundant tasks or adding a task that checks the most likely location first?"
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the rationale for not including a task to check common hiding spots like under the bed, in a closet, or on a shelf? These locations are also plausible based on common practices for storing firearms at home."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "Gun Placement Analysis": "Analyzing the context of where a dad would most likely place his gun for protection within his home."
+            },
+            "orders": [
+                {
+                    "condition": "appropriate",
+                    "from": "Gun Placement Analysis",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What specific context or scenario is being considered for the dad's actions? This information is crucial to determine the most likely location for the gun."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What specific context or scenario is being considered for the dad's actions? This information is crucial to determine the most likely location for the gun. Additionally, why is a \"Gun Placement Analysis\" task included without specifying its subtasks or how it will lead to determining the answer choices provided?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What specific context or scenario is being considered for the dad's actions? This information is crucial to determine the most likely location for the gun. Additionally, why is a \"Gun Placement Analysis\" task included without specifying its subtasks or how it will lead to determining the answer choices provided? How will the analysis be conducted and what criteria will be used to evaluate each option?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausality",
+        "task_graph": {
+            "owner_agent": "WiserCausality",
+            "tasks": {
+                "Answer Selection": "Select the answer that best fits the scenario from given choices.",
+                "Gun Placement Analysis": "Determine the most likely place for a dad to store his gun based on common practices and context."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Gun Placement Analysis",
+                    "to": "Answer Selection"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the context or reason for the dad wanting to protect his house, as it might influence the most likely place to store a gun?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the typical accessibility requirement for a dad to quickly access his gun in case of an emergency? This can help clarify why one storage location might be more likely than others."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the typical legal and safety practice for storing a gun in a household, as it might influence the dad's choice of storage location?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "DrawerCheck": "Checking if the dad put his gun in a drawer.",
+                "HolsterCheck": "Checking if the dad put his gun in a holster.",
+                "RestroomCheck": "Checking if the dad put his gun in the restroom."
+            },
+            "orders": [
+                {
+                    "condition": "no_gun_found",
+                    "from": "RestroomCheck",
+                    "to": "DrawerCheck"
+                },
+                {
+                    "condition": "no_gun_found",
+                    "from": "RestroomCheck",
+                    "to": "HolsterCheck"
+                },
+                {
+                    "condition": "no_gun_found",
+                    "from": "DrawerCheck",
+                    "to": "HolsterCheck"
+                },
+                {
+                    "condition": "gun_in_holster",
+                    "from": "HolsterCheck",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the condition for checking the restroom? The current TG does not specify what to do if the gun is found in the restroom, which could lead to ambiguity."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the condition for checking the drawer? The current TG does not specify what to do if the gun is found in the drawer, which could lead to ambiguity."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the condition for checking the holster? The current TG does not specify what to do if the gun is found in the restroom, which could lead to ambiguity. Additionally, there should be a task and order defined for checking the police station and crime scene, as these are also answer choices."
+            }
+        ],
+        "Answers": []
+    }
+]

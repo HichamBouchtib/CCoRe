@@ -1,0 +1,142 @@
+[
+    {
+        "TG_Owner": "LogiWise",
+        "task_graph": {
+            "owner_agent": "LogiWise",
+            "tasks": {
+                "CalculateCurrentDate": "Determine the current date based on the given information.",
+                "SubtractOneWeek": "Subtract one week from the calculated current date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentDate",
+                    "to": "SubtractOneWeek"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "PrediWise",
+                "content": "What is the current date based on the given information? This task's specification is unclear and should provide a starting point for calculating the dates."
+            },
+            {
+                "from": "AutoProve",
+                "content": "What is the current date based on the given information, and how does it relate to Mar 20, 2020? This task's specification needs clarification."
+            },
+            {
+                "from": "RepWise",
+                "content": "What is the current date, and how does it relate to the date 176 days after Mar 20, 2020? This task's specification needs clarification."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "PrediWise",
+        "task_graph": {
+            "owner_agent": "PrediWise",
+            "tasks": {
+                "DateCalculation": "Calculate the date one week ago from today based on the given information."
+            },
+            "orders": [
+                {
+                    "condition": "completed",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogiWise",
+                "content": "What is the current date based on the given information? The TG does not specify how to determine the current date, which is necessary for calculating one week ago."
+            },
+            {
+                "from": "AutoProve",
+                "content": "What is the current date, and how was it determined based on the given information?"
+            },
+            {
+                "from": "RepWise",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "AutoProve",
+        "task_graph": {
+            "owner_agent": "AutoProve",
+            "tasks": {
+                "DateCalculation": "Calculate the date one week ago from today based on the given information."
+            },
+            "orders": [
+                {
+                    "condition": "date_calculated",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogiWise",
+                "content": "What is the current date based on the given information, and how was it determined?"
+            },
+            {
+                "from": "PrediWise",
+                "content": "What is the current date, and how was it determined based on Jane quitting her job on Mar 20, 2020, and 176 days having passed since then?"
+            },
+            {
+                "from": "RepWise",
+                "content": "What is the current date, and how was it determined based on Jane quitting her job on Mar 20, 2020, and 176 days having passed since then? This question should be addressed to ensure the TG accurately calculates today's date before determining the date one week ago."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RepWise",
+        "task_graph": {
+            "owner_agent": "RepWise",
+            "tasks": {
+                "Calculate_Current_Date": "Calculate the current date from the number of days passed since Jane quit.",
+                "Calculate_Jane_Quit_Date": "Determine the date Jane quit her job based on the given information.",
+                "Calculate_One_Week_Ago": "Compute the date one week ago from today."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Calculate_Jane_Quit_Date",
+                    "to": "Calculate_Current_Date"
+                },
+                {
+                    "condition": "success",
+                    "from": "Calculate_Current_Date",
+                    "to": "Calculate_One_Week_Ago"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogiWise",
+                "content": "What is the current date based on the given information, and how does it affect the calculation of one week ago from today?"
+            },
+            {
+                "from": "PrediWise",
+                "content": "What is the specific date Jane quit her job, and how does it affect the calculation of today's date? The current TG assumes a direct calculation from days passed without explicitly defining the quit date, which could lead to ambiguity."
+            },
+            {
+                "from": "AutoProve",
+                "content": "What is the specific date Jane quit her job, and how does it affect the calculation of today's date? The current TG assumes a direct calculation from days passed without explicitly defining the quit date, which could lead to ambiguity. Additionally, the TG should include a task to determine the exact date one week ago from the calculated current date."
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -17,11 +17,9 @@ class ScoreOutput(BaseModel):
 scoring_instructions = """
 You are {agent_name}, a WiserAgent with expertise in {domain}.
 You are tasked with reviewing multiple Task Graphs (TGs) proposed to solve the following user query:
-
 "{query}"
 
 Here are the TGs evaluate them against each other:
-
 {all_tgs}
 
 For each TG, evaluate critically based on:
@@ -37,9 +35,7 @@ Score Guide:
 - 5: Excellent
 
 Don't score them all the same
-
 Be strict: Deduct points for unclear tasks, missing steps, illogical flows, or redundancy.
-
 Return your output as a JSON object structured like:
 {{
   "TG Owner Name 1": score1,

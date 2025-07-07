@@ -64,8 +64,9 @@ def create_wiseragents(state: State):
     # Add interactive widget display here
     display_wiseragents(wiseragents_list)
     # agent in chrome
-    iframe = visualize_agents_pyvis(wiseragents_list)
-    display(iframe)
+    
+    # iframe = visualize_agents_pyvis(wiseragents_list)
+    # display(iframe)
     
     # # printing
     # for agent in wiseragents_output.wiseragents:

@@ -1,0 +1,216 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "TotalMilesCalculation": "Calculate the total miles Pancho walks in a week",
+                "WeekdayWalking": "Pancho walks 20 miles a day on weekdays",
+                "WeekendWalking": "Pancho walks 10 miles a day on weekends"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "WeekdayWalking",
+                    "to": "TotalMilesCalculation"
+                },
+                {
+                    "condition": "success",
+                    "from": "WeekendWalking",
+                    "to": "TotalMilesCalculation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What is the definition of a week in this context, considering it might include holidays or other days off?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is considered a \"week\" in this context? Does it strictly follow the calendar week, or does it include any days off Pancho might have during the week or on weekends?"
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "GeoTrigo",
+                "content": "In this context, a week consists of seven consecutive days, typically Monday through Sunday. The definition does not change regardless of holidays or other days off, as the task focuses on the standard weekly cycle for calculating Pancho's walking miles."
+            },
+            {
+                "to": "CalcDifEq",
+                "content": "In this context, a \"week\" strictly follows the calendar week. It includes five weekdays (Monday through Friday) and two weekend days (Saturday and Sunday). There are no additional days off considered in the calculation of miles walked in a week based on the information provided."
+            },
+            {
+                "to": "ProbStat",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "WeekdayWalking": "Pancho walks 20 miles a day on weekdays",
+                "WeekendWalking": "Pancho walks 10 miles a day on weekends"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "WeekdayWalking",
+                    "to": "WeekendWalking"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the definition of a week in this context? Is it from Sunday to Saturday, or does it start from Monday to Friday and then include the next weekend?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is considered a week in this context? Is it from Sunday to Saturday, or does it start from Monday to Friday and then include the next weekend?"
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "AlgebraWise",
+                "content": "In this context, a week in the TG starts from Monday to Friday and then includes the next weekend. Specifically, the TG defines Pancho's weekday walking as 20 miles per day from Monday to Friday, followed by weekends (Saturday and Sunday) where he walks 10 miles per day."
+            },
+            {
+                "to": "CalcDifEq",
+                "content": "In this context, a week is considered to start from Monday and end on Sunday, including both the weekdays and the weekend."
+            },
+            {
+                "to": "ProbStat",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "WeekdayWalking": "Pancho walks 20 miles a day on weekdays",
+                "WeekendWalking": "Pancho walks 10 miles a day on weekends"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "WeekdayWalking",
+                    "to": "CalculateTotalWeekdayMiles"
+                },
+                {
+                    "condition": "success",
+                    "from": "WeekendWalking",
+                    "to": "CalculateTotalWeekendMiles"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateTotalWeekdayMiles",
+                    "to": "AddTotalMiles"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateTotalWeekendMiles",
+                    "to": "AddTotalMiles"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddTotalMiles",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the definition of \"success\" in the context of each task, and how will it be determined?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "AlgebraWise",
+                "content": "In the context of each task within this TG, \"success\" typically refers to the completion of a specific step without errors. Here's how success will be determined for each task:\n\n1. **WeekdayWalking**: Success is determined when the number of miles Pancho walks on weekdays (20 miles per weekday) is correctly calculated. This involves multiplying 20 miles by the number of weekdays in a week, which is 5.\n\n2. **WeekendWalking**: Success is determined when the number of miles Pancho walks on weekends (10 miles per weekend day) is correctly calculated. This involves multiplying 10 miles by the number of weekend days in a week, which is 2.\n\n3. **CalculateTotalWeekdayMiles**: Success is determined when the total miles walked during weekdays are accurately computed and stored or passed to the next task.\n\n4. **CalculateTotalWeekendMiles**: Success is determined when the total miles walked during weekends are accurately computed and stored or passed to the next task.\n\n5. **AddTotalMiles**: Success is determined when the total miles from both weekdays and weekends are correctly added together, resulting in the weekly total of miles Pancho walks.\n\n6. **End**: Success is implied once all tasks have been completed successfully, leading to the final answer being calculated and potentially stored or outputted as needed.\n\nEach task's success can be programmatically determined by checking if the calculations meet expected criteria or if any errors occurred during execution."
+            },
+            {
+                "to": "GeoTrigo",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "ProbStat",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "WeekdayWalking": "Pancho walks 20 miles a day on weekdays",
+                "WeekendWalking": "Pancho walks 10 miles a day on weekends"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "WeekdayWalking",
+                    "to": "WeekendWalking"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the definition of a week used in this scenario? Is it from Sunday to Saturday, or are there specific weekdays and weekends mentioned?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "AlgebraWise",
+                "content": "In this scenario, specific weekdays and weekends are mentioned rather than a standard Sunday-to-Saturday week. The tasks refer to \"weekdays\" when Pancho walks 20 miles each day, and \"weekends\" when he walks 10 miles each day. There is no indication that the week starts on a particular day or follows a standard calendar week."
+            },
+            {
+                "to": "GeoTrigo",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "CalcDifEq",
+                "content": "You are welcome!"
+            }
+        ]
+    }
+]

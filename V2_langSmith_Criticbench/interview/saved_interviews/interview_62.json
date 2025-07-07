@@ -1,0 +1,104 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateDaysPassed": "Determine the number of days Jane has been consuming eggs since May 9th, 2017.",
+                "CalculateTomorrowDate": "Compute the date for tomorrow after determining today's date from the previous step.",
+                "DetermineDateOfRunningOut": "Find out the date when Jane ran out of eggs based on the number of days calculated in the previous task."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysPassed",
+                    "to": "DetermineDateOfRunningOut"
+                },
+                {
+                    "condition": "success",
+                    "from": "DetermineDateOfRunningOut",
+                    "to": "CalculateTomorrowDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date in MM/DD/YYYY before starting the task graph? This information is necessary to determine today's date and, subsequently, tomorrow's date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the date of May 9th, 2017, in MM/DD/YYYY format? This information is necessary to start calculating the number of days Jane has been consuming eggs."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "AddOneDay": "Adding one day to the determined date to find tomorrow's date",
+                "CalculateDaysPassed": "Calculating the number of days passed since May 9th, 2017 until today",
+                "DetermineDate": "Determining the date when Jane ran out of eggs based on the number of days passed and the starting date"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysPassed",
+                    "to": "DetermineDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "DetermineDate",
+                    "to": "AddOneDay"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the exact date Jane ran out of eggs, and how was it determined? The TG does not specify the number of days passed since May 9th, 2017, until today. This information is crucial to determine the correct answer."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the starting date from which we are calculating the number of days passed, and how was it determined? The TG does not specify whether today's date is known or if it needs to be calculated. Additionally, the TG should clarify how the exact date Jane ran out of eggs was determined based on the number of days passed."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "AddDaysToStartDate": "Add the calculated number of days to the start date (May 9th, 2017) and find out today's date.",
+                "CalculateDaysPassed": "Determine the number of days Jane has been consuming eggs since May 9th, 2017."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDaysPassed",
+                    "to": "AddDaysToStartDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the date of today if Jane ran out of eggs after eating one per day for 40 days starting from May 9th, 2017?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the rationale for including both \"AddDaysToStartDate\" and \"CalculateDaysPassed\" tasks? The number of days passed can be directly calculated from the initial date, and there seems to be redundancy in adding these as separate tasks."
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,90 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateYesterday": "Determine the date for yesterday based on the extracted date components.",
+                "IdentifyDateComponents": "Extract the month, day, and year components of the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyDateComponents",
+                    "to": "CalculateYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the expected input format for the date \"11/12/2019\" in the \"IdentifyDateComponents\" task? The current TG does not specify if it expects the date to be in a string or integer format, which could affect the extraction process."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the expected format for the output of the \"CalculateYesterday\" task, and how will it be used to determine the correct answer among the provided options?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date yesterday from the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the date format expected for the input and output, considering the options provided do not match the given date format?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the date format of the given date \"11/12/2019\" and why are the options provided in a different format? This discrepancy needs to be addressed for clarity."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date for yesterday given today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date format expected by the system, and why are options like 11/06/2019 and 11/17/2019 included if they cannot be correct based on the given today's date?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the purpose of including options like 11/06/2019 and 11/17/2019 in the date range, given that today's date is specified as 11/12/2019? This inclusion might confuse the user or indicate a potential error in the TG design."
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,97 @@
+[
+    {
+        "TG_Owner": "LogicalInfer",
+        "task_graph": {
+            "owner_agent": "LogicalInfer",
+            "tasks": {
+                "IdentifyDateComponents": "Determine the day, month, and year components of today's date.",
+                "MatchDateToOptions": "Compare the calculated date with provided options to find a match.",
+                "SubtractOneDay": "Calculate yesterday's date based on today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyDateComponents",
+                    "to": "SubtractOneDay"
+                },
+                {
+                    "condition": "success",
+                    "from": "SubtractOneDay",
+                    "to": "MatchDateToOptions"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleMaster",
+                "content": "What is the significance of mentioning \"10/01/1966\" and \"03/04/1966\" in the options if they are not related to the date calculation?"
+            },
+            {
+                "from": "KnowledgeKeeper",
+                "content": "What is the relevance of including \"10/01/1966\" and \"03/04/1966\" in the options if they are not used in the date calculation process? This seems to be a redundant inclusion that could confuse the task graph."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleMaster",
+        "task_graph": {
+            "owner_agent": "RuleMaster",
+            "tasks": {
+                "DateCalculation": "Calculate the date for yesterday based on today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the current date in MM/DD/YYYY format to ensure accurate calculation?"
+            },
+            {
+                "from": "KnowledgeKeeper",
+                "content": "What is the current date in YYYY/MM/DD format to ensure accurate calculation?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeKeeper",
+        "task_graph": {
+            "owner_agent": "KnowledgeKeeper",
+            "tasks": {
+                "CalculateYesterday": "Compute the date for yesterday based on the identified components.",
+                "IdentifyDateComponents": "Determine the day, month, and year from the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyDateComponents",
+                    "to": "CalculateYesterday"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInfer",
+                "content": "What is the date of the first day of the third month of 1966, and how does it relate to the given date? This can help clarify if the TG correctly handles edge cases for the start of a month."
+            },
+            {
+                "from": "RuleMaster",
+                "content": "What is the date of the last day of February 1966, and how does it relate to the given date? This can help clarify if the TG correctly handles the transition between months."
+            }
+        ],
+        "Answers": []
+    }
+]

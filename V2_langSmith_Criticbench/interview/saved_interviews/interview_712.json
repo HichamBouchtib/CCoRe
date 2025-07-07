@@ -1,0 +1,162 @@
+[
+    {
+        "TG_Owner": "EverydayKnowledgeAgent",
+        "task_graph": {
+            "owner_agent": "EverydayKnowledgeAgent",
+            "tasks": {
+                "GetNationalityOfAlexanderKluge": "Find the nationality of Alexander Kluge.",
+                "GetNationalityOfSidneySalkow": "Find the nationality of Sidney Salkow."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "GetNationalityOfAlexanderKluge",
+                    "to": "CompareNationalities"
+                },
+                {
+                    "condition": "success",
+                    "from": "GetNationalityOfSidneySalkow",
+                    "to": "CompareNationalities"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialNormsAgent",
+                "content": "What is the criterion for comparing nationalities in the \"CompareNationalities\" task?"
+            },
+            {
+                "from": "CausalRelationshipsAgent",
+                "content": "What is the source of the information for determining nationality in the \"GetNationalityOfAlexanderKluge\" and \"GetNationalityOfSidneySalkow\" tasks?"
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "What is the criterion for determining nationality in the \"GetNationalityOfAlexanderKluge\" and \"GetNationalityOfSidneySalkow\" tasks?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialNormsAgent",
+        "task_graph": {
+            "owner_agent": "SocialNormsAgent",
+            "tasks": {
+                "NationalityResearcher": "Determine the nationality of Alexander Kluge and Sidney Salkow."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "NationalityResearcher",
+                    "to": "AnswerGenerator"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "What is the source of the information for the NationalityResearcher task? Ensuring the accuracy of the data is crucial for the correctness of the answer."
+            },
+            {
+                "from": "CausalRelationshipsAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "What is the definition of \"nationality\" used by the NationalityResearcher task, and how will it handle cases where individuals have multiple nationalities or citizenships?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CausalRelationshipsAgent",
+        "task_graph": {
+            "owner_agent": "CausalRelationshipsAgent",
+            "tasks": {
+                "Nationality Lookup for Alexander Kluge": "Find the nationality of Alexander Kluge.",
+                "Nationality Lookup for Sidney Salkow": "Find the nationality of Sidney Salkow."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Nationality Lookup for Alexander Kluge",
+                    "to": "Nationality Lookup for Sidney Salkow"
+                },
+                {
+                    "condition": "nationalities_found",
+                    "from": "Nationality Lookup for Alexander Kluge",
+                    "to": "Answer Construction"
+                },
+                {
+                    "condition": "nationalities_found",
+                    "from": "Nationality Lookup for Sidney Salkow",
+                    "to": "Answer Construction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "What is the definition of nationality used in this context?"
+            },
+            {
+                "from": "SocialNormsAgent",
+                "content": "What is the source of the information for the nationality lookups? Ensuring the reliability of the sources is crucial for accurate answers."
+            },
+            {
+                "from": "ObjectPropertiesAgent",
+                "content": "What is the expected format of the answer in \"Answer Construction\"? Will it simply state whether they are of the same nationality or provide more details?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ObjectPropertiesAgent",
+        "task_graph": {
+            "owner_agent": "ObjectPropertiesAgent",
+            "tasks": {
+                "Nationality Lookup for Alexander Kluge": "Find out the nationality of Alexander Kluge",
+                "Nationality Lookup for Sidney Salkow": "Find out the nationality of Sidney Salkow"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Nationality Lookup for Alexander Kluge",
+                    "to": "Nationality Lookup for Sidney Salkow"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Nationality Lookup for Alexander Kluge",
+                    "to": "Answer Construction"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Nationality Lookup for Sidney Salkow",
+                    "to": "Answer Construction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "What is the definition of nationality used in this context?"
+            },
+            {
+                "from": "SocialNormsAgent",
+                "content": "What is the source of the information for the nationality lookups? Ensuring the reliability of the sources is crucial for accurate results."
+            },
+            {
+                "from": "CausalRelationshipsAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

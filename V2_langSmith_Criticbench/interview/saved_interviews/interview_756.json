@@ -1,0 +1,150 @@
+[
+    {
+        "TG_Owner": "DataPrepWise",
+        "task_graph": {
+            "owner_agent": "DataPrepWise",
+            "tasks": {
+                "CaliforniaComparison": "Comparing the filtered population with California's population.",
+                "OddTimesFiltering": "Filter out odd times from the scaled population.",
+                "PopulationScaling": "Scaling the population of a village to five times its original value."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PopulationScaling",
+                    "to": "OddTimesFiltering"
+                },
+                {
+                    "condition": "filtered_population_larger",
+                    "from": "OddTimesFiltering",
+                    "to": "CaliforniaComparison"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureCraft",
+                "content": "What is the current population of the village, and how will the \"odd times\" be determined in this context?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "What is the criterion for determining \"odd times\" in the context of this task graph? How will these times be used to filter the population?"
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "What is the criterion for determining \"odd times\" in the context of this task graph? How will these times be used to filter the population, and what does \"larger than California\" mean in this scenario?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "FeatureCraft",
+        "task_graph": {
+            "owner_agent": "FeatureCraft",
+            "tasks": {
+                "CaliforniaComparison": "Comparing the scaled and checked population with California's population.",
+                "OddTimesCheck": "Checking if the scaled population is an odd number.",
+                "PopulationScaling": "Scaling the population of the village by five times."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PopulationScaling",
+                    "to": "OddTimesCheck"
+                },
+                {
+                    "condition": "true",
+                    "from": "OddTimesCheck",
+                    "to": "CaliforniaComparison"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPrepWise",
+                "content": "What is the current population of the village before scaling?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "What is the current population of the village, and how will we determine if a number is \"larger than California's population\"?"
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ModelMaster",
+        "task_graph": {
+            "owner_agent": "ModelMaster",
+            "tasks": {
+                "California Comparison": "Compare the calculated population with California's population.",
+                "Population Calculation": "Calculate the population of the village based on the given condition."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Population Calculation",
+                    "to": "California Comparison"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPrepWise",
+                "content": "What is the current population of California used for comparison?"
+            },
+            {
+                "from": "FeatureCraft",
+                "content": "What is the threshold for \"odd times\" and how many times should the population be increased?"
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "What is the specific condition for \"five times\" and how should it be applied to the population calculation?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "MetricMaestro",
+        "task_graph": {
+            "owner_agent": "MetricMaestro",
+            "tasks": {
+                "California Comparison": "Compare the calculated population with California's population.",
+                "Population Calculation": "Calculate the population of the village based on the given information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Population Calculation",
+                    "to": "California Comparison"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPrepWise",
+                "content": "What is the current population of California, and how will you determine if the village's population is larger than California's?"
+            },
+            {
+                "from": "FeatureCraft",
+                "content": "What is the criterion for \"odd times\" mentioned in the user query, and how will this affect the population calculation?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "What is the specific criterion for \"five times\" and how will this affect the population calculation?"
+            }
+        ],
+        "Answers": []
+    }
+]

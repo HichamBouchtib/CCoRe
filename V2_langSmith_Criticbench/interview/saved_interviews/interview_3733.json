@@ -1,0 +1,190 @@
+[
+    {
+        "TG_Owner": "OptiCode",
+        "task_graph": {
+            "owner_agent": "OptiCode",
+            "tasks": {
+                "ApplyRegexSubstitution": "Replace all occurrences of the identified lowercase substrings with an empty string.",
+                "DefineRegexPattern": "Create a regex pattern that matches lowercase substrings."
+            },
+            "orders": [
+                {
+                    "condition": "pattern_defined",
+                    "from": "DefineRegexPattern",
+                    "to": "ApplyRegexSubstitution"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ErrDetect",
+                "content": "What is the expected behavior if the input string contains no lowercase substrings?"
+            },
+            {
+                "from": "TestGen",
+                "content": "What is the expected behavior if the input string contains only lowercase substrings?"
+            },
+            {
+                "from": "FormatPro",
+                "content": "What is the expected behavior if the input string contains both uppercase and lowercase substrings, but no consecutive lowercase letters form a substring? For example, how should 'KDeoALOklOOHserfLoAJSIskdsf' be handled if we consider 'skd' as individual characters rather than a substring?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "ErrDetect",
+                "content": "The expected behavior if the input string contains no lowercase substrings is that the function should return the original string unchanged. This is because the regex pattern defined to match lowercase substrings will not find any matches in a string without lowercase characters, and thus no substitutions will be made."
+            },
+            {
+                "to": "TestGen",
+                "content": "The expected behavior for the given TG and function when the input string contains only lowercase substrings would be that the function returns an empty string. This is because all occurrences of lowercase substrings are replaced with an empty string according to the task definition. Given the regex pattern defined in \"DefineRegexPattern\" to match any lowercase substring, and applying it in \"ApplyRegexSubstitution\" to replace them with an empty string, a string containing only lowercase characters would be fully replaced, resulting in an empty string."
+            },
+            {
+                "to": "FormatPro",
+                "content": "The expected behavior for the given TG, as defined by the task graph, is to replace all occurrences of identified lowercase substrings with an empty string. In the example 'KDeoALOklOOHserfLoAJSIskdsf', if we consider each lowercase letter individually and not as part of a substring, the function should treat each lowercase letter separately.\n\nGiven the task graph's instructions:\n- \"DefineRegexPattern\": Create a regex pattern that matches lowercase substrings.\n- \"ApplyRegexSubstitution\": Replace all occurrences of the identified lowercase substrings with an empty string.\n\nSince 'skd' are considered individual characters rather than a substring, the function should treat each character separately. Therefore, the expected output for the input 'KDeoALOklOOHserfLoAJSIskdsf' would be:\n\n```\n'KDALOOOHLAJSI'\n```\n\nThis is because all lowercase letters are replaced with an empty string according to the defined regex pattern and substitution rules."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ErrDetect",
+        "task_graph": {
+            "owner_agent": "ErrDetect",
+            "tasks": {
+                "ApplyRegexSubstitution": "Use the defined regex pattern to remove lowercase substrings from the input string.",
+                "DefineRegexPattern": "Create a regex pattern to match lowercase substrings."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineRegexPattern",
+                    "to": "ApplyRegexSubstitution"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior if the input string contains no lowercase letters? Is the function supposed to return an empty string in such cases?"
+            },
+            {
+                "from": "TestGen",
+                "content": "What is the expected behavior if the input string contains only lowercase letters? Is the function supposed to return an empty string in such cases?"
+            },
+            {
+                "from": "FormatPro",
+                "content": "What is the expected behavior if the input string contains both uppercase and lowercase letters, but no consecutive lowercase substrings? Is the function supposed to return the entire string in such cases?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "OptiCode",
+                "content": "The expected behavior for the function when the input string contains no lowercase letters should not return an empty string. Instead, it should return the original input string unchanged. This ensures that the function correctly handles edge cases and maintains the integrity of strings that do not contain any lowercase substrings to begin with."
+            },
+            {
+                "to": "TestGen",
+                "content": "Yes, the function should return an empty string if the input string contains only lowercase letters. Given the regex pattern defined to match and remove lowercase substrings, applying this pattern to a string that consists solely of lowercase letters will result in all those characters being removed, leaving no characters behind. Therefore, the expected behavior is for the function to return an empty string in such cases."
+            },
+            {
+                "to": "FormatPro",
+                "content": "Yes, in such cases where the input string contains both uppercase and lowercase letters but no consecutive lowercase substrings, the function should return the entire string as it does not match the defined regex pattern. The regex pattern is designed to match and remove lowercase substrings, so if there are no such substrings, nothing should be removed from the input string."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "TestGen",
+        "task_graph": {
+            "owner_agent": "TestGen",
+            "tasks": {
+                "Regex Initialization": "Initialize the regex pattern to match lowercase substrings.",
+                "String Processing": "Apply the regex pattern to remove lowercase substrings from the input string."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Regex Initialization",
+                    "to": "String Processing"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior if the input string contains no lowercase letters?"
+            },
+            {
+                "from": "ErrDetect",
+                "content": "What is the expected behavior if the input string contains only lowercase letters?"
+            },
+            {
+                "from": "FormatPro",
+                "content": "What is the expected behavior if the input string contains both uppercase and lowercase letters, but no consecutive lowercase substrings?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "OptiCode",
+                "content": "The expected behavior for the input string containing no lowercase letters would be that the function returns the original string unchanged. This is because there are no lowercase substrings to remove according to the defined regex pattern."
+            },
+            {
+                "to": "ErrDetect",
+                "content": "The expected behavior for an input string that contains only lowercase letters would be to return an empty string. This is because the regex pattern initialized to match and remove all lowercase substrings will match the entire input string in this case. Therefore, the String Processing task would result in no characters remaining after removal."
+            },
+            {
+                "to": "FormatPro",
+                "content": "The expected behavior for the given TG when the input string contains both uppercase and lowercase letters but no consecutive lowercase substrings would be to remove all lowercase letters while leaving the uppercase letters intact. \n\nFor example, if the input string is \"KDeoALOklOOHserfLoAJSIskdsf\", the function should return \"KDALOOOHSAJSI\" after applying the regex pattern to remove all lowercase substrings."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "FormatPro",
+        "task_graph": {
+            "owner_agent": "FormatPro",
+            "tasks": {
+                "ApplyRegexSubstitution": "Use the defined regex pattern to remove lowercase substrings from the given string.",
+                "DefineRegexPattern": "Create a regex pattern to match lowercase substrings in the input string."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineRegexPattern",
+                    "to": "ApplyRegexSubstitution"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior if the input string contains no lowercase letters? Is the function supposed to return an empty string in such cases?"
+            },
+            {
+                "from": "ErrDetect",
+                "content": "What is the expected behavior if the input string contains only lowercase letters? Is the function supposed to return an empty string in such cases?"
+            },
+            {
+                "from": "TestGen",
+                "content": "What is the expected behavior if the input string contains both uppercase and lowercase letters, but no consecutive lowercase substrings? Is the function supposed to return the entire string in such cases?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "OptiCode",
+                "content": "The expected behavior when the input string contains no lowercase letters should not result in an empty string. The function should return the original string unchanged. This ensures that the function correctly handles edge cases and maintains the integrity of strings that do not contain any lowercase substrings to begin with."
+            },
+            {
+                "to": "ErrDetect",
+                "content": "Yes, the function should return an empty string if the input string contains only lowercase letters. Given the task of removing all lowercase substrings from the input string, if there are no characters that are not lowercase, then nothing remains after removal, resulting in an empty string. This behavior aligns with the provided test cases as well."
+            },
+            {
+                "to": "TestGen",
+                "content": "Yes, in such cases where the input string contains both uppercase and lowercase letters but no consecutive lowercase substrings, the function should return the entire string as it does not match the defined regex pattern. The regex pattern is designed to match and remove lowercase substrings, so if there are none, the original string remains unchanged."
+            }
+        ]
+    }
+]

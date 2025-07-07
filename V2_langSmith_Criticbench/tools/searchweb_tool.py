@@ -15,7 +15,6 @@ websearch_instructions = """transform the long question below into a small and c
 tavily_search = TavilySearchResults(max_results=3)
 
 def search_web(state: State):
-# def search_web(state: State) -> None:
     """Retrieve info from the web using the state's context and store the results."""
     context = state["context"]
     req = context.current_search
@@ -28,7 +27,8 @@ def search_web(state: State):
     message = [SystemMessage(content=system_message)]
     keywords = llm.invoke(message)
     search_docs = tavily_search.invoke(keywords.content)
-
+    print("search_docs : ",search_docs)
+    print("Type:", type(search_docs))
     formatted_search_docs = "\n".join(
         [
             # f'Link browsed :{doc["url"]}\nSummary of the content \n:{doc["content"]}\n'

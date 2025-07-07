@@ -1,0 +1,137 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "FindAuthorBirthDate": "Identify the author of 'The Telltale Head' and check their birth date."
+            },
+            "orders": [
+                {
+                    "condition": "match",
+                    "from": "FindAuthorBirthDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "The TG lacks a task to actually find the birth date of the identified author. You should include a task to verify if the identified author was born on February 15, 1954. \n\nSuggested new task: \n\"VerifyAuthorBirthDate: Check if the identified author's birth date is February 15, 1954.\""
+            },
+            {
+                "from": "WiserCausality",
+                "content": "The TG still lacks a task to identify the author of \"The Telltale Head.\" You should include a task to find out who wrote this book before proceeding to check their birth date. Suggested new task: \"IdentifyAuthor: Determine the author(s) of 'The Telltale Head'.\""
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "Logical errors or unclear dependencies: The current TG does not specify how to handle cases where multiple authors wrote \"The Telltale Head.\" You should clarify how to proceed if there are multiple authors. Suggested new task: \"HandleMultipleAuthors: If more than one author is identified, determine which author was born on February 15, 1954.\""
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "CheckBirthDate": "Verify which writer was born on February 15, 1954",
+                "FindWriters": "Identify the writers of 'The Telltale Head'"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FindWriters",
+                    "to": "CheckBirthDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the source of the information about \"The Telltale Head\" writers? The TG assumes this information is correct but does not verify it."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the source of the birthdate information for the writers of \"The Telltale Head\"? The TG assumes this information is correct but does not verify it."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the source of the information about \"The Telltale Head\" writers and their birthdates? The TG assumes this information is correct but does not verify it."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausality",
+        "task_graph": {
+            "owner_agent": "WiserCausality",
+            "tasks": {
+                "CheckBirthDate": "Verify which writer was born on February 15, 1954",
+                "IdentifyWriters": "Find the writers of 'The Telltale Head'"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyWriters",
+                    "to": "CheckBirthDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the source of the information about \"The Telltale Head\" writers? The TG assumes this information is correct but does not verify it."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the source of the birthdate information for the writers of \"The Telltale Head\"? The TG assumes this information is correct but does not verify it."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the source of the information about \"The Telltale Head\" writers and their birthdates? The TG assumes this information is correct but does not verify it."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "CheckAuthorBirthdate": "Identify which author was born on February 15, 1954 from the fetched details.",
+                "FetchBookDetails": "Retrieve information about the book 'The Telltale Head' including its authors."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "FetchBookDetails",
+                    "to": "CheckAuthorBirthdate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the source of the information for the authors of \"The Telltale Head\"? The TG assumes this information is available without specifying how to obtain it."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the source of the birthdate information for the authors of \"The Telltale Head\"? The TG assumes this information is available without specifying how to obtain it."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the source of the information for the authors of \"The Telltale Head\"? The TG assumes this information is available without specifying how to obtain it, and similarly, what is the source of the birthdate information for the authors? The TG should specify how these details will be retrieved."
+            }
+        ],
+        "Answers": []
+    }
+]

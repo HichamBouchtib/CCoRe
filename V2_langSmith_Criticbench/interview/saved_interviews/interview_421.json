@@ -1,0 +1,225 @@
+[
+    {
+        "TG_Owner": "DataPreprocessorAgent",
+        "task_graph": {
+            "owner_agent": "DataPreprocessorAgent",
+            "tasks": {
+                "Count Musical Instruments": "Calculate the total number of musical instruments based on given quantities."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Count Musical Instruments",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the definition of a \"musical instrument\" in this context, and should instruments like violins and trombones be counted individually?"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What is the definition of a \"musical instrument\" in this context, and should instruments like violins and trombones be counted individually? No question, Thanks."
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "FeatureEngineerAgent",
+        "task_graph": {
+            "owner_agent": "FeatureEngineerAgent",
+            "tasks": {
+                "Counting Instruments": "Summing up the total number of musical instruments."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Counting Instruments",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of a \"musical instrument\" in this context, as some items listed (like violins and trombones) are clearly musical instruments, but others (like flutes and trumpets) might be considered more specific types? This could affect the counting process."
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the scope of \"musical instruments\" in this context, as both violins and trombones are clearly musical instruments, but flutes and trumpets might be considered more specific types? This could affect the counting process."
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What is the exact count of each type of musical instrument, and are there any other types of instruments not mentioned in the query? This can help ensure accuracy in the counting process."
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ModelSelectorAgent",
+        "task_graph": {
+            "owner_agent": "ModelSelectorAgent",
+            "tasks": {
+                "Counting Instruments": "Calculate the total number of musical instruments."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Counting Instruments",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the purpose of the \"End\" task in this TG, and does it add value to the process? The TG seems straightforward but lacks details on how the counting will be performed."
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the basis for the \"Calculate the total number of musical instruments\" task? How will the system determine which items are considered musical instruments without explicit criteria?"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What criteria will be used to determine if an item is a musical instrument, and how will the system account for the specific counts provided (three violins, three trombones, one flute, and four trumpets)?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "HyperTunerAgent",
+        "task_graph": {
+            "owner_agent": "HyperTunerAgent",
+            "tasks": {
+                "Count Musical Instruments": "Calculating the total number of musical instruments based on given quantities."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Count Musical Instruments",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of a \"musical instrument\" in this context, considering you have listed specific types like violins and trombones but not defining if they are counted individually or as a group?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the scope of \"musical instruments\" in this context? Are accessories or parts of these instruments (like valves on a trumpet) included in the count, or are we to consider each instrument type as a whole?"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the scope of \"musical instruments\" in this context? Are we to count each individual instrument (e.g., considering a violin as one instrument) or are we to consider the total number of different types of instruments regardless of quantity (e.g., counting violins, trombones, flute, and trumpets)?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "EvaluatorAgent",
+        "task_graph": {
+            "owner_agent": "EvaluatorAgent",
+            "tasks": {
+                "CountFlute": "Count the number of flutes.",
+                "CountTrombones": "Count the number of trombones.",
+                "CountTrumpets": "Count the number of trumpets.",
+                "CountViolins": "Count the number of violins."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountViolins",
+                    "to": "AddViolinsToTotal"
+                },
+                {
+                    "condition": "success",
+                    "from": "CountTrombones",
+                    "to": "AddTrombonesToTotal"
+                },
+                {
+                    "condition": "success",
+                    "from": "CountFlute",
+                    "to": "AddFluteToTotal"
+                },
+                {
+                    "condition": "success",
+                    "from": "CountTrumpets",
+                    "to": "AddTrumpetsToTotal"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddViolinsToTotal",
+                    "to": "AddTrombonesToTotal"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddTrombonesToTotal",
+                    "to": "AddFluteToTotal"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddFluteToTotal",
+                    "to": "AddTrumpetsToTotal"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddTrumpetsToTotal",
+                    "to": "CalculateTotalInstruments"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the purpose of the \"AddViolinsToTotal\", \"AddTrombonesToTotal\", \"AddFluteToTotal\", and \"AddTrumpetsToTotal\" tasks? The TG does not specify how these tasks work, which could lead to ambiguity in the execution."
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the intended operation of the \"AddViolinsToTotal\", \"AddTrombonesToTotal\", \"AddFluteToTotal\", and \"AddTrumpetsToTotal\" tasks? The TG does not specify how these tasks work, which could lead to ambiguity in the execution."
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

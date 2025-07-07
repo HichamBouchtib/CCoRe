@@ -7,34 +7,48 @@ from pydantic import BaseModel, Field, field_validator
 from llm import llm
 
 GC_scoring_instructions = """"
-You are an expert in evaluating AI-generated responses as "Wrong" or "True".
+You are an expert in evaluating AI-generated responses as false or true.
 Your task is to verify whether the response is correct in compraison with a reference response.
-the agent response: {response}
-the reference response: {reference_response}
+Return only a valid JSON object in the following format:
+{{"score": true}}   # if the agent response is correct
+{{"score": false}}  # if the agent response is incorrect
+
+Agent response: {response}
+Reference response: {reference_response}
 """
 
 gold_label = """
-You are a judge. Is the following response correct?
+You are a JSON-only judge.
+
+Your task is to return a JSON object with a single key `score`, with value `true` (correct) or `false` (wrong) — the boolean values, not strings.
+
+Do not explain your answer.
+Do not return anything except JSON.
+Do not return null, None, or undefined.
+
 Response: {G}
 Reference: {expected}
-Answer only with True (correct) or False (wrong).
+
+Return ONLY:
+{{"score": true}}   # if correct
+or
+{{"score": false}}  # if wrong
 """
 
 critique_label = """
-You are a judge. Your job is answer with True or False.
+Your job is to return only a valid JSON object with a single key: `score`, which must be `true` or `false` (the boolean type, not a string)
 
-If the Critique contains at least one valid flaw or improvement related to the Generation, answer: True
+Instructions:
+- If the Critique contains at least one valid flaw or improvement related to the Generation, respond with: {{"score": true}}
+- If the Critique is not helpful or fails to correctly criticize the Generation, respond with: {{"score": false}}
 
-If the Critique is not helpful or fails to correctly criticize the Generation, answer: False
+Do not explain your answer. Do not output anything else. Do not include null, None, or strings.
 
 Critique:
 {Q}
 
 Generation:
 {G}
-
-Respond Only with True or False 
-Never respond with null, None, or any other value.
 """
 
 # Global counters
@@ -47,37 +61,73 @@ FN = 0
 class BinaryScore(BaseModel):
     score: bool = Field(description="True if the response is correct, False if it is wrong.")
 
-@traceable(name="criticbench", metadata={"llm": "qwen2.5"})
+# @traceable(name="criticbench", metadata={"llm": "qwen2.5"})
+# def target(inputs: dict) -> dict:
+#     initial_state = State(
+#         # topic=topic,
+#         topic=inputs["topic"], # from the dataset
+#         query=inputs["query"], 
+#         WS=50,
+#         wiseragents=[],
+#         tg_candidates=[],
+#         tg_chosen=None,
+#         context=Context(),
+#         interview=[],
+#         human_wiseragent_feedback="",
+#         feedback_handled=True,
+#         max_num_turns=3,
+#         G_response="",
+#         Q_response="",
+#         C_response="",
+#         messages=[]
+#     )
+    
+#     print("Evaluating with query:\n", inputs["query"])
+#     final_state = graph.invoke(initial_state)
+
+#     return {
+#         "G_answer": final_state["g_response"] or "N/A",
+#         "Q_answer": final_state["q_response"] or "N/A",
+#         "C_answer": final_state["c_response"] or "N/A",
+#     }
+
 def target(inputs: dict) -> dict:
-    # topic = "AI in cybersecurity"  # this mimics the initial user input step
-    initial_state = State(
-        # topic=topic,
-        topic=inputs["topic"], # from the dataset
-        query=inputs["query"], 
-        WS=50,
-        wiseragents=[],
-        tg_candidates=[],
-        tg_chosen=None,
-        context=Context(),
-        interview=[],
-        human_wiseragent_feedback="",
-        feedback_handled=True,
-        max_num_turns=3,
-        G_response="",
-        Q_response="",
-        C_response="",
-        messages=[]
-    )
-    print("Evaluating with query:\n", inputs["query"])
-    final_state = graph.invoke(initial_state)
+    from langsmith import traceable
 
-    return {
-        "G_answer": final_state["g_response"] or "N/A",
-        "Q_answer": final_state["q_response"] or "N/A",
-        "C_answer": final_state["c_response"] or "N/A",
-    }
+    topic = inputs.get("topic", "General")
 
-def accuracy(inputs: dict, outputs: dict, reference_outputs: dict):
+    @traceable(name="criticbench", metadata={"llm": "qwen2.5", "topic": topic})
+    def _inner_target(inputs):
+        initial_state = State(
+            # topic=inputs["topic"],
+            topic=topic,
+            query=inputs["query"], 
+            WS=50,
+            wiseragents=[],
+            tg_candidates=[],
+            tg_chosen=None,
+            context=Context(),
+            interview=[],
+            human_wiseragent_feedback="",
+            feedback_handled=True,
+            max_num_turns=3,
+            G_response="",
+            Q_response="",
+            C_response="",
+            messages=[]
+        )
+        print("Evaluating with query:\n", inputs["query"])
+        final_state = graph.invoke(initial_state)
+
+        return {
+            "G_answer": final_state["g_response"] or "N/A",
+            "Q_answer": final_state["q_response"] or "N/A",
+            "C_answer": final_state["c_response"] or "N/A",
+        }
+
+    return _inner_target(inputs)
+
+def accuracy(outputs: dict, reference_outputs: dict):
     
     G = outputs.get("G_answer", "").strip().lower()
     C = outputs.get("C_answer", "").strip().lower()
@@ -112,106 +162,184 @@ def accuracy(inputs: dict, outputs: dict, reference_outputs: dict):
     #     "Expected": expected
     # }
     return [
-        {"key": "G_score", "score": G_score},
-        {"key": "C_score", "score": C_score}
+        {"key": "G (Generation)", "score": G_score},
+        {"key": "C (Correction)", "score": C_score}
         ]
 
-def f1score(inputs: dict, outputs: dict, reference_outputs: dict):
-    Q = outputs.get("Q_answer", "").strip().lower()
-    G = outputs.get("G_answer", "").strip().lower()
-    expected = reference_outputs.get("answer", "").strip().lower()
-
-    structured_llm = llm.with_structured_output(BinaryScore)
-    gold_label_instructions = gold_label.format(G=G, expected=expected)
-    # Use LLM to judge if G is wrong (gold label)
-    is_G_wrong = structured_llm.invoke(gold_label_instructions)
-    is_G_wrong = is_G_wrong.score
-    print("is_G_wrong :", is_G_wrong)
-    if is_G_wrong in ["True", "true", True]:
-        is_G_wrong = 1
-    if is_G_wrong in["Wrong", "wrong", False]:
-        is_G_wrong = 0
-
-
-    structured_llm = llm.with_structured_output(BinaryScore)
-    critique_label_instructions = critique_label.format(G=G, Q=Q)
-    print("critique_label_instructions :", critique_label_instructions)
-    # Use LLM to judge if Q correctly criticized it
-
-    Q_identified_wrong = None
-    max_retries = 10
-
-    for attempt in range(max_retries):
-        try:
-            response = structured_llm.invoke(critique_label_instructions)
-            print(f"LLM response (attempt {attempt + 1}):", response)
-
-            if response is not None and hasattr(response, "score") and response.score is not None:
-                Q_identified_wrong = response.score
-                break
-            else:
-                print(f"⚠️ Attempt {attempt + 1}: score is None or invalid response.")
-
-        except Exception as e:
-            print(f"❌ Attempt {attempt + 1} failed with exception: {e}")
-
-    print(" .score :", Q_identified_wrong)
-    if Q_identified_wrong in ["True", "true", True]:
-        Q_identified_wrong = 1
-    if Q_identified_wrong in["Wrong", "wrong", False]:
-        Q_identified_wrong = 0
-
-    global TP, FP, FN
+def f1score_summary_evaluator(outputs: list[dict], reference_outputs: list[dict]) -> dict:
     TP = 0
     FP = 0
     FN = 0
 
-    if Q_identified_wrong and is_G_wrong:
-        TP += 1  # correct discrimination
-    elif Q_identified_wrong and not is_G_wrong:
-        FP += 1  # criticized a correct response
-    elif not Q_identified_wrong and is_G_wrong:
-        FN += 1  # missed a wrong response
+    for output_dict, reference_output_dict in zip(outputs, reference_outputs):
+        Q = output_dict.get("Q_answer", "").strip().lower()
+        G = output_dict.get("G_answer", "").strip().lower()
+        expected = reference_output_dict.get("answer", "").strip().lower()
 
-    return [
-        {"key": "is_G_wrongScore", "score": is_G_wrong},
-        {"key": "Q_identified_wrongScore", "score": Q_identified_wrong},
-        # {"key": "Expected", "score": expected},
-        {"key": "TP", "score": TP},
-        {"key": "FP", "score": FP},
-        {"key": "FN", "score": FN}
-    ]
+        # Gold label: is G wrong?
+        structured_llm = llm.with_structured_output(BinaryScore)
+        gold_label_instructions = gold_label.format(G=G, expected=expected)
+
+        is_G_wrong = None
+        max_retries = 5
+        for attempt in range(max_retries):
+            try:
+                response = structured_llm.invoke(gold_label_instructions)
+                if response is not None and hasattr(response, "score") and response.score is not None:
+                    is_G_wrong = response.score
+                    break
+            except Exception as e:
+                print(f"[GOLD] Attempt {attempt + 1} failed: {e}")
+        if is_G_wrong is None:
+            print("⚠️ Could not determine gold label, skipping this sample.")
+            continue
+
+        # is_G_wrong = structured_llm.invoke(gold_label_instructions).score
+
+        if is_G_wrong in ["True", "true", True]:
+            is_G_wrong = 1
+        elif is_G_wrong in ["Wrong", "wrong", False]:
+            is_G_wrong = 0
+
+        # Critique: did Q correctly identify G as wrong?
+        structured_llm = llm.with_structured_output(BinaryScore)
+        critique_label_instructions = critique_label.format(G=G, Q=Q)
+
+        Q_identified_wrong = None
+        max_retries = 5
+
+        for attempt in range(max_retries):
+            try:
+                response = structured_llm.invoke(critique_label_instructions)
+                if response is not None and hasattr(response, "score") and response.score is not None:
+                    Q_identified_wrong = response.score
+                    break
+            except Exception as e:
+                print(f"Attempt {attempt + 1} failed: {e}")
+
+        if Q_identified_wrong in ["True", "true", True]:
+            Q_identified_wrong = 1
+        elif Q_identified_wrong in ["Wrong", "wrong", False]:
+            Q_identified_wrong = 0
+
+        # Count metrics
+        if Q_identified_wrong and is_G_wrong:
+            TP += 1
+        elif Q_identified_wrong and not is_G_wrong:
+            FP += 1
+        elif not Q_identified_wrong and is_G_wrong:
+            FN += 1
+
+    # Compute precision, recall, f1
+    if TP + FP == 0 or TP + FN == 0:
+        return {"key": "Q (Critique)", "score": 0.0}
+
+    precision = TP / (TP + FP)
+    recall = TP / (TP + FN)
+    f1 = 2 * precision * recall / (precision + recall)
+
+    return {
+        "key": "Q (Critique)",
+        "score": f1
+        # "precision": precision,
+        # "recall": recall
+        # "TP": TP,
+        # "FP": FP,
+        # "FN": FN
+    }
 
 client = Client()
 
+
+all_examples = list(client.list_examples(dataset_name="CriticBench_dataset", limit=3825))
+resume_from = 2775
+remaining_examples = all_examples[resume_from:]
 experiment_results = client.evaluate(
-    target,  # your traced MAS function
+    target,
     # data="CriticBench",
-    data=client.list_examples(dataset_name="CriticBench", limit=2),
-    evaluators=[accuracy, f1score],
-    experiment_prefix="CriticBench",
-    max_concurrency=2,
+    data=remaining_examples,
+    evaluators=[accuracy],
+    summary_evaluators=[f1score_summary_evaluator],
+    experiment_prefix="CoopCompLLMMAS_CriticBench",
+    max_concurrency=2
+    # metadata={"topic": example.inputs["topic"]}
 )
-
-# G accuracy Calculation
-# G_finalscore = G_accuracy/3825
-G_finalscore = G_accuracy/1
-print(f"G Final Score: {G_finalscore}")
-
-# C accuracy Calculation
-# C_finalscore = C_accuracy/3825
-C_finalscore = C_accuracy/1
-print(f"C Final Score: {C_finalscore}")
-
-# F1 Score Calculation
-precision = TP / (TP + FP) if (TP + FP) > 0 else 0
-recall = TP / (TP + FN) if (TP + FN) > 0 else 0
-f1_score = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
-print(f"Q F1 Score:  {f1_score:.3f}")
-
-# import json
-# from agentevals.trajectory.llm import (create_trajectory_llm_as_judge, TRAJECTORY_ACCURACY_PROMPT_WITH_REFERENCE)
-# evaluator = create_trajectory_llm_as_judge(
-#     prompt=TRAJECTORY_ACCURACY_PROMPT_WITH_REFERENCE,
-#     model="openai:o3-mini"
+# experiment_results = client.evaluate(
+#     target,
+#     # data="CriticBench",
+#     data=client.list_examples(dataset_name="CriticBench_dataset", limit=3825),
+#     evaluators=[accuracy],
+#     summary_evaluators=[f1score_summary_evaluator],
+#     experiment_prefix="CoopCompLLMMAS_CriticBench",
+#     max_concurrency=2
+#     # metadata={"topic": example.inputs["topic"]}
 # )
+
+
+# correctness
+# from openevals.llm import create_llm_as_judge
+# from openevals.prompts import CORRECTNESS_PROMPT
+
+# def correctness_evaluator(inputs: dict, outputs: dict, reference_outputs: dict):
+#     evaluator = create_llm_as_judge(
+#         prompt=CORRECTNESS_PROMPT,
+#         model="openai:o3-mini",
+#         feedback_key="correctness",
+#     )
+#     eval_result = evaluator(
+#         inputs=inputs,
+#         outputs=outputs,
+#         reference_outputs=reference_outputs
+#     )
+#     return eval_result
+
+
+# from collections import defaultdict
+# from langsmith import Client
+# client = Client()
+# # Load all examples from the full dataset
+# all_examples = client.list_examples(dataset_name="CriticBench_dataset")
+# # Group by topic
+# topic_groups = defaultdict(list)
+# for ex in all_examples:
+#     topic = ex.inputs.get("topic", "General")
+#     topic_groups[topic].append(ex)
+# # Loop over each topic and evaluate separately as a new experiment
+# for topic, examples in topic_groups.items():
+#     experiment_name = f"CoopCompLLMMAS_{topic.replace(' ', '_')}"
+#     print(f"\n🔍 Starting experiment for topic: {topic} ({len(examples)} examples)")
+#     client.evaluate(
+#         target,
+#         data=examples,
+#         evaluators=[accuracy],
+#         summary_evaluators=[f1score_summary_evaluator],
+#         experiment_prefix=experiment_name,
+#         max_concurrency=2
+#     )
+#     print(f"✅ Finished experiment for topic: {topic}")
+
+
+
+
+# split_limits = {
+#     "CriticBench_Commonsense_Reasoning": 1129,
+#     "CriticBench_Mathematical_Reasoning": 1304,
+#     "CriticBench_Code_Generation": 464,
+#     "CriticBench_Symbolic_Reasoning": 646,
+#     "CriticBench_Algorithmic_task": 282
+# }
+# for split, limit in split_limits.items():
+#     print(f"Processing split: {split}")
+#     experiment_results = client.evaluate(
+#         target,
+#         # data="CriticBench",
+#         data=client.list_examples(dataset_name=split, limit=limit),
+#         evaluators=[accuracy],
+#         summary_evaluators=[f1score_summary_evaluator],
+#         experiment_prefix=f"CoopCompLLMMAS_{split}",
+#         max_concurrency=2
+#     )
+
+
+
+

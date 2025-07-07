@@ -1,0 +1,98 @@
+[
+    {
+        "TG_Owner": "NetSecWise",
+        "task_graph": {
+            "owner_agent": "NetSecWise",
+            "tasks": {
+                "Generate Response": "Formulate an answer based on the gathered information.",
+                "Query Clarification": "Clarify the user's query by asking for more details if necessary.",
+                "Search Information": "Search for relevant information about the term 'whats' in a broader context."
+            },
+            "orders": [
+                {
+                    "condition": "needed",
+                    "from": "Query Clarification",
+                    "to": "Search Information"
+                },
+                {
+                    "condition": "success",
+                    "from": "Search Information",
+                    "to": "Generate Response"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ThreatHunter",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "VulnManager",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ThreatHunter",
+        "task_graph": {
+            "owner_agent": "ThreatHunter",
+            "tasks": {
+                "Generate Answer": "Provide a direct answer based on the clarified query.",
+                "Query Clarification": "Clarify the user's query if it is unclear or incomplete."
+            },
+            "orders": [
+                {
+                    "condition": "needed",
+                    "from": "Query Clarification",
+                    "to": "Generate Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "NetSecWise",
+                "content": "What is the expected response for the clarified query if it turns out to be \"whats\" without any additional context?"
+            },
+            {
+                "from": "VulnManager",
+                "content": "What is the expected response if the clarification of \"whats\" results in an empty or null query?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "VulnManager",
+        "task_graph": {
+            "owner_agent": "VulnManager",
+            "tasks": {
+                "Generate TG": "Create a Task Graph based on the clarified query.",
+                "Query Clarification": "Clarify the user's query if necessary."
+            },
+            "orders": [
+                {
+                    "condition": "needed",
+                    "from": "Query Clarification",
+                    "to": "Generate TG"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "NetSecWise",
+                "content": "What is the expected output or action if the query is clarified? The current TG does not specify what should happen after the TG is generated."
+            },
+            {
+                "from": "ThreatHunter",
+                "content": "What is the expected action if the user's query is clarified and the TG is generated? The current TG does not specify what should happen next after the TG is created."
+            }
+        ],
+        "Answers": []
+    }
+]

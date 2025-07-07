@@ -1,0 +1,167 @@
+[
+    {
+        "TG_Owner": "CodeOptimizer",
+        "task_graph": {
+            "owner_agent": "CodeOptimizer",
+            "tasks": {
+                "AnalyzeFunction": "Analyze the given function for optimization opportunities.",
+                "OptimizeFunction": "Apply optimizations to the provided function based on analysis."
+            },
+            "orders": [
+                {
+                    "condition": "analysis_complete",
+                    "from": "AnalyzeFunction",
+                    "to": "OptimizeFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the current state of the function that needs to be analyzed and optimized? Is there a specific optimization goal in mind, such as reducing execution time or minimizing code complexity?"
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the current state of the function implementation, and are there any specific constraints or requirements for the optimization process?"
+            },
+            {
+                "from": "TestAutomator",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SyntaxChecker",
+        "task_graph": {
+            "owner_agent": "SyntaxChecker",
+            "tasks": {
+                "CheckSyntax": "Check if the defined function has correct syntax.",
+                "DefineFunction": "Define the function max_element with its parameters and docstring.",
+                "ValidateDocstring": "Ensure that the docstring is correctly formatted and provides accurate information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "CheckSyntax"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckSyntax",
+                    "to": "ValidateDocstring"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior if the input list is empty? The current TG does not address this scenario, which could lead to potential errors."
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior if the input list contains non-numeric elements? The current TG does not address this scenario, which could lead to potential errors."
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the expected behavior if the input list contains duplicate maximum elements? The current TG does not address this scenario, which could lead to potential ambiguities in the test cases."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "StyleFormatter",
+        "task_graph": {
+            "owner_agent": "StyleFormatter",
+            "tasks": {
+                "CheckDocstring": "Verify that the docstring is correctly formatted according to PEP8 guidelines.",
+                "CheckFunctionSignature": "Ensure the function signature matches the expected format and includes type hints.",
+                "CheckReturnStatement": "Validate that the return statement is properly formatted."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckDocstring",
+                    "to": "CheckFunctionSignature"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckDocstring",
+                    "to": "CheckReturnStatement"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckFunctionSignature",
+                    "to": "CheckReturnStatement"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior if the input list `l` is empty? The current TG does not address this scenario, which could lead to potential errors in the implementation."
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior if the input list `l` contains non-numeric elements? The current TG does not address this scenario, which could lead to potential errors in the implementation."
+            },
+            {
+                "from": "TestAutomator",
+                "content": "What is the expected behavior if the input list `l` contains duplicate maximum elements? The current TG does not address this scenario, which could lead to potential errors in the implementation."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestAutomator",
+        "task_graph": {
+            "owner_agent": "TestAutomator",
+            "tasks": {
+                "AddDocstring": "Add docstring to the function.",
+                "DefineFunction": "Define the function signature for max_element.",
+                "GenerateTestCases": "Generate test cases based on provided examples.",
+                "RunTests": "Execute generated tests and validate the function's correctness."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "AddDocstring"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddDocstring",
+                    "to": "GenerateTestCases"
+                },
+                {
+                    "condition": "success",
+                    "from": "GenerateTestCases",
+                    "to": "RunTests"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeOptimizer",
+                "content": "What is the expected behavior if the input list is empty? This scenario should be considered in the test cases."
+            },
+            {
+                "from": "SyntaxChecker",
+                "content": "What is the expected behavior if the input list contains non-numeric elements? This scenario should be considered in the test cases."
+            },
+            {
+                "from": "StyleFormatter",
+                "content": "What is the expected behavior if the input list contains duplicate maximum elements? This scenario should be considered in the test cases."
+            }
+        ],
+        "Answers": []
+    }
+]

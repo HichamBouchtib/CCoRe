@@ -1,0 +1,162 @@
+[
+    {
+        "TG_Owner": "OptiCode",
+        "task_graph": {
+            "owner_agent": "OptiCode",
+            "tasks": {
+                "AnalyzeFunction": "Analyze the given function for optimization opportunities.",
+                "OptimizeFunction": "Apply optimizations to the provided function based on analysis."
+            },
+            "orders": [
+                {
+                    "condition": "analysis_complete",
+                    "from": "AnalyzeFunction",
+                    "to": "OptimizeFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "ErrDetect",
+                "content": "What is the current state of the function to be analyzed, and are there any specific optimization goals in mind?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior for `longest` when the input list contains only empty strings?"
+            },
+            {
+                "from": "FormatPro",
+                "content": "What is the expected behavior of `longest` when the input list contains only strings of the same length?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ErrDetect",
+        "task_graph": {
+            "owner_agent": "ErrDetect",
+            "tasks": {
+                "CheckSyntax": "Check for any syntax errors in the provided Python code snippet.",
+                "DefineFunction": "Define the function signature with proper parameters and return type.",
+                "ValidateLogic": "Ensure that the logic within the function is correct according to the problem statement."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "CheckSyntax"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckSyntax",
+                    "to": "ValidateLogic"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior for `longest` when the input list contains only empty strings?"
+            },
+            {
+                "from": "TestMaster",
+                "content": "What is the expected behavior of `longest` when the input list contains only strings of the same length?"
+            },
+            {
+                "from": "FormatPro",
+                "content": "What is the expected behavior of `longest` when the input list contains a mix of strings and non-string elements?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestMaster",
+        "task_graph": {
+            "owner_agent": "TestMaster",
+            "tasks": {
+                "Function Analysis": "Analyze the function signature and requirements.",
+                "Test Case Generation": "Generate test cases based on the provided function.",
+                "Test Execution": "Execute the generated tests to ensure the function works as expected."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Function Analysis",
+                    "to": "Test Case Generation"
+                },
+                {
+                    "condition": "success",
+                    "from": "Test Case Generation",
+                    "to": "Test Execution"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior of the function when the input list contains only one string? This scenario is not covered by the provided test cases."
+            },
+            {
+                "from": "ErrDetect",
+                "content": "What is the expected behavior of the function when the input list contains multiple strings of different lengths but no single longest string? For example, what should `longest(['a', 'bb', 'cc'])` return?"
+            },
+            {
+                "from": "FormatPro",
+                "content": "What is the expected behavior of the function when the input list is empty? This scenario is not covered by the provided test cases."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "FormatPro",
+        "task_graph": {
+            "owner_agent": "FormatPro",
+            "tasks": {
+                "CheckLogic": "Verify the logic of the provided code snippet.",
+                "DefineFunction": "Define the function with proper docstring and type hints.",
+                "ImproveStyle": "Refine the code style to match best practices.",
+                "TestFunction": "Write test cases for the function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunction",
+                    "to": "CheckLogic"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckLogic",
+                    "to": "ImproveStyle"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImproveStyle",
+                    "to": "TestFunction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "OptiCode",
+                "content": "What is the expected behavior when the input list contains only empty strings? The current TG does not address this scenario."
+            },
+            {
+                "from": "ErrDetect",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TestMaster",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

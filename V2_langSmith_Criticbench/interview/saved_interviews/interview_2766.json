@@ -1,0 +1,90 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateNextDate": "Compute the next date based on the identified components.",
+                "IdentifyDateComponents": "Determine the month, day, and year components of the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyDateComponents",
+                    "to": "CalculateNextDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date, and how are we determining tomorrow's date without it? The TG does not specify the current date, which is necessary to calculate tomorrow's date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "IdentifyDate": "Determine the date tomorrow based on today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "IdentifyDate",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is today's date? The current TG does not specify today's date, which is necessary to determine tomorrow's date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is today's date?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date tomorrow from the given date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the given date format, and do we need to consider leap years for this calculation? The TG does not specify the exact date format, which might affect the calculation. Additionally, while the user query mentions a specific date (Tue, 7/9/1972), the TG does not explicitly use or validate this date in its tasks."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the expected date format for the output, and should the TG consider the given date as a local date or UTC?"
+            }
+        ],
+        "Answers": []
+    }
+]

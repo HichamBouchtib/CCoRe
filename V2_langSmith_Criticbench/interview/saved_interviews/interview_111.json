@@ -1,0 +1,181 @@
+[
+    {
+        "TG_Owner": "EverydayWise",
+        "task_graph": {
+            "owner_agent": "EverydayWise",
+            "tasks": {
+                "PP_Policy_Checking": "Checking Planned Parenthood's policies regarding sharing personal health information with third parties such as universities.",
+                "University_Policy_Checking": "Checking the university's policies on receiving and handling health-related information from external sources like Planned Parenthood."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PP_Policy_Checking",
+                    "to": "University_Policy_Checking"
+                },
+                {
+                    "condition": "policy_compliance",
+                    "from": "University_Policy_Checking",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What specific actions will be taken if both policies allow Planned Parenthood to share this information?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What specific actions will be taken if both policies do not allow Planned Parenthood to share this information?"
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "What specific actions will be taken if Planned Parenthood's policy allows sharing but the university's policy does not?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialEtiquetteAgent",
+            "tasks": {
+                "Consultation_with_Legal_Advisor": "Seeking legal advice on the implications of sharing health information.",
+                "PP_Policy_Review": "Reviewing Planned Parenthood's policies regarding patient confidentiality.",
+                "University_Contract_Review": "Examining the university's contract with Planned Parenthood for any relevant clauses."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PP_Policy_Review",
+                    "to": "University_Contract_Review"
+                },
+                {
+                    "condition": "success",
+                    "from": "University_Contract_Review",
+                    "to": "Consultation_with_Legal_Advisor"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What specific actions will Planned Parenthood take if they are informed of a patient's Herpes simplex virus status, and how might these actions differ based on the results of the PP_Policy_Review and University_Contract_Review?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What specific actions will Planned Parenthood take if they are informed of a patient's Herpes simplex virus status, and how might these actions differ based on the results of the PP_Policy_Review and University_Contract_Review? No question, Thanks."
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProblemSolver",
+        "task_graph": {
+            "owner_agent": "ProblemSolver",
+            "tasks": {
+                "Consult Legal Expert": "Seeking legal advice to determine if there are any laws or regulations that prohibit or require disclosure of medical information.",
+                "Information Gathering": "Collecting information about the policies of Planned Parenthood regarding data sharing with educational institutions.",
+                "Research University Policies": "Examining the privacy and confidentiality policies of the university in question to understand their stance on such disclosures."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Information Gathering",
+                    "to": "Research University Policies"
+                },
+                {
+                    "condition": "failure",
+                    "from": "Information Gathering",
+                    "to": "Consult Legal Expert"
+                },
+                {
+                    "condition": "conflicting_policies",
+                    "from": "Research University Policies",
+                    "to": "Consult Legal Expert"
+                },
+                {
+                    "condition": "no_conflict",
+                    "from": "Research University Policies",
+                    "to": "End"
+                },
+                {
+                    "condition": "legal_advice",
+                    "from": "Consult Legal Expert",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What specific actions will Planned Parenthood take if they are required to disclose medical information according to their policies?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What specific actions will the university take if it is found to have a policy requiring disclosure of such medical information?"
+            },
+            {
+                "from": "LogicalDeductor",
+                "content": "What specific actions will Planned Parenthood take if they are required to disclose medical information according to their policies? (This question is already asked, consider rephrasing it to avoid redundancy and clarify the exact scope of actions taken by Planned Parenthood.)"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "LogicalDeductor",
+        "task_graph": {
+            "owner_agent": "LogicalDeductor",
+            "tasks": {
+                "CheckPrivacyPolicy": "Review the privacy policy of Planned Parenthood to determine if they can share personal health information without explicit consent.",
+                "ConsultUniversityPolicies": "Examine university policies regarding student confidentiality and data sharing practices.",
+                "DetermineLegality": "Assess legal implications for both parties involved in potential data sharing."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckPrivacyPolicy",
+                    "to": "ConsultUniversityPolicies"
+                },
+                {
+                    "condition": "success",
+                    "from": "ConsultUniversityPolicies",
+                    "to": "DetermineLegality"
+                },
+                {
+                    "condition": "legal_conclusion",
+                    "from": "DetermineLegality",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayWise",
+                "content": "What specific actions would Planned Parenthood and the university take if data sharing were deemed legal?"
+            },
+            {
+                "from": "SocialEtiquetteAgent",
+                "content": "What specific actions would Planned Parenthood and the university take if data sharing were deemed illegal?"
+            },
+            {
+                "from": "ProblemSolver",
+                "content": "What specific actions would Planned Parenthood and the university take if data sharing were found to be permissible under both their policies and legal frameworks?"
+            }
+        ],
+        "Answers": []
+    }
+]

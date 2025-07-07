@@ -1,0 +1,162 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "BandFormationDateLookup1": "Find the formation date of Killing Joke band",
+                "BandFormationDateLookup2": "Find the formation date of Acceptance band"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "BandFormationDateLookup1",
+                    "to": "BandFormationDateLookup2"
+                },
+                {
+                    "condition": "KillingJoke_date_known",
+                    "from": "BandFormationDateLookup2",
+                    "to": "AnswerDetermination"
+                },
+                {
+                    "condition": "Acceptance_date_known",
+                    "from": "BandFormationDateLookup1",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the source of the information for the band formation dates? Ensure the dates are from a reliable source."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the source of the information for the band formation dates? Ensure the dates are from a reliable source. Additionally, how will you handle cases where the formation dates are not available or differ between sources?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the criteria for determining which band was formed first if both bands have the same formation date?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "BandFormationDateLookup": "Look up the formation dates of both bands to determine which one was formed first."
+            },
+            "orders": [
+                {
+                    "condition": "dates_fetched",
+                    "from": "BandFormationDateLookup",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the source of the formation dates used in the BandFormationDateLookup task? Ensuring the accuracy and reliability of the date sources is crucial for determining which band was formed first."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the criteria for determining which band was formed first if the dates are fetched but not explicitly compared in the TG? Ensuring there's a clear task to compare the dates would address this."
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the expected format of the dates fetched from the BandFormationDateLookup task, and how will they be compared to determine which band was formed first? Ensuring clarity on these aspects is crucial."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausality",
+        "task_graph": {
+            "owner_agent": "WiserCausality",
+            "tasks": {
+                "BandFormationDateRetrievalAcceptance": "Retrieve the formation date of Acceptance band",
+                "BandFormationDateRetrievalKillingJoke": "Retrieve the formation date of Killing Joke band"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "BandFormationDateRetrievalKillingJoke",
+                    "to": "BandFormationDateRetrievalAcceptance"
+                },
+                {
+                    "condition": "formation_date_retrieved",
+                    "from": "BandFormationDateRetrievalAcceptance",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the source of the formation date information for both bands?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the definition of \"formation date\" used for both bands, and how can we ensure consistency in interpreting this date?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What is the source of the formation date information for both bands, and how will conflicts in dates (if any) be resolved?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "AcceptanceFormationYear": "Find the year when Acceptance was formed",
+                "KillingJokeFormationYear": "Find the year when Killing Joke was formed"
+            },
+            "orders": [
+                {
+                    "condition": "both_success",
+                    "from": "KillingJokeFormationYear",
+                    "to": "AcceptanceFormationYear"
+                },
+                {
+                    "condition": "KillingJoke_earlier",
+                    "from": "KillingJokeFormationYear",
+                    "to": "AnswerDetermination"
+                },
+                {
+                    "condition": "Acceptance_earlier",
+                    "from": "AcceptanceFormationYear",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the significance of using \"both_success\" as a condition for comparing the formation years? This seems unnecessary since the subsequent conditions directly compare the years."
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What is the purpose of having separate \"KillingJoke_earlier\" and \"Acceptance_earlier\" conditions when a direct comparison task can determine which band was formed first? This seems redundant given the structure of the TG."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What is the source of the formation year data for Acceptance and Killing Joke, and how can we ensure its accuracy?"
+            }
+        ],
+        "Answers": []
+    }
+]

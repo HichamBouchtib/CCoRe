@@ -1,0 +1,211 @@
+[
+    {
+        "TG_Owner": "DataPreprocessorAgent",
+        "task_graph": {
+            "owner_agent": "DataPreprocessorAgent",
+            "tasks": {
+                "WorkAndPlaySequence": "Generate a sequence based on the user's query where every work is followed by play three times, adding Jack for even iterations and Jill for odd iterations."
+            },
+            "orders": [
+                {
+                    "condition": "complete",
+                    "from": "WorkAndPlaySequence",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the definition of \"three times\" in the context of adding Jack and Jill to the sequence? This clarification is necessary to ensure the correct implementation of the user's query."
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the starting condition for the sequence, and how should the first iteration be handled in terms of adding Jack or Jill?"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What is the duration or number of iterations for the sequence, and how should the sequence conclude?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "FeatureEngineerAgent",
+        "task_graph": {
+            "owner_agent": "FeatureEngineerAgent",
+            "tasks": {
+                "Play": "Simulate play activities.",
+                "Work": "Simulate work activities."
+            },
+            "orders": [
+                {
+                    "condition": "every even time",
+                    "from": "Work",
+                    "to": "Play"
+                },
+                {
+                    "condition": "every odd time",
+                    "from": "Work",
+                    "to": "AddJack"
+                },
+                {
+                    "condition": "every three times",
+                    "from": "Play",
+                    "to": "AddJill"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of \"every three times\" in the context of this task graph? The condition seems to mix timing with a specific action, which might lead to ambiguity."
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the intended meaning of \"every three times\" in the context of this task graph? The condition seems to mix timing with a specific action, which might lead to ambiguity."
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What is the intended sequence of actions for \"every three times\"? Should it refer to a fixed number of iterations or a pattern based on the total count of Work and Play activities?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What is the intended action when \"every three times\" occurs, and how does it interact with the \"AddJack\" and \"AddJill\" tasks? The current TG mixes timing conditions with specific actions without clear precedence rules."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ModelSelectorAgent",
+        "task_graph": {
+            "owner_agent": "ModelSelectorAgent",
+            "tasks": {
+                "AddJackEvenTimes": "Every even time add Jack to the generated phrase.",
+                "AddJillOddTimes": "Every odd time add Jill to the generated phrase.",
+                "SayAllWorkNoPlay": "Generate a phrase 'all work and no play' three times."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "SayAllWorkNoPlay",
+                    "to": "AddJackEvenTimes"
+                },
+                {
+                    "condition": "success",
+                    "from": "AddJackEvenTimes",
+                    "to": "AddJillOddTimes"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What happens if the phrase \"all work and no play\" is not generated three times, but a different number of times?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What happens if the phrase \"all work and no play\" is generated more than three times?"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "What happens if the phrase \"all work and no play\" contains characters other than letters, such as punctuation or numbers?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What happens if the phrase \"all work and no play\" is generated in a format other than three separate instances, such as concatenated together or interspersed with other text?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "HyperTunerAgent",
+        "task_graph": {
+            "owner_agent": "HyperTunerAgent",
+            "tasks": {
+                "Work": "Perform work tasks as specified by the user query."
+            },
+            "orders": [
+                {
+                    "condition": "even_time",
+                    "from": "Work",
+                    "to": "Work"
+                },
+                {
+                    "condition": "odd_time",
+                    "from": "Work",
+                    "to": "Play"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of \"even_time\" and \"odd_time\" in this context? How are these conditions determined, and how many times should the loop run to satisfy the user query?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What is the criteria for determining \"even_time\" and \"odd_time\"? Specifically, how many times should the loop run to satisfy the user query, and what are the actions to be taken at each iteration?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "EvaluatorAgent",
+        "task_graph": {
+            "owner_agent": "EvaluatorAgent",
+            "tasks": {
+                "Play": "Engage in play activities.",
+                "Work": "Perform work tasks."
+            },
+            "orders": [
+                {
+                    "condition": "every_even_time_add_Jack_and_odd_time_add_Jill",
+                    "from": "Work",
+                    "to": "Play"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What does \"three times\" refer to in the context of adding Jack and Jill? Is it the frequency of adding them, or is there a specific sequence involved?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "HyperTunerAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

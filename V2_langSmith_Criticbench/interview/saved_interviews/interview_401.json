@@ -1,0 +1,97 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "DetermineCurrentYear": "Calculate the current year based on the golden wedding anniversary.",
+                "SubtractOneWeek": "Subtract one week from the calculated date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineCurrentYear",
+                    "to": "SubtractOneWeek"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date, and how does it relate to their golden wedding anniversary? The TG does not specify the current date, which is crucial for determining the correct answer."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateCurrentDate": "Determine the current date based on today's date.",
+                "SubtractOneWeek": "Subtract one week from the calculated current date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentDate",
+                    "to": "SubtractOneWeek"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date based on today's date? The TG does not specify how to determine the current date, which is crucial for subtracting one week accurately."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the reference date used to determine \"today\" in the TG, and how does it relate to the golden wedding anniversary of Jane and John?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "CalculateGoldenAnniversaryDate": "Determine the date of Jane and John's golden wedding anniversary.",
+                "SubtractOneWeek": "Subtract one week from today's date to find the required date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateGoldenAnniversaryDate",
+                    "to": "SubtractOneWeek"
+                },
+                {
+                    "condition": "completed",
+                    "from": "SubtractOneWeek",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current year, and how was it determined? The TG does not specify the current year, which is necessary to calculate today's date and subsequently subtract one week."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date, and how was it determined? The TG does not specify the current date, which is necessary to calculate today's date and subsequently subtract one week."
+            }
+        ],
+        "Answers": []
+    }
+]

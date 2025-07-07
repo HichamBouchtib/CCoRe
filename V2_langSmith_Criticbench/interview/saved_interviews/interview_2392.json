@@ -1,0 +1,89 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "SubtractDaysFromDate": "Calculate the date by subtracting a certain number of days from a given date."
+            },
+            "orders": [
+                {
+                    "condition": "date_calculated",
+                    "from": "SubtractDaysFromDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the given date from which 10 days need to be subtracted? The TG does not specify the starting date, which is crucial for the calculation."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the starting date from which 10 days need to be subtracted? The TG does not specify the given date, which is essential for performing the calculation."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateDate": "Calculate the date 10 days ago from today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateDate",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date format expected by the system, and should it match the options provided?"
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date format expected by the system, and should it match the options provided? No question, Thanks."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date 10 days ago from today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date format expected by the system, and how should it handle dates before 2007? The TG assumes today is January 1, 2007, but the options provided include dates from 2006 and even 1961. This discrepancy needs clarification."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the expected date format for the answer, and how should the system handle dates before 2007 if the TG does not specify?"
+            }
+        ],
+        "Answers": []
+    }
+]

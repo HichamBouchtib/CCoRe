@@ -1,0 +1,173 @@
+[
+    {
+        "TG_Owner": "CodeMaster",
+        "task_graph": {
+            "owner_agent": "CodeMaster",
+            "tasks": {
+                "CompareValues": "Compare the values based on their types and return the larger one if they are not equal.",
+                "ConvertStringsToFloats": "Convert any string inputs to floats for comparison purposes.",
+                "ParseInputTypes": "Identify the input types (int, float, or string) of the given arguments.",
+                "ReturnNoneIfEqual": "Return None if both values are equal after conversion."
+            },
+            "orders": [
+                {
+                    "condition": "string_input",
+                    "from": "ParseInputTypes",
+                    "to": "ConvertStringsToFloats"
+                },
+                {
+                    "condition": "not string_input",
+                    "from": "ParseInputTypes",
+                    "to": "CompareValues"
+                },
+                {
+                    "condition": "success",
+                    "from": "ConvertStringsToFloats",
+                    "to": "CompareValues"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestGenius",
+                "content": "What happens if both inputs are strings and represent equal real numbers? The current TG does not cover this scenario, as it only has a \"success\" condition after conversion which may not handle equality correctly."
+            },
+            {
+                "from": "APIWizard",
+                "content": "What happens if both inputs are strings and represent equal real numbers after conversion? The current TG does not cover this scenario, as it only has a \"success\" condition after conversion which may not handle equality correctly."
+            },
+            {
+                "from": "GitGuru",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestGenius",
+        "task_graph": {
+            "owner_agent": "TestGenius",
+            "tasks": {
+                "CompareValues": "Compare the parsed values and return the larger one based on their types.",
+                "HandleEquality": "Return None if the two inputs are equal.",
+                "ParseInput": "Parse input arguments to determine their type (integer, float, or string)."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ParseInput",
+                    "to": "CompareValues"
+                },
+                {
+                    "condition": "equal_values",
+                    "from": "CompareValues",
+                    "to": "HandleEquality"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeMaster",
+                "content": "What is the precedence rule for comparing different types (integer, float, string)? For example, should \"1\" be considered equal to 1, or should it be converted to a float and compared as 1.0?"
+            },
+            {
+                "from": "APIWizard",
+                "content": "What is the expected behavior when comparing a string representing a float with a float, and should leading spaces or commas in the string affect the comparison?"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What is the expected behavior when comparing a string representing a float, such as \"2.5\", with a float, and should leading spaces or commas in the string affect the comparison?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIWizard",
+        "task_graph": {
+            "owner_agent": "APIWizard",
+            "tasks": {
+                "CompareValues": "Compare the parsed values and return the larger one in its original type or None if equal.",
+                "ParseInputTypes": "Parse the input types (int, float, str) and handle string representations of real numbers."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "ParseInputTypes",
+                    "to": "CompareValues"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeMaster",
+                "content": "What is the expected behavior when comparing a string representation of an integer with itself, e.g., `compare_one(\"1\", \"1\")`?"
+            },
+            {
+                "from": "TestGenius",
+                "content": "What is the expected behavior when comparing an integer with a string representation of the same integer where the string uses a comma as the decimal separator, e.g., `compare_one(1, \"1,0\")`?"
+            },
+            {
+                "from": "GitGuru",
+                "content": "What is the expected behavior when comparing a float with a string representation of the same value where the string uses a comma as the decimal separator, e.g., `compare_one(1.0, \"1,0\")`?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitGuru",
+        "task_graph": {
+            "owner_agent": "GitGuru",
+            "tasks": {
+                "CompareValues": "Compare the values and return the larger one or None if they are equal.",
+                "ConvertStringsToFloats": "Convert string representations of numbers to floats for accurate comparison.",
+                "ParseInput": "Parse the input arguments to determine the type of variables being compared.",
+                "ReturnResult": "Output the result based on the comparison."
+            },
+            "orders": [
+                {
+                    "condition": "input_is_string",
+                    "from": "ParseInput",
+                    "to": "ConvertStringsToFloats"
+                },
+                {
+                    "condition": "input_is_number",
+                    "from": "ParseInput",
+                    "to": "CompareValues"
+                },
+                {
+                    "condition": "conversion_success",
+                    "from": "ConvertStringsToFloats",
+                    "to": "CompareValues"
+                },
+                {
+                    "condition": "true",
+                    "from": "CompareValues",
+                    "to": "ReturnResult"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeMaster",
+                "content": "What happens if both inputs are strings and represent numbers with different decimal separators (e.g., \"1.5\" vs \"2,3\")? How should the task graph handle this scenario?"
+            },
+            {
+                "from": "TestGenius",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "APIWizard",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

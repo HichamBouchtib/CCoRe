@@ -1,0 +1,186 @@
+[
+    {
+        "TG_Owner": "DataMender",
+        "task_graph": {
+            "owner_agent": "DataMender",
+            "tasks": {
+                "Counting Objects": "Count the number of objects based on the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Counting Objects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureCraft",
+                "content": "What is the source of the list of objects? Is it provided in a specific format, such as a string or a structured data type?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "What is the format of the input list of objects? Is it a string, a list, or another data type, and how will it be provided to the \"Counting Objects\" task?"
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "What is the format of the input list of objects, and how will it be provided to the \"Counting Objects\" task?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "FeatureCraft",
+                "content": "The source of the list of objects in the initial query is provided as plain text within the question. It is not structured in a specific format such as JSON or a database entry; instead, it is presented as a simple string: \"I have two couches, a toaster, two chairs, four microwaves, a table, and a lamp.\""
+            },
+            {
+                "to": "ModelMaster",
+                "content": "The format of the input list of objects in this task graph is a string. The string contains a comma-separated list of objects, which will be provided to the \"Counting Objects\" task. For example, the input for the given query would be: \"two couches, a toaster, two chairs, four microwaves, a table, and a lamp\"."
+            },
+            {
+                "to": "MetricMaestro",
+                "content": "The format of the input list of objects for the \"Counting Objects\" task should be a simple, comma-separated string or a list where each object is represented as a string. For example:\n\n- Comma-separated string: \"couches, toaster, chairs, microwaves, table, lamp\"\n- List: [\"couch\", \"toaster\", \"chair\", \"microwave\", \"table\", \"lamp\"]\n\nThis input will be provided directly to the \"Counting Objects\" task as part of the task graph execution."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "FeatureCraft",
+        "task_graph": {
+            "owner_agent": "FeatureCraft",
+            "tasks": {
+                "CountingObjects": "Count the number of objects based on the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountingObjects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataMender",
+                "content": "What is the source of the list of objects? Is it provided in a specific format, or should the system infer it from natural language?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "What is the format of the input list of objects? Is it a comma-separated string, a list, or another format?"
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "What is the expected format for the input list of objects, and how will the system handle potential duplicates or variations in object names?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataMender",
+                "content": "The source of the list of objects in this case is provided as natural language within the initial query. The system should be designed to infer the list from the given text rather than expecting it in a specific format like JSON or a structured database entry. This approach allows for flexibility and ease of use when users input their lists directly without needing to follow a particular format."
+            },
+            {
+                "to": "ModelMaster",
+                "content": "The input list of objects in this TG is a comma-separated string."
+            },
+            {
+                "to": "MetricMaestro",
+                "content": "The expected format for the input list of objects should be a simple, comma-separated string or a list where each object name is clearly defined. For example:\n\n- \"couches:2, toaster:1, chairs:2, microwaves:4, table:1, lamp:1\"\n- [\"couch\", \"couch\", \"toaster\", \"chair\", \"chair\", \"microwave\", \"microwave\", \"microwave\", \"microwave\", \"table\", \"lamp\"]\n\nTo handle potential duplicates or variations in object names, the system can implement a normalization step where it standardizes the object names. This can be done using techniques like:\n\n1. **Case Normalization**: Convert all object names to lowercase.\n2. **Stemming/Lemmatization**: Reduce words to their base form (e.g., \"microwaves\" becomes \"microwave\").\n3. **Synonym Replacement**: Replace synonyms with a common term (e.g., \"chair\" and \"seat\" both become \"chair\").\n\nAfter normalization, the system can count the occurrences of each unique object name to determine the total number of objects."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ModelMaster",
+        "task_graph": {
+            "owner_agent": "ModelMaster",
+            "tasks": {
+                "Count Objects": "Count the number of objects based on the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Count Objects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataMender",
+                "content": "What is the source of the list of objects? Is it provided in a specific format, or should the task handle different formats?"
+            },
+            {
+                "from": "FeatureCraft",
+                "content": "What is the format of the input list of objects? Should it be a string, a list, or another data type, and should it include any separators between items?"
+            },
+            {
+                "from": "MetricMaestro",
+                "content": "What is the expected format of the input list of objects? Should it be a comma-separated string, a space-delimited string, or another format, and how will the task handle different formats if provided?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataMender",
+                "content": "The source of the list of objects in the initial query is provided directly within the text of the question. The task can handle different formats as long as it can parse and understand the input. For example, it could accept a comma-separated list, a space-separated list, or even a more structured format like JSON. However, for simplicity, the current TG assumes the list is given in a straightforward, space-separated format."
+            },
+            {
+                "to": "FeatureCraft",
+                "content": "The format of the input list of objects should be a string or a list. If it's a string, items can be separated by commas, spaces, or any other consistent separator. If it's a list, each object would be an element in the list. For example:\n\n- String: \"two couches, a toaster, two chairs, four microwaves, a table, and a lamp\"\n- List: [\"two couches\", \"a toaster\", \"two chairs\", \"four microwaves\", \"a table\", \"a lamp\"]"
+            },
+            {
+                "to": "MetricMaestro",
+                "content": "The expected format of the input list of objects can be a comma-separated string, a space-delimited string, or any other format that clearly separates each object. The task should be designed to handle different formats by splitting the input into individual elements based on common delimiters (such as commas and spaces) and counting them accordingly.\n\nFor example:\n- Comma-separated: \"couch, couch, toaster, chair, chair, microwave, microwave, microwave, microwave, table, lamp\"\n- Space-delimited: \"couch couch toaster chair chair microwave microwave microwave microwave table lamp\"\n\nThe task will then count the number of elements in the list to determine the total number of objects."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "MetricMaestro",
+        "task_graph": {
+            "owner_agent": "MetricMaestro",
+            "tasks": {
+                "CountingObjects": "Count the number of objects based on the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountingObjects",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataMender",
+                "content": "What is the source of the list of objects? Is it provided in a specific format, or should the task handle different formats?"
+            },
+            {
+                "from": "FeatureCraft",
+                "content": "What is the format of the input list of objects? Should it be a simple text list, a structured JSON array, or handled in any other specific way?"
+            },
+            {
+                "from": "ModelMaster",
+                "content": "What is the expected format of the input list, and will the task handle different formats such as a simple text list or a structured JSON array?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataMender",
+                "content": "The source of the list of objects in the initial query is provided directly within the text of the question. The task graph should be designed to handle different formats of input lists, such as plain text, comma-separated values, or even structured data formats like JSON or a list in a programming language. This flexibility ensures that the task can accommodate various inputs without requiring significant changes to the TG structure."
+            },
+            {
+                "to": "FeatureCraft",
+                "content": "The format of the input list of objects should be a structured JSON array for clarity and ease of processing. This allows for easy parsing and manipulation by the TG. Here's an example:\n\n```json\n[\"couch\", \"couch\", \"toaster\", \"chair\", \"chair\", \"microwave\", \"microwave\", \"microwave\", \"microwave\", \"table\", \"lamp\"]\n```\n\nThis format makes it straightforward to count the objects using programming logic."
+            },
+            {
+                "to": "ModelMaster",
+                "content": "The expected format of the input list can be either a simple text list or a structured JSON array. The task should handle both formats to ensure flexibility and compatibility with various data sources. For example:\n\n- Simple text list: \"two couches, a toaster, two chairs, four microwaves, a table, and a lamp\"\n- Structured JSON array: [\"two couches\", \"a toaster\", \"two chairs\", \"four microwaves\", \"a table\", \"a lamp\"]\n\nThe task graph is designed to be adaptable to these different input formats."
+            }
+        ]
+    }
+]

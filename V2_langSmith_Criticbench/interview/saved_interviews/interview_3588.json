@@ -1,0 +1,183 @@
+[
+    {
+        "TG_Owner": "WiserEveryday",
+        "task_graph": {
+            "owner_agent": "WiserEveryday",
+            "tasks": {
+                "BigCityAnalysis": "Analyze if a big city can have between 1000 to 10000 restaurants",
+                "CanadaAnalysis": "Analyze if Canada can have between 1000 to 10000 restaurants",
+                "SmallTownAnalysis": "Analyze if a small town can have between 1000 to 10000 restaurants",
+                "TownAnalysis": "Analyze if a town can have between 1000 to 10000 restaurants",
+                "YellowPagesCheck": "Check the Yellow Pages for any city or area with more than 10000 restaurants"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "BigCityAnalysis",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "failure",
+                    "from": "TownAnalysis",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "failure",
+                    "from": "SmallTownAnalysis",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CanadaAnalysis",
+                    "to": "Answer"
+                },
+                {
+                    "condition": "success",
+                    "from": "YellowPagesCheck",
+                    "to": "Answer"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserSocialNorms",
+                "content": "What criteria are used to define a \"big city,\" \"town,\" and \"small town\" in this context? These definitions can significantly affect the analysis."
+            },
+            {
+                "from": "WiserCausality",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserSocialNorms",
+        "task_graph": {
+            "owner_agent": "WiserSocialNorms",
+            "tasks": {
+                "RestaurantCountCheck": "Determine if the number of restaurants falls between 1000 and 10000 based on given options."
+            },
+            "orders": [
+                {
+                    "condition": "valid",
+                    "from": "RestaurantCountCheck",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What criteria will be used to determine the number of restaurants in each option?"
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What criteria will be used to determine the number of restaurants in each option, and how will these criteria ensure accuracy for options like \"big city,\" \"town,\" \"small town,\" \"Canada,\" and \"yellow pages\"?"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "What criteria will be used to determine the number of restaurants in each option, and how will these criteria ensure accuracy for options like \"big city,\" \"town,\" \"small town,\" \"Canada,\" and \"yellow pages\"? Additionally, how will the TG handle cases where the exact number of restaurants is not available for a given option?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserCausality",
+        "task_graph": {
+            "owner_agent": "WiserCausality",
+            "tasks": {
+                "Evaluate_Option_a": "Assess the likelihood of finding such a range in a big city",
+                "Evaluate_Option_b": "Assess the likelihood of finding such a range in a town",
+                "Evaluate_Option_c": "Assess the likelihood of finding such a range in a small town",
+                "Evaluate_Option_d": "Assess the likelihood of finding such a range in Canada",
+                "Evaluate_Option_e": "Assess the likelihood of finding such a range in Yellow Pages",
+                "Identify_Range": "Determine if a location can accommodate between 1000 and 10000 restaurants"
+            },
+            "orders": [
+                {
+                    "condition": "big_city",
+                    "from": "Identify_Range",
+                    "to": "Evaluate_Option_a"
+                },
+                {
+                    "condition": "town",
+                    "from": "Identify_Range",
+                    "to": "Evaluate_Option_b"
+                },
+                {
+                    "condition": "small_town",
+                    "from": "Identify_Range",
+                    "to": "Evaluate_Option_c"
+                },
+                {
+                    "condition": "canada",
+                    "from": "Identify_Range",
+                    "to": "Evaluate_Option_d"
+                },
+                {
+                    "condition": "yellow_pages",
+                    "from": "Identify_Range",
+                    "to": "Evaluate_Option_e"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What is the criteria for determining if a location can accommodate between 1000 and 10000 restaurants in the \"Identify_Range\" task?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "WiserObjectProperties",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "WiserObjectProperties",
+        "task_graph": {
+            "owner_agent": "WiserObjectProperties",
+            "tasks": {
+                "Estimate_Restaurant_Counts": "Estimate the number of restaurants in different locations based on population size."
+            },
+            "orders": [
+                {
+                    "condition": "restaurant_count",
+                    "from": "Estimate_Restaurant_Counts",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "WiserEveryday",
+                "content": "What specific population size ranges should be used for estimating restaurant counts in each location?"
+            },
+            {
+                "from": "WiserSocialNorms",
+                "content": "What specific criteria will be used to determine the population size ranges for each location?"
+            },
+            {
+                "from": "WiserCausality",
+                "content": "What specific criteria will be used to define \"between 1000 and 10000 restaurants\" in terms of population size for each location?"
+            }
+        ],
+        "Answers": []
+    }
+]

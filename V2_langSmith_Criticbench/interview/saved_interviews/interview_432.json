@@ -1,0 +1,158 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "Finding Slope": "Calculate the slope between two consecutive points to determine if it's constant or changes.",
+                "Plotting Points": "Plot the given points on a graph to visualize the function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Plotting Points",
+                    "to": "Finding Slope"
+                },
+                {
+                    "condition": "slope_constant",
+                    "from": "Finding Slope",
+                    "to": "Answer Determination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "What will you do if the slope is not constant between all consecutive points?"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What will you do if the slope is constant between all consecutive points but still conclude the function is nonlinear?"
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "CheckSlopeConsistency": "Calculate the slope between consecutive points to determine if it's constant or changes.",
+                "PlotPoints": "Plot the given points on a graph to visualize the function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PlotPoints",
+                    "to": "CheckSlopeConsistency"
+                },
+                {
+                    "condition": "slope_consistent",
+                    "from": "CheckSlopeConsistency",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What will you do if the slope is not consistent? Ensure the TG includes a task to determine the nature of the function when slopes are inconsistent."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What will you do if the slope is consistent but the function still appears nonlinear when plotted? Ensure the TG includes a task to handle such cases."
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "CheckSlopeConsistency": "Calculate the slope between each pair of consecutive points to determine if it's constant or changes.",
+                "PlotPoints": "Plot the given points on a graph to visualize the function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "PlotPoints",
+                    "to": "CheckSlopeConsistency"
+                },
+                {
+                    "condition": "constant_slope",
+                    "from": "CheckSlopeConsistency",
+                    "to": "AnswerDetermination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the significance of checking for a constant slope in determining if the function is linear, and how does this relate to the given data points?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the rationale behind plotting the points if checking for a constant slope will determine whether the function is linear or nonlinear? Can this task be omitted without affecting the correctness of the solution?"
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the rationale for including both \"CheckSlopeConsistency\" and \"PlotPoints\" tasks when one of them alone should suffice to determine if the function is linear? Can these tasks be combined or simplified in the TG?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "LinearFit": "Perform linear regression analysis to determine if there is a linear relationship between x and y.",
+                "Plotting Points": "Plot the given points on a graph to visually inspect if they form a straight line or not."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Plotting Points",
+                    "to": "LinearFit"
+                },
+                {
+                    "condition": "linear_fit_result",
+                    "from": "LinearFit",
+                    "to": "Answer Determination"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the criterion for determining a linear relationship in the \"LinearFit\" task, and how will it affect the \"Answer Determination\"?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the criterion for determining a linear relationship in the \"LinearFit\" task, and how will it affect the \"Answer Determination\"? Additionally, should the TG include a task to check the correlation coefficient or R-squared value to support the determination of linearity?"
+            }
+        ],
+        "Answers": []
+    }
+]

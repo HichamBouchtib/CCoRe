@@ -1,0 +1,155 @@
+[
+    {
+        "TG_Owner": "CodeGenLangExpert",
+        "task_graph": {
+            "owner_agent": "CodeGenLangExpert",
+            "tasks": {
+                "IgnoreSpaces": "Remove any spaces from the input string.",
+                "SeparateParenGroups": "Input is a string containing multiple groups of nested parentheses. The goal is to separate those groups into separate strings and return the list of those. Separate groups are balanced (each open brace is properly closed) and not nested within each other."
+            },
+            "orders": [
+                {
+                    "condition": "always",
+                    "from": "IgnoreSpaces",
+                    "to": "SeparateParenGroups"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the input string contains unbalanced parentheses?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the input string contains nested groups that are not balanced within each other, but the overall groups are balanced?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the input string contains consecutive groups without spaces, such as '()()(())'?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "TestDebugWizard",
+        "task_graph": {
+            "owner_agent": "TestDebugWizard",
+            "tasks": {
+                "DefineFunctionSignature": "Define the function signature with proper input and output types.",
+                "ImplementFunctionLogic": "Write the logic to separate groups of nested parentheses.",
+                "TestFunction": "Create test cases to validate the correctness of the implemented function."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DefineFunctionSignature",
+                    "to": "ImplementFunctionLogic"
+                },
+                {
+                    "condition": "success",
+                    "from": "ImplementFunctionLogic",
+                    "to": "TestFunction"
+                },
+                {
+                    "condition": "all_tests_passed",
+                    "from": "TestFunction",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input string contains unbalanced parentheses groups?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the input string contains nested groups that are not balanced within each other, but the overall groups are balanced? For example, how should the function handle an input like '((())()' ?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the input string contains spaces within the parentheses groups, such as '(() ) (())'? Should these spaces be ignored or considered part of the group?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "APIProvisioner",
+        "task_graph": {
+            "owner_agent": "APIProvisioner",
+            "tasks": {
+                "FunctionDocumentation": "Generates documentation for the provided function.",
+                "SeparateParenGroups": "Input to this function is a string containing multiple groups of nested parentheses. Your goal is to separate those group into separate strings and return the list of those. Separate groups are balanced (each open brace is properly closed) and not nested within each other. Ignore any spaces in the input string."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "SeparateParenGroups",
+                    "to": "FunctionDocumentation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input string contains unbalanced parentheses or multiple groups that are nested within each other?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the input string contains spaces that need to be ignored?"
+            },
+            {
+                "from": "GitHelper",
+                "content": "What is the expected behavior if the input string is empty?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GitHelper",
+        "task_graph": {
+            "owner_agent": "GitHelper",
+            "tasks": {
+                "Group Separation": "Separate identified paren groups into individual strings.",
+                "Input Parsing": "Parse the input string to remove spaces and identify separate paren groups.",
+                "Result Construction": "Construct the final list of separated paren groups."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Input Parsing",
+                    "to": "Group Separation"
+                },
+                {
+                    "condition": "success",
+                    "from": "Group Separation",
+                    "to": "Result Construction"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "CodeGenLangExpert",
+                "content": "What is the expected behavior if the input string contains unbalanced parentheses?"
+            },
+            {
+                "from": "TestDebugWizard",
+                "content": "What is the expected behavior if the input string contains nested groups that are not balanced within each other, but the overall groups are balanced? For example, how should the function handle a string like '(()) ((())) (()())'?"
+            },
+            {
+                "from": "APIProvisioner",
+                "content": "What is the expected behavior if the input string contains multiple groups of nested parentheses where some groups are partially overlapping, such as '((())())'? How should these be handled and separated?"
+            }
+        ],
+        "Answers": []
+    }
+]

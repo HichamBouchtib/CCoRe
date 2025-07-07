@@ -1,0 +1,97 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "Determine_Jane's_Hire_Date": "Calculate the date Jane got her job based on her work anniversary.",
+                "Find_Yesterday's_Date": "Calculate yesterday's date from today's date."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Determine_Jane's_Hire_Date",
+                    "to": "Find_Yesterday's_Date"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date based on the information provided? The TG does not specify how to determine today's date, which is crucial for calculating yesterday's date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "Calculate_Hire_Date": "Determine the hire date of Jane based on her work anniversary.",
+                "Calculate_Yesterday_Date": "Compute the date for yesterday from the spill date.",
+                "Find_Spilled_Coffee_Date": "Identify the date when Jane spilled coffee on her laptop."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Calculate_Hire_Date",
+                    "to": "Find_Spilled_Coffee_Date"
+                },
+                {
+                    "condition": "success",
+                    "from": "Find_Spilled_Coffee_Date",
+                    "to": "Calculate_Yesterday_Date"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date in MM/DD/YYYY? This information is necessary to calculate yesterday's date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is Jane's current work anniversary date in MM/DD/YYYY? This information is necessary to determine her hire date."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "DateCalculation": "Calculate the date yesterday based on given information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DateCalculation",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date based on the given information?"
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]

@@ -1,0 +1,110 @@
+[
+    {
+        "TG_Owner": "LogicalInferenceAgent",
+        "task_graph": {
+            "owner_agent": "LogicalInferenceAgent",
+            "tasks": {
+                "CalculateNextWeekDate": "Compute the date one week from today.",
+                "DetermineVisitDate": "Calculate the date of Jane's current visit based on her visiting pattern and the number of visits."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "DetermineVisitDate",
+                    "to": "CalculateNextWeekDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the current date, and how does it relate to Jane's visiting pattern? The TG does not specify the starting point for counting Jane's visits, which is necessary to determine her current visit date."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the current date, and how does it relate to Jane's visiting pattern? The TG should specify the starting point for counting Jane's visits to accurately determine her current visit date."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "RuleBasedSystemAgent",
+        "task_graph": {
+            "owner_agent": "RuleBasedSystemAgent",
+            "tasks": {
+                "CalculateFutureDate": "Determine the future date one week from the calculated visit date.",
+                "CalculateStartDate": "Determine the start date of Jane's bookstore visits based on given information.",
+                "CalculateVisitDate": "Compute the exact visit date considering the 5th visit and monthly pattern.",
+                "FindCurrentDate": "Identify today's date as per the context provided."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateStartDate",
+                    "to": "FindCurrentDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "FindCurrentDate",
+                    "to": "CalculateVisitDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateVisitDate",
+                    "to": "CalculateFutureDate"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date, and how does it relate to Jane's 5th visit in October 2009? The TG assumes a starting point but does not specify how to determine today's date from the given information."
+            },
+            {
+                "from": "KnowledgeRepresentationAgent",
+                "content": "What is the starting date for Jane's 5th visit, and how does it relate to October 2009? The TG assumes a starting point but does not specify how to determine today's date from the given information."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "KnowledgeRepresentationAgent",
+        "task_graph": {
+            "owner_agent": "KnowledgeRepresentationAgent",
+            "tasks": {
+                "AddOneWeek": "Add one week to the current date to find the future date.",
+                "CalculateCurrentDate": "Compute the current date from the number of visits and the start date.",
+                "CalculateStartDate": "Determine the start date of Jane's bookstore visits based on given information."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateStartDate",
+                    "to": "CalculateCurrentDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "CalculateCurrentDate",
+                    "to": "AddOneWeek"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "LogicalInferenceAgent",
+                "content": "What is the current date of Jane's 5th visit to the bookstore? The TG does not specify how to calculate the current date from the number of visits and the start date."
+            },
+            {
+                "from": "RuleBasedSystemAgent",
+                "content": "What is the start date of Jane's bookstore visits, and how many days are there between each visit? The TG does not specify the duration between visits, which is necessary to calculate the current date."
+            }
+        ],
+        "Answers": []
+    }
+]

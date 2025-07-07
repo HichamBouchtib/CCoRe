@@ -1,0 +1,180 @@
+[
+    {
+        "TG_Owner": "EverydayKnowledgeAgent",
+        "task_graph": {
+            "owner_agent": "EverydayKnowledgeAgent",
+            "tasks": {
+                "CheckDrivingPermit": "Ensure that the user holds a valid driving permit for the Rowe 550.",
+                "CheckOlympicsAccess": "Determine if the user has access to the 2008 Summer Olympics venue.",
+                "CheckVehicleOwnership": "Verify if the user owns a Rowe 550 vehicle."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckVehicleOwnership",
+                    "to": "CheckOlympicsAccess"
+                },
+                {
+                    "condition": "failure",
+                    "from": "CheckVehicleOwnership",
+                    "to": "CheckDrivingPermit"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckOlympicsAccess",
+                    "to": "CheckDrivingPermit"
+                },
+                {
+                    "condition": "no_access",
+                    "from": "CheckOlympicsAccess",
+                    "to": "End"
+                },
+                {
+                    "condition": "valid_permit",
+                    "from": "CheckDrivingPermit",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "SocialNormsEtiquetteAgent",
+                "content": "What is the definition of \"valid driving permit\" for the Rowe 550, and does it differ from a standard driving permit?"
+            },
+            {
+                "from": "CausalRelationshipsAgent",
+                "content": "What is the definition of \"valid driving permit\" for the Rowe 550, and does it differ from a standard driving permit? This question addresses an unclear dependency in the TG and could provide necessary context to determine the success condition for the \"CheckDrivingPermit\" task."
+            },
+            {
+                "from": "ObjectPropertiesInteractionsAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "SocialNormsEtiquetteAgent",
+        "task_graph": {
+            "owner_agent": "SocialNormsEtiquetteAgent",
+            "tasks": {
+                "DrivingToEvent": "Determine if driving a Rowe 550 to the 2008 Summer Olympics is socially acceptable or not based on historical and cultural norms."
+            },
+            "orders": [
+                {
+                    "condition": "completed",
+                    "from": "DrivingToEvent",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "What is the definition of \"socially acceptable\" in this context, and who are the key stakeholders whose norms should be considered?"
+            },
+            {
+                "from": "CausalRelationshipsAgent",
+                "content": "What is the current legal status of Rowe 550 vehicles in the context of attending major international events like the Olympics?"
+            },
+            {
+                "from": "ObjectPropertiesInteractionsAgent",
+                "content": "What is the historical context of Rowe 550 vehicles during major international events, and how might this influence perceptions of social acceptability?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CausalRelationshipsAgent",
+        "task_graph": {
+            "owner_agent": "CausalRelationshipsAgent",
+            "tasks": {
+                "CheckEventDate": "Determine if the 2008 Summer Olympics are within the valid date range for driving to the event.",
+                "CheckEventLocation": "Identify the location of the 2008 Summer Olympics and verify if it's accessible by road from the user's current location.",
+                "CheckVehicleOwnership": "Verify if the user owns a Rowe 550 car."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CheckVehicleOwnership",
+                    "to": "CheckEventDate"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckEventDate",
+                    "to": "CheckEventLocation"
+                },
+                {
+                    "condition": "success",
+                    "from": "CheckEventLocation",
+                    "to": "AnswerQuery"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "What is the current location of the user and how far is it from the 2008 Summer Olympics venue? This information is necessary to determine if driving a Rowe 550 to the event is feasible."
+            },
+            {
+                "from": "SocialNormsEtiquetteAgent",
+                "content": "What is the current date, and does the user have a valid driver's license for operating a Rowe 550?"
+            },
+            {
+                "from": "ObjectPropertiesInteractionsAgent",
+                "content": "What is the current date, and does the 2008 Summer Olympics fall within a timeframe where driving would still be practical? This clarifies if there are any logistical issues with driving to an event that has already concluded."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ObjectPropertiesInteractionsAgent",
+        "task_graph": {
+            "owner_agent": "ObjectPropertiesInteractionsAgent",
+            "tasks": {
+                "CheckVehicleSuitability": "Verify if the Rowe 550 is suitable for transporting to an event.",
+                "EventAccessibility": "Determine if there are any accessibility issues regarding the venue of the 2008 Summer Olympics.",
+                "TransportPlan": "Formulate a transport plan considering all constraints."
+            },
+            "orders": [
+                {
+                    "condition": "suitable",
+                    "from": "CheckVehicleSuitability",
+                    "to": "TransportPlan"
+                },
+                {
+                    "condition": "issues_found",
+                    "from": "EventAccessibility",
+                    "to": "TransportPlan"
+                },
+                {
+                    "condition": "unsuitable",
+                    "from": "CheckVehicleSuitability",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "EverydayKnowledgeAgent",
+                "content": "What is the definition of \"suitable\" in the context of transporting the Rowe 550 to the 2008 Summer Olympics?"
+            },
+            {
+                "from": "SocialNormsEtiquetteAgent",
+                "content": "What is the definition of \"issues_found\" in the context of event accessibility, and how will these issues impact the transport plan?"
+            },
+            {
+                "from": "CausalRelationshipsAgent",
+                "content": "What is the definition of \"unsuitable\" in the context of the Rowe 550, and how will this determination affect the overall task graph?"
+            }
+        ],
+        "Answers": []
+    }
+]

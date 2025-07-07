@@ -41,30 +41,11 @@ wiseragents_instructions = """You are tasked with creating a set of specialized 
 
 # def create_wiseragents(state: dict) -> dict:
 def create_wiseragents(state: State):
-    """ Create WiserAgents """
 
     if state.get("wiseragents") and state.get("feedback_handled", True):
         print("⚠️ WiserAgents already created. Skipping regeneration.")
         return state
-
-    # feedback = state.get("human_wiseragent_feedback", "").strip()
-    # state["messages"] = [
-    #     m for m in state["messages"]
-    #     if not (isinstance(m, HumanMessage) and m.additional_kwargs.get("tag") == "system-feedback")
-    # ]
-    # if feedback:
-    #     state["messages"].append(HumanMessage(content=feedback))
-
-    if not state.get("topic") or not state["topic"].strip():
-        print("No valid topic detected.")
-        return {
-            **state,
-            "__end__": True
-        }
-
-    # Show progress before actual generation
     state.setdefault("messages", []).append(AIMessage(content="WiserAgents generating successfully"))
-    
     print("Generating WiserAgents...\n")
     
     topic=state['topic']
@@ -75,9 +56,9 @@ def create_wiseragents(state: State):
                                                         human_wiseragent_feedback=human_wiseragent_feedback,
                                                         WS=WS)
     messages = [
-        SystemMessage(content=system_message),
-        HumanMessage(content="Generate the appropriate set of WiserAgents.")
-    ]
+                SystemMessage(content=system_message),
+                HumanMessage(content="Generate the appropriate set of WiserAgents.")
+            ]
     structured_llm = llm.with_structured_output(WiserAgentsList)
     wiseragents_output = structured_llm.invoke(messages)
 
@@ -118,20 +99,13 @@ def create_wiseragents(state: State):
             ]
         )
     )
-    # state["messages"].append(AIMessage(content="Do you have any feedback regarding your WiserAgent ?"))
     append_or_update_AImessage2(state, "Do you have any feedback regarding your WiserAgent ?")
 
     # After using the feedback, reset it
     state["human_wiseragent_feedback"] = ""
-    # state["feedback_handled"] = False
     state["feedback_handled"] = True
     state["wiseragents"] = wiseragents_list
-    # return {
-    #     **state,
-    #     "wiseragents": wiseragents_list,
-    #     "topic": topic
-    # }
-    
+
     return state
 
 def append_or_update_AImessage2(state, new_content):

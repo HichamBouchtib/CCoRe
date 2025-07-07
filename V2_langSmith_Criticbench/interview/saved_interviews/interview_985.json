@@ -1,0 +1,272 @@
+[
+    {
+        "TG_Owner": "DataPreprocessorAgent",
+        "task_graph": {
+            "owner_agent": "DataPreprocessorAgent",
+            "tasks": {
+                "Count Fruits": "Count the number of each type of fruit mentioned in the user query."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Count Fruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the purpose of the \"End\" task in this TG? It seems unnecessary since there are no subsequent tasks."
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the purpose of including a \"Count Fruits\" task when the TG does not specify how to count or process the fruit types mentioned? This task seems incomplete without further details on what actions should be taken after counting."
+            },
+            {
+                "from": "TunerAgent",
+                "content": "What is the expected output format for the \"Count Fruits\" task, and how should the TG handle the result to directly answer the user's query?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What is the expected output format for the \"Count Fruits\" task, and how should the TG ensure that the total number of fruits is calculated from the counted fruit types to directly answer the user's query?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "The \"End\" task in this TG serves as a placeholder to indicate the completion of the workflow. While it may seem unnecessary since there are no subsequent tasks, it provides clarity and structure to the task graph. This can be particularly useful for debugging, logging, or integrating with other systems that expect a defined end point in the workflow."
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "The purpose of including a \"Count Fruits\" task in the TG is to identify and quantify the different types of fruits mentioned in the user query. However, without specifying how to count or process the fruit types, the task is indeed incomplete. To make this task effective, we need to define clear steps for processing the fruit counts, such as:\n\n1. **Identify Fruit Types**: Recognize and categorize each item mentioned as a fruit.\n2. **Count Each Type**: Tally the number of occurrences for each identified fruit type.\n3. **Summarize Results**: Provide a summary of the total count for each fruit type.\n\nFor example, after identifying and counting the fruits in the given query, the task should output something like:\n\n- Nectarine: 1\n- Orange: 1\n- Peach: 4\n- Apple: 1\n- Strawberry: 1\n- Plum: 1\n\nThis information can then be used to answer the user's question about the total number of fruits."
+            },
+            {
+                "to": "TunerAgent",
+                "content": "The expected output format for the \"Count Fruits\" task should be a dictionary where each key represents a type of fruit and its corresponding value represents the count of that fruit. For example:\n\n```\n{\n    \"nectarine\": 1,\n    \"orange\": 1,\n    \"peach\": 4,\n    \"apple\": 1,\n    \"strawberry\": 1,\n    \"plum\": 1\n}\n```\n\nOnce the \"Count Fruits\" task is completed and its result is available, the TG should proceed to the \"End\" order. To directly answer the user's query about how many fruits are present, you can sum up all the values in the dictionary:\n\n```\nTotal fruits = 1 + 1 + 4 + 1 + 1 + 1 = 9\n```\n\nSo, the final output of the TG should be a simple statement answering the user's question: \"You have 9 fruits.\""
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "The expected output format for the \"Count Fruits\" task should be a dictionary where each key represents a type of fruit and its corresponding value represents the count of that fruit. For example:\n\n```\n{\n    \"nectarine\": 1,\n    \"orange\": 1,\n    \"peach\": 4,\n    \"apple\": 1,\n    \"strawberry\": 1,\n    \"plum\": 1\n}\n```\n\nTo ensure that the total number of fruits is calculated from the counted fruit types and directly answer the user's query, the next task in the TG should sum up all the values in this dictionary. The TG can be updated as follows:\n\n```json\n{\n    \"owner_agent\": \"DataPreprocessorAgent\",\n    \"tasks\": {\n        \"Count Fruits\": \"Count the number of each type of fruit mentioned in the user query.\",\n        \"Calculate Total Fruits\": \"Sum up all the counted fruits to get the total number.\"\n    },\n    \"orders\": [\n        {\n            \"condition\": \"success\",\n            \"from\": \"Count Fruits\",\n            \"to\": \"Calculate Total Fruits\"\n        },\n        {\n            \"condition\": \"success\",\n            \"from\": \"Calculate Total Fruits\",\n            \"to\": \"End\"\n        }\n    ],\n    \"refused\": false,\n    \"answer\": null\n}\n```\n\nThe \"Calculate Total Fruits\" task would then take the dictionary output from \"Count Fruits\", sum all values, and provide the total number of fruits as the final answer to the user's query."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "FeatureEngineerAgent",
+        "task_graph": {
+            "owner_agent": "FeatureEngineerAgent",
+            "tasks": {
+                "CountFruits": "Count the number of fruits based on the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountFruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of a \"fruit\" in this context, as some items listed (like toasters) are not fruits?"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TunerAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "In this context, a \"fruit\" refers to items that are actually produce and edible, such as nectarines, oranges, peaches, apples, strawberries, and plums. Items like toasters are not fruits."
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "TunerAgent",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "You are welcome!"
+            }
+        ]
+    },
+    {
+        "TG_Owner": "ModelSelectorAgent",
+        "task_graph": {
+            "owner_agent": "ModelSelectorAgent",
+            "tasks": {
+                "CountFruits": "Counts the total number of fruits from the provided list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountFruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of a \"fruit\" in this context, as some items listed (like toasters) are not fruits?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "What is the criteria for considering an item as a \"fruit\" in this context, given that toasters are not fruits?"
+            },
+            {
+                "from": "TunerAgent",
+                "content": "What is the expected output format for the total number of fruits? Is it a simple numerical count, or should it include the types of fruits mentioned?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What is the expected output format for the total number of fruits? Should it be a simple numerical count, or should it include the types of fruits mentioned (nectarine, orange, peach, apple, strawberry, plum)?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "In this context, a \"fruit\" refers to items that are actually edible produce, such as the nectarine, orange, peaches, apple, strawberry, and plum. Items like toasters are not fruits at all and should be excluded from the count of fruits."
+            },
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "In this context, an item is considered a \"fruit\" if it is a plant product that develops from the ovary of a flowering plant and can be eaten as food, typically sweet and juicy. Toasters are not fruits because they are man-made objects and do not grow from plants."
+            },
+            {
+                "to": "TunerAgent",
+                "content": "The expected output format for the total number of fruits should be a simple numerical count. Including the types of fruits mentioned would not be necessary for this specific query."
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "The expected output format for the total number of fruits should be a simple numerical count. Including the types of fruits mentioned (nectarine, orange, peach, apple, strawberry, plum) is not necessary for this specific query. The task is to count the total number of fruits, so the response should just be a single number representing that count."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "TunerAgent",
+        "task_graph": {
+            "owner_agent": "TunerAgent",
+            "tasks": {
+                "CountFruits": "Counts the total number of fruits based on the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CountFruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of a \"fruit\" in this context, as some items listed (like toasters) are not fruits?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "What is the criteria for considering an item as a \"fruit\" in this context, given that toasters are not fruits?"
+            },
+            {
+                "from": "EvaluatorAgent",
+                "content": "What is the criteria for considering an item as a \"fruit\" in this context, given that toasters are not fruits and should not be included in the count?"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "In this context, a \"fruit\" refers to items that are actually produce and edible, such as the nectarine, orange, peaches, apple, strawberry, and plum. Items like toasters are not fruits."
+            },
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "In this context, an item is considered a \"fruit\" if it is a plant product that develops from the ovary of a flowering plant and can be eaten as food, typically sweet and juicy. Toasters are not fruits because they are man-made objects and do not grow from plants."
+            },
+            {
+                "to": "EvaluatorAgent",
+                "content": "In this context, an item is considered a \"fruit\" if it is one of the edible items listed, such as the nectarine, orange, peach, apple, strawberry, and plum. Toasters are not fruits and should be excluded from the count."
+            }
+        ]
+    },
+    {
+        "TG_Owner": "EvaluatorAgent",
+        "task_graph": {
+            "owner_agent": "EvaluatorAgent",
+            "tasks": {
+                "Count Fruits": "Counting the total number of fruits based on the given list."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "Count Fruits",
+                    "to": "End"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "DataPreprocessorAgent",
+                "content": "What is the definition of a \"fruit\" in this context, as some items listed (like toasters) are not fruits?"
+            },
+            {
+                "from": "FeatureEngineerAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "ModelSelectorAgent",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "TunerAgent",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": [
+            {
+                "to": "DataPreprocessorAgent",
+                "content": "In this context, a \"fruit\" refers to items that are produce and edible, such as the nectarine, orange, peach, apple, strawberry, and plum. Items like toasters are not fruits."
+            },
+            {
+                "to": "FeatureEngineerAgent",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "ModelSelectorAgent",
+                "content": "You are welcome!"
+            },
+            {
+                "to": "TunerAgent",
+                "content": "You are welcome!"
+            }
+        ]
+    }
+]

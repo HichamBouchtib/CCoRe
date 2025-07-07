@@ -1,0 +1,183 @@
+[
+    {
+        "TG_Owner": "AlgebraWise",
+        "task_graph": {
+            "owner_agent": "AlgebraWise",
+            "tasks": {
+                "CostEquationSetup": "Set up cost equations based on given information",
+                "SolveForX": "Solve for the unknown variable in the cost equation",
+                "SurfaceAreaCalculation": "Calculate the surface area of a cube with side length x",
+                "VolumeCalculation": "Calculate the volume of a cube with side length x"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "SurfaceAreaCalculation",
+                    "to": "VolumeCalculation"
+                },
+                {
+                    "condition": "success",
+                    "from": "VolumeCalculation",
+                    "to": "CostEquationSetup"
+                },
+                {
+                    "condition": "success",
+                    "from": "SurfaceAreaCalculation",
+                    "to": "CostEquationSetup"
+                },
+                {
+                    "condition": "success",
+                    "from": "CostEquationSetup",
+                    "to": "SolveForX"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "GeoTrigo",
+                "content": "Why is there an order from SurfaceAreaCalculation to VolumeCalculation when they are independent calculations for a cube of side length x? This task dependency seems unnecessary and could lead to confusion."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "Why are there two orders from SurfaceAreaCalculation to CostEquationSetup when only one is necessary? This redundancy could lead to confusion and unnecessary computation."
+            },
+            {
+                "from": "ProbStat",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "GeoTrigo",
+        "task_graph": {
+            "owner_agent": "GeoTrigo",
+            "tasks": {
+                "CalculateSurfaceArea": "Calculating the surface area of a cube with side length 3 inches",
+                "CalculateVolume": "Calculating the volume of a cube with side length 3 inches",
+                "DetermineCosts": "Determining the cost components based on given data for cubes of different sizes"
+            },
+            "orders": [
+                {
+                    "condition": "surface_area_needed",
+                    "from": "DetermineCosts",
+                    "to": "CalculateSurfaceArea"
+                },
+                {
+                    "condition": "volume_needed",
+                    "from": "DetermineCosts",
+                    "to": "CalculateVolume"
+                },
+                {
+                    "condition": "surface_area_calculated",
+                    "from": "CalculateSurfaceArea",
+                    "to": "FinalCalculation"
+                },
+                {
+                    "condition": "volume_calculated",
+                    "from": "CalculateVolume",
+                    "to": "FinalCalculation"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the specific relationship between the cost and the surface area, as well as the volume, based on the given data for cubes of different sizes? This clarification is needed to accurately determine the costs in the \"DetermineCosts\" task."
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "What is the exact relationship between the cost and the surface area, as well as the volume, based on the given data for cubes of different sizes? This clarification is needed to accurately determine the costs in the \"DetermineCosts\" task."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the exact formula for the cost based on surface area and volume, given the costs for 1-inch and 2-inch cubes? This clarification is needed to accurately determine the costs in the \"DetermineCosts\" task."
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "CalcDifEq",
+        "task_graph": {
+            "owner_agent": "CalcDifEq",
+            "tasks": {
+                "CostCalculation1": "Calculate the cost of a 1 inch cube with given data",
+                "CostCalculation2": "Calculate the cost of a 2 inch cube with given data",
+                "CostCalculation3": "Calculate the cost of a 3 inch cube based on the derived formula"
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CostCalculation1",
+                    "to": "CostCalculation2"
+                },
+                {
+                    "condition": "success",
+                    "from": "CostCalculation2",
+                    "to": "CostCalculation3"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the relationship between the cost and the surface area of the cube, and how does it differ from the relationship between the cost and the volume?"
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "What is the relationship between the cost and the surface area of the cube, and how does it differ from the relationship between the cost and the volume? This question can help clarify if the TG correctly accounts for both factors in its calculations."
+            },
+            {
+                "from": "ProbStat",
+                "content": "What is the exact formula used to calculate the cost of a cube based on its surface area and volume, and how are these factors weighted in the calculation?"
+            }
+        ],
+        "Answers": []
+    },
+    {
+        "TG_Owner": "ProbStat",
+        "task_graph": {
+            "owner_agent": "ProbStat",
+            "tasks": {
+                "CalculateCostPerInch": "Calculating the cost per inch of making a cube based on given costs.",
+                "Compute3inchCubeCost": "Computing the cost for a 3-inch cube using the derived scaling factors.",
+                "DetermineScalingFactor": "Determining the scaling factor between different sizes of cubes."
+            },
+            "orders": [
+                {
+                    "condition": "success",
+                    "from": "CalculateCostPerInch",
+                    "to": "DetermineScalingFactor"
+                },
+                {
+                    "condition": "success",
+                    "from": "DetermineScalingFactor",
+                    "to": "Compute3inchCubeCost"
+                }
+            ],
+            "refused": false,
+            "answer": null
+        },
+        "Questions": [
+            {
+                "from": "AlgebraWise",
+                "content": "What is the basis for determining the scaling factor between different sizes of cubes in this task graph? The relationship between surface area and volume needs to be considered, as the cost of paint is proportional to surface area while the cost of concrete is proportional to volume."
+            },
+            {
+                "from": "GeoTrigo",
+                "content": "No question, Thanks"
+            },
+            {
+                "from": "CalcDifEq",
+                "content": "No question, Thanks"
+            }
+        ],
+        "Answers": []
+    }
+]
